@@ -1,0 +1,10 @@
+name: ForgottenObbiettivi
+version: @version@
+main: it.forgottenworld.forgottenobbiettivi.ForgottenObbiettivi
+api-version: 1.13
+prefix: FWOBB
+load: STARTUP
+depend: [Towny]
+authors: [Markus__27]
+description: Plugin per la gestione degli Obbiettivi Cittadini
+website: https://forgottenworld.it/
