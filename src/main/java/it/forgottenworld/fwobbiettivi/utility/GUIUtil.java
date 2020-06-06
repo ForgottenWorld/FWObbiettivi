@@ -6,14 +6,18 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class GUIUtil {
 
-    // Menu Obbiettivi Cittadini
+    // Steps
     public static final int GOALS_STEP = 1;
+    public static final int GOALS_NEW_STEP = 2;
+    public static final int GOALS_EDIT_STEP = 3;
+    public static final int GOALS_DELETE_STEP = 4;
+    public static final int BRANCH_STEP = 5;
+
+    // Menu Obbiettivi Cittadini
     public static String GOALS_INVENTORY_TITLE = FWObbiettivi.instance.getConfig().getString("languages." + getConfLang() + ".goals_inventory_title");
     public static int GOALS_INVENTORY_SIZE = 9;
 

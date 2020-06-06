@@ -7,16 +7,40 @@ import org.bukkit.inventory.Inventory;
 
 public class ObbiettiviGUI {
 
+    public enum Action {
+        NEW,
+        EDIT,
+        DELETE
+    }
+
     private Player player;
+    private Action action;
 
     public ObbiettiviGUI(Player player){
         this.player = player;
+    }
+
+    public ObbiettiviGUI(Player player, Action action){
+        this.player = player;
+        this.action = action;
     }
 
     public void openGUI(int step){
         switch (step){
             case GUIUtil.GOALS_STEP:
                 openGoalsGUI();
+                break;
+            case GUIUtil.GOALS_NEW_STEP:
+                openGoalsListGUI();
+                break;
+            case GUIUtil.GOALS_EDIT_STEP:
+                openGoalsListGUI();
+                break;
+            case GUIUtil.GOALS_DELETE_STEP:
+                openGoalsListGUI();
+                break;
+            case GUIUtil.BRANCH_STEP:
+                openBranchGUI();
                 break;
         }
     }
@@ -56,6 +80,12 @@ public class ObbiettiviGUI {
                 ));
 
         player.openInventory(GUI);
+    }
+
+    private void openGoalsListGUI() {
+    }
+
+    private void openBranchGUI() {
     }
 
 }

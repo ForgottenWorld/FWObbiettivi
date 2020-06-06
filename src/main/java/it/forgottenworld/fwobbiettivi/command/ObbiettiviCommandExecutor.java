@@ -1,7 +1,10 @@
 package it.forgottenworld.fwobbiettivi.command;
 
+import it.forgottenworld.fwobbiettivi.FWObbiettivi;
 import it.forgottenworld.fwobbiettivi.gui.ObbiettiviGUI;
+import it.forgottenworld.fwobbiettivi.utility.ChatFormatter;
 import it.forgottenworld.fwobbiettivi.utility.GUIUtil;
+import it.forgottenworld.fwobbiettivi.utility.Messages;
 import it.forgottenworld.fwobbiettivi.utility.NameUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -20,6 +23,25 @@ public class ObbiettiviCommandExecutor implements TabExecutor {
             case 0:
                 ObbiettiviGUI gui = new ObbiettiviGUI((Player) sender);
                 gui.openGUI(GUIUtil.GOALS_STEP);
+                break;
+            case 1:
+                switch (args[0].toLowerCase()){
+                    case "help":
+                        sender.sendMessage(ChatFormatter.helpMessage());
+                        return true;
+                    case "reload":
+                        FWObbiettivi.info("Saving infos...");
+
+                        FWObbiettivi.info("Data saved");
+
+                        FWObbiettivi.info("Loading infos...");
+
+                        FWObbiettivi.info("Data loades");
+
+                        FWObbiettivi.instance.reloadConfig();
+                        FWObbiettivi.info(Messages.CONFIG_RELOAD);
+                        return true;
+                }
                 break;
         }
 

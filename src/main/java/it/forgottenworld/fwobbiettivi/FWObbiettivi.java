@@ -2,6 +2,7 @@ package it.forgottenworld.fwobbiettivi;
 
 import it.forgottenworld.fwobbiettivi.command.ObbiettiviCommandExecutor;
 import it.forgottenworld.fwobbiettivi.listeners.DisbandTownListener;
+import it.forgottenworld.fwobbiettivi.listeners.GUIObbiettiviListener;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,6 +31,7 @@ public final class FWObbiettivi extends JavaPlugin {
         // Registrazione event-listeners
         info("Registering listeners...");
         this.getServer().getPluginManager().registerEvents(new DisbandTownListener(), this);
+        this.getServer().getPluginManager().registerEvents(new GUIObbiettiviListener(), this);
 
         // Caricamento delle aree da file
         info("Loading infos...");
