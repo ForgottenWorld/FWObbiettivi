@@ -1,0 +1,35 @@
+####################################################################################################
+# +----------------------------------------------------------------------------------------------+ #
+# |                  ___    _       _       _          _     _     _           _                 | #
+# |                 / _ \  | |__   | |__   (_)   ___  | |_  | |_  (_) __   __ (_)                | #
+# |                | | | | | '_ \  | '_ \  | |  / _ \ | __| | __| | | \ \ / / | |                | #
+# |                | |_| | | |_) | | |_) | | | |  __/ | |_  | |_  | |  \ V /  | |                | #
+# |                 \___/  |_.__/  |_.__/  |_|  \___|  \__|  \__| |_|   \_/   |_|                | #
+# |                                                                                              | #
+# |                                   Made by: Markus__27                                        | #
+# |                                                                                              | #
+# |  SOURCE CODE: https://github.com/ForgottenWorld/FWObbiettivi                                 | #
+# |                                                                                              | #
+# +----------------------------------------------------------------------------------------------+ #
+####################################################################################################
+
+# Select your language
+languages:
+  default: "it_IT"
+  it_IT:
+    goals_inventory_title: "Obbiettivi Cittadini"
+    goals_new_item_name: "Aggiugni"
+    goals_new_item_list:
+      - test
+    goals_edit_item_name: "Modifica"
+    goals_edit_item_list:
+      - a
+    goals_delete_item_name: "Elimina"
+    goals_delete_item_list:
+      - a
+    goals_branch_item_name: "Menu Rami"
+    goals_branch_item_list:
+      - a
+    goals_close_item_name: "Chiudi"
+    goals_close_item_list:
+      - a
