@@ -36,8 +36,9 @@ public class ChatFormatter {
         String message = chatHeader();
         message = message.concat(
                 "\n" + ChatColor.GRAY + "Lista comandi:" +
-                "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.GRAY + ": Attiva la visita delle citta'." +
+                "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.GRAY + ": ." +
                 "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "add " + "<Obbiettivo> " + ChatColor.GRAY + ": Aggiunge una Town al Cicero." +
+                "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "gui " + ChatColor.GRAY + ": Apre la GUI." +
                 "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "reload " + ChatColor.GRAY + ": Ricarica il config.yml."
         );
         return message;

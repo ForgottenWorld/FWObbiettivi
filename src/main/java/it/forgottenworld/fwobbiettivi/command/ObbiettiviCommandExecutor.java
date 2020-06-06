@@ -21,11 +21,14 @@ public class ObbiettiviCommandExecutor implements TabExecutor {
 
         switch (args.length){
             case 0:
-                ObbiettiviGUI gui = new ObbiettiviGUI((Player) sender);
-                gui.openGUI(GUIUtil.GOALS_STEP);
+
                 break;
             case 1:
                 switch (args[0].toLowerCase()){
+                    case "gui":
+                        ObbiettiviGUI gui = new ObbiettiviGUI((Player) sender);
+                        gui.openGUI(GUIUtil.GOALS_STEP);
+                        return true;
                     case "help":
                         sender.sendMessage(ChatFormatter.helpMessage());
                         return true;
