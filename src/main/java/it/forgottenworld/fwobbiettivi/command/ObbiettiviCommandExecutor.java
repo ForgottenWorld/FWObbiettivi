@@ -72,6 +72,21 @@ public class ObbiettiviCommandExecutor implements TabExecutor {
         List<String> suggestions = new ArrayList<>();
         String argsIndex = "";
 
+        switch (args.length){
+            case 1:
+                if (sender.hasPermission(Permissions.PERM_GUI))
+                    suggestions.add("gui");
+
+                suggestions.add("help");
+
+                if (sender.hasPermission(Permissions.PERM_RELOAD))
+                    suggestions.add("reload");
+                
+                break;
+            case 2:
+                break;
+        }
+
         return NameUtil.filterByStart(suggestions, argsIndex);
     }
 
