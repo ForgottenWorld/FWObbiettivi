@@ -25,6 +25,12 @@ public class GUIObbiettiviListener implements Listener {
         }else if(title == GUIUtil.BRANCH_INVENTORY_TITLE){
             handleBranchSelectionGUI((Player) event.getWhoClicked(), event.getCurrentItem().getType());
             event.setCancelled(true);
+        }else if(title == GUIUtil.BRANCH_LIST_INVENTORY_TITLE){
+            handleBranchListSelectionGUI((Player) event.getWhoClicked(), event.getCurrentItem().getType());
+            event.setCancelled(true);
+        }else if(title == GUIUtil.GOALS_LIST_INVENTORY_TITLE){
+            handleGoalsListSelectionGUI((Player) event.getWhoClicked(), event.getCurrentItem().getType());
+            event.setCancelled(true);
         }
 
         return;
@@ -45,7 +51,7 @@ public class GUIObbiettiviListener implements Listener {
                 editObGUI.openGUI(GUIUtil.GOALS_EDIT_STEP);
                 whoClicked.playSound( whoClicked.getLocation(), Sound.BLOCK_LEVER_CLICK, 10, 1 );
                 break;
-            case BARRIER:       // Elimina
+            case RED_STAINED_GLASS_PANE:       // Elimina
                 // Apro GUI Lista Rami
                 ObbiettiviGUI deleteObGUI = new ObbiettiviGUI(whoClicked, ObbiettiviGUI.Action.DELETE, false);
                 deleteObGUI.openGUI(GUIUtil.GOALS_DELETE_STEP);
@@ -57,7 +63,7 @@ public class GUIObbiettiviListener implements Listener {
                 branch.openGUI(GUIUtil.BRANCH_STEP);
                 whoClicked.playSound( whoClicked.getLocation(), Sound.BLOCK_LEVER_CLICK, 10, 1 );
                 break;
-            case RED_STAINED_GLASS_PANE:    // Chiudi
+            case BARRIER:    // Chiudi
                 // Chiudo la GUI Obbiettivi Cittadini
                 whoClicked.closeInventory();
                 whoClicked.playSound(whoClicked.getLocation(), Sound.ENTITY_ITEM_FRAME_REMOVE_ITEM, 10, 1);
@@ -72,21 +78,21 @@ public class GUIObbiettiviListener implements Listener {
                 // Apro Modulo creazione Rami
                 ObbiettiviGUI newObGUI = new ObbiettiviGUI(whoClicked, ObbiettiviGUI.Action.NEW, false);
                 newObGUI.openGUI(GUIUtil.BRANCH_NEW_STEP);
-                whoClicked.playSound(whoClicked.getLocation(), Sound.ENTITY_ITEM_FRAME_REMOVE_ITEM, 10, 1);
+                whoClicked.playSound(whoClicked.getLocation(), Sound.BLOCK_LEVER_CLICK, 10, 1);
                 break;
             case WRITABLE_BOOK: // Modifica
                 // Apro GUI Lista Rami
                 ObbiettiviGUI editObGUI = new ObbiettiviGUI(whoClicked, ObbiettiviGUI.Action.EDIT, false);
                 editObGUI.openGUI(GUIUtil.BRANCH_EDIT_STEP);
-                whoClicked.playSound(whoClicked.getLocation(), Sound.ENTITY_ITEM_FRAME_REMOVE_ITEM, 10, 1);
+                whoClicked.playSound(whoClicked.getLocation(), Sound.BLOCK_LEVER_CLICK, 10, 1);
                 break;
-            case BARRIER:       // Elimina
+            case RED_STAINED_GLASS_PANE:       // Elimina
                 // Apro GUI Lista Rami
                 ObbiettiviGUI deleteObGUI = new ObbiettiviGUI(whoClicked, ObbiettiviGUI.Action.DELETE, false);
                 deleteObGUI.openGUI(GUIUtil.BRANCH_DELETE_STEP);
-                whoClicked.playSound(whoClicked.getLocation(), Sound.ENTITY_ITEM_FRAME_REMOVE_ITEM, 10, 1);
+                whoClicked.playSound(whoClicked.getLocation(), Sound.BLOCK_LEVER_CLICK, 10, 1);
                 break;
-            case RED_STAINED_GLASS_PANE:    // Torna indietro
+            case BARRIER:    // Torna indietro
                 // Torno alla GUI precedente (Obbiettivi Cittadini)
                 ObbiettiviGUI backObGUI = new ObbiettiviGUI(whoClicked);
                 backObGUI.openGUI(GUIUtil.GOALS_STEP);
@@ -95,4 +101,27 @@ public class GUIObbiettiviListener implements Listener {
         }
     }
 
+    // Branch List Menu
+    private void handleBranchListSelectionGUI(Player whoClicked, Material type) {
+        switch (type){
+            case BARRIER:    // Torna indietro
+                // Torno alla GUI precedente (Rami Obbiettivi)
+                ObbiettiviGUI backObGUI = new ObbiettiviGUI(whoClicked);
+                backObGUI.openGUI(GUIUtil.BRANCH_STEP);
+                whoClicked.playSound(whoClicked.getLocation(), Sound.ENTITY_ITEM_FRAME_REMOVE_ITEM, 10, 1);
+                break;
+        }
+    }
+
+    // Goals of the branch Menu
+    private void handleGoalsListSelectionGUI(Player whoClicked, Material type) {
+        switch (type){
+            case BARRIER:    // Torna indietro
+                // Torno alla GUI precedente (Obbiettivi Cittadini)
+                ObbiettiviGUI backObGUI = new ObbiettiviGUI(whoClicked);
+                backObGUI.openGUI(GUIUtil.BRANCH_LIST_STEP);
+                whoClicked.playSound(whoClicked.getLocation(), Sound.ENTITY_ITEM_FRAME_REMOVE_ITEM, 10, 1);
+                break;
+        }
+    }
 }

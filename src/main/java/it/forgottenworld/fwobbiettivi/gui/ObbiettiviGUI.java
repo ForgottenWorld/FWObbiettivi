@@ -85,14 +85,16 @@ public class ObbiettiviGUI {
     }
 
     private void openGoalsListGUI() {
-        switch (this.action){
-            case NEW:
-                break;
-            case EDIT:
-                break;
-            case DELETE:
-                break;
-        }
+        Inventory GUI = Bukkit.createInventory(null, GUIUtil.GOALS_LIST_INVENTORY_SIZE, GUIUtil.GOALS_LIST_INVENTORY_TITLE);
+
+        GUI.setItem(GUIUtil.BRANCH_LIST_BACK_ITEM_SLOT,
+                GUIUtil.prepareMenuPoint(
+                        GUIUtil.BRANCH_LIST_BACK_ITEM_MATERIAL,
+                        GUIUtil.BRANCH_LIST_BACK_ITEM_NAME,
+                        GUIUtil.BRANCH_LIST_BACK_ITEM_LORE
+                ));
+
+        player.openInventory(GUI);
     }
 
     private void openBranchGUI() {
@@ -127,21 +129,16 @@ public class ObbiettiviGUI {
     }
 
     private void openBranchListGUI() {
-        // Controllo se devo interagire con il Branch o un Goals
-        // Branch
-        if (firstStep) {
-            switch (this.action) {
-                case NEW:
-                    break;
-                case EDIT:
-                    break;
-                case DELETE:
-                    break;
-            }
-            return;
-        }
+        Inventory GUI = Bukkit.createInventory(null, GUIUtil.BRANCH_LIST_INVENTORY_SIZE, GUIUtil.BRANCH_LIST_INVENTORY_TITLE);
 
-        // Goals
+        GUI.setItem(GUIUtil.BRANCH_LIST_BACK_ITEM_SLOT,
+                GUIUtil.prepareMenuPoint(
+                        GUIUtil.BRANCH_LIST_BACK_ITEM_MATERIAL,
+                        GUIUtil.BRANCH_LIST_BACK_ITEM_NAME,
+                        GUIUtil.BRANCH_LIST_BACK_ITEM_LORE
+                ));
+
+        player.openInventory(GUI);
     }
 
 }

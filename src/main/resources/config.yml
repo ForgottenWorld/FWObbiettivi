@@ -46,3 +46,5 @@ languages:
     branch_back_item_name: "Torna indietro"
     branch_back_item_list:
       - a
+    branch_list_inventory_title: "Lista Rami"
+    goals_list_inventory_title: "Lista Obbiettivi in Ramo"
