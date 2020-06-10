@@ -17,6 +17,10 @@ public class GUIUtil {
     public static final int GOALS_DELETE_STEP = 4;
     public static final int BRANCH_STEP = 5;
 
+    public static final int BRANCH_NEW_STEP = 6;
+    public static final int BRANCH_EDIT_STEP = 7;
+    public static final int BRANCH_DELETE_STEP = 8;
+
     // Menu Obbiettivi Cittadini
     public static String GOALS_INVENTORY_TITLE = ConfigUtil.getConfigStringLang("goals_inventory_title");
     public static int GOALS_INVENTORY_SIZE = 9;

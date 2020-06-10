@@ -15,14 +15,16 @@ public class ObbiettiviGUI {
 
     private Player player;
     private Action action;
+    private boolean firstStep;
 
     public ObbiettiviGUI(Player player){
         this.player = player;
     }
 
-    public ObbiettiviGUI(Player player, Action action){
+    public ObbiettiviGUI(Player player, Action action, boolean firstStep){
         this.player = player;
         this.action = action;
+        this.firstStep = firstStep;
     }
 
     public void openGUI(int step){
@@ -31,13 +33,13 @@ public class ObbiettiviGUI {
                 openGoalsGUI();
                 break;
             case GUIUtil.GOALS_NEW_STEP:
-                openGoalsListGUI();
+                openBranchListGUI();
                 break;
             case GUIUtil.GOALS_EDIT_STEP:
-                openGoalsListGUI();
+                openBranchListGUI();
                 break;
             case GUIUtil.GOALS_DELETE_STEP:
-                openGoalsListGUI();
+                openBranchListGUI();
                 break;
             case GUIUtil.BRANCH_STEP:
                 openBranchGUI();
@@ -83,9 +85,63 @@ public class ObbiettiviGUI {
     }
 
     private void openGoalsListGUI() {
+        switch (this.action){
+            case NEW:
+                break;
+            case EDIT:
+                break;
+            case DELETE:
+                break;
+        }
     }
 
     private void openBranchGUI() {
+        Inventory GUI = Bukkit.createInventory(null, GUIUtil.BRANCH_INVENTORY_SIZE, GUIUtil.BRANCH_INVENTORY_TITLE);
+
+        GUI.setItem(GUIUtil.BRANCH_NEW_ITEM_SLOT,
+                GUIUtil.prepareMenuPoint(
+                        GUIUtil.BRANCH_NEW_ITEM_MATERIAL,
+                        GUIUtil.BRANCH_NEW_ITEM_NAME,
+                        GUIUtil.BRANCH_NEW_ITEM_LORE
+                ));
+        GUI.setItem(GUIUtil.BRANCH_EDIT_ITEM_SLOT,
+                GUIUtil.prepareMenuPoint(
+                        GUIUtil.BRANCH_EDIT_ITEM_MATERIAL,
+                        GUIUtil.BRANCH_EDIT_ITEM_NAME,
+                        GUIUtil.BRANCH_EDIT_ITEM_LORE
+                ));
+        GUI.setItem(GUIUtil.BRANCH_DELETE_ITEM_SLOT,
+                GUIUtil.prepareMenuPoint(
+                        GUIUtil.BRANCH_DELETE_ITEM_MATERIAL,
+                        GUIUtil.BRANCH_DELETE_ITEM_NAME,
+                        GUIUtil.BRANCH_DELETE_ITEM_LORE
+                ));
+        GUI.setItem(GUIUtil.BRANCH_BACK_ITEM_SLOT,
+                GUIUtil.prepareMenuPoint(
+                        GUIUtil.BRANCH_BACK_ITEM_MATERIAL,
+                        GUIUtil.BRANCH_BACK_ITEM_NAME,
+                        GUIUtil.BRANCH_BACK_ITEM_LORE
+                ));
+
+        player.openInventory(GUI);
+    }
+
+    private void openBranchListGUI() {
+        // Controllo se devo interagire con il Branch o un Goals
+        // Branch
+        if (firstStep) {
+            switch (this.action) {
+                case NEW:
+                    break;
+                case EDIT:
+                    break;
+                case DELETE:
+                    break;
+            }
+            return;
+        }
+
+        // Goals
     }
 
 }
