@@ -22,7 +22,7 @@ public class ObbiettiviCommandExecutor implements TabExecutor {
                 break;
             case 1:
                 switch (args[0].toLowerCase()){
-                    case "gui":
+                    case CommandTypes.GUI_COMMAND:
                         // Deve essere un Player
                         if (!(sender instanceof Player)){
                             sender.sendMessage(Messages.NO_CONSOLE);
@@ -39,10 +39,13 @@ public class ObbiettiviCommandExecutor implements TabExecutor {
                         ObbiettiviGUI gui = new ObbiettiviGUI(player);
                         gui.openGUI(GUIUtil.GOALS_STEP);
                         return true;
-                    case "help":
+                    case CommandTypes.HELP_COMMAND:
                         sender.sendMessage(ChatFormatter.helpMessage());
                         return true;
-                    case "reload":
+                    case CommandTypes.PAY_COMMAND:
+                        // To do
+                        return true;
+                    case CommandTypes.RELOAD_COMMAND:
                         // Ha i permessi?
                         if(!sender.hasPermission(Permissions.PERM_RELOAD)){
                             sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
@@ -75,13 +78,16 @@ public class ObbiettiviCommandExecutor implements TabExecutor {
         switch (args.length){
             case 1:
                 if (sender.hasPermission(Permissions.PERM_GUI))
-                    suggestions.add("gui");
+                    suggestions.add(CommandTypes.GUI_COMMAND);
 
-                suggestions.add("help");
+                suggestions.add(CommandTypes.HELP_COMMAND);
+
+                if (sender.hasPermission(Permissions.PERM_PAY))
+                    suggestions.add(CommandTypes.PAY_COMMAND);
 
                 if (sender.hasPermission(Permissions.PERM_RELOAD))
-                    suggestions.add("reload");
-                
+                    suggestions.add(CommandTypes.RELOAD_COMMAND);
+
                 break;
             case 2:
                 break;
