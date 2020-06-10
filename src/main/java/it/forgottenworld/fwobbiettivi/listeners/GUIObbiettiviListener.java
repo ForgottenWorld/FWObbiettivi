@@ -37,21 +37,25 @@ public class GUIObbiettiviListener implements Listener {
                 // Apro GUI Lista Rami
                 ObbiettiviGUI newObGUI = new ObbiettiviGUI(whoClicked, ObbiettiviGUI.Action.NEW, false);
                 newObGUI.openGUI(GUIUtil.GOALS_NEW_STEP);
+                whoClicked.playSound( whoClicked.getLocation(), Sound.BLOCK_LEVER_CLICK, 10, 1 );
                 break;
             case WRITABLE_BOOK: // Modifica
                 // Apro GUI Lista Rami
                 ObbiettiviGUI editObGUI = new ObbiettiviGUI(whoClicked, ObbiettiviGUI.Action.EDIT, false);
                 editObGUI.openGUI(GUIUtil.GOALS_EDIT_STEP);
+                whoClicked.playSound( whoClicked.getLocation(), Sound.BLOCK_LEVER_CLICK, 10, 1 );
                 break;
             case BARRIER:       // Elimina
                 // Apro GUI Lista Rami
                 ObbiettiviGUI deleteObGUI = new ObbiettiviGUI(whoClicked, ObbiettiviGUI.Action.DELETE, false);
                 deleteObGUI.openGUI(GUIUtil.GOALS_DELETE_STEP);
+                whoClicked.playSound( whoClicked.getLocation(), Sound.BLOCK_LEVER_CLICK, 10, 1 );
                 break;
             case DEAD_BUSH:     // Ramo
                 // Apro GUI Rami Obbiettivi
                 ObbiettiviGUI branch = new ObbiettiviGUI(whoClicked);
                 branch.openGUI(GUIUtil.BRANCH_STEP);
+                whoClicked.playSound( whoClicked.getLocation(), Sound.BLOCK_LEVER_CLICK, 10, 1 );
                 break;
             case RED_STAINED_GLASS_PANE:    // Chiudi
                 // Chiudo la GUI Obbiettivi Cittadini
@@ -68,21 +72,25 @@ public class GUIObbiettiviListener implements Listener {
                 // Apro Modulo creazione Rami
                 ObbiettiviGUI newObGUI = new ObbiettiviGUI(whoClicked, ObbiettiviGUI.Action.NEW, false);
                 newObGUI.openGUI(GUIUtil.BRANCH_NEW_STEP);
+                whoClicked.playSound(whoClicked.getLocation(), Sound.ENTITY_ITEM_FRAME_REMOVE_ITEM, 10, 1);
                 break;
             case WRITABLE_BOOK: // Modifica
                 // Apro GUI Lista Rami
                 ObbiettiviGUI editObGUI = new ObbiettiviGUI(whoClicked, ObbiettiviGUI.Action.EDIT, false);
                 editObGUI.openGUI(GUIUtil.BRANCH_EDIT_STEP);
+                whoClicked.playSound(whoClicked.getLocation(), Sound.ENTITY_ITEM_FRAME_REMOVE_ITEM, 10, 1);
                 break;
             case BARRIER:       // Elimina
                 // Apro GUI Lista Rami
                 ObbiettiviGUI deleteObGUI = new ObbiettiviGUI(whoClicked, ObbiettiviGUI.Action.DELETE, false);
                 deleteObGUI.openGUI(GUIUtil.BRANCH_DELETE_STEP);
+                whoClicked.playSound(whoClicked.getLocation(), Sound.ENTITY_ITEM_FRAME_REMOVE_ITEM, 10, 1);
                 break;
             case RED_STAINED_GLASS_PANE:    // Torna indietro
                 // Torno alla GUI precedente (Obbiettivi Cittadini)
                 ObbiettiviGUI backObGUI = new ObbiettiviGUI(whoClicked);
                 backObGUI.openGUI(GUIUtil.GOALS_STEP);
+                whoClicked.playSound(whoClicked.getLocation(), Sound.ENTITY_ITEM_FRAME_REMOVE_ITEM, 10, 1);
                 break;
         }
     }
