@@ -35,7 +35,7 @@ public class ObbiettiviCommandExecutor implements TabExecutor {
                             player.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
                             return true;
                         }
-                        
+
                         ObbiettiviGUI gui = new ObbiettiviGUI(player);
                         gui.openGUI(GUIUtil.GOALS_STEP);
                         return true;
@@ -43,6 +43,12 @@ public class ObbiettiviCommandExecutor implements TabExecutor {
                         sender.sendMessage(ChatFormatter.helpMessage());
                         return true;
                     case "reload":
+                        // Ha i permessi?
+                        if(!sender.hasPermission(Permissions.PERM_RELOAD)){
+                            sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
+                            return true;
+                        }
+
                         FWObbiettivi.info("Saving infos...");
 
                         FWObbiettivi.info("Data saved");
