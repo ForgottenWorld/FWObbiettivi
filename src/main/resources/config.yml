@@ -33,3 +33,16 @@ languages:
     goals_close_item_name: "Chiudi"
     goals_close_item_list:
       - a
+    branch_inventory_title: "Rami Obbiettivi"
+    branch_new_item_name: "Aggiugni"
+    branch_new_item_list:
+      - test
+    branch_edit_item_name: "Modifica"
+    branch_edit_item_list:
+      - a
+    branch_delete_item_name: "Elimina"
+    branch_delete_item_list:
+      - a
+    branch_back_item_name: "Torna indietro"
+    branch_back_item_list:
+      - a

@@ -45,6 +45,42 @@ public class GUIUtil {
     public static final Material GOALS_BRANCH_ITEM_MATERIAL = Material.DEAD_BUSH;
     public static final Material GOALS_CLOSE_ITEM_MATERIAL = Material.RED_STAINED_GLASS_PANE;
 
+    // Menu New Obbiettivo
+
+    // Menu Edit Obbiettivo
+
+    // Menu Delete Obbiettivo
+
+    // Menu Rami Obbiettivi
+    public static String BRANCH_INVENTORY_TITLE = ConfigUtil.getConfigStringLang("branch_inventory_title");
+    public static int BRANCH_INVENTORY_SIZE = 9;
+
+    public static final int BRANCH_NEW_ITEM_SLOT = 0;
+    public static final int BRANCH_EDIT_ITEM_SLOT = 1;
+    public static final int BRANCH_DELETE_ITEM_SLOT = 2;
+    public static final int BRANCH_BACK_ITEM_SLOT = 8;
+
+    public static final String BRANCH_NEW_ITEM_NAME = ConfigUtil.getConfigStringLang("branch_new_item_name");
+    public static final String BRANCH_EDIT_ITEM_NAME = ConfigUtil.getConfigStringLang("branch_edit_item_name");
+    public static final String BRANCH_DELETE_ITEM_NAME = ConfigUtil.getConfigStringLang("branch_delete_item_name");
+    public static final String BRANCH_BACK_ITEM_NAME = ConfigUtil.getConfigStringLang("branch_back_item_name");
+
+    public static final List<String> BRANCH_NEW_ITEM_LORE = ConfigUtil.getConfigStringListLang("branch_new_item_list");
+    public static final List<String> BRANCH_EDIT_ITEM_LORE = ConfigUtil.getConfigStringListLang("branch_edit_item_list");
+    public static final List<String> BRANCH_DELETE_ITEM_LORE = ConfigUtil.getConfigStringListLang("branch_delete_item_list");
+    public static final List<String> BRANCH_BACK_ITEM_LORE = ConfigUtil.getConfigStringListLang("branch_back_item_list");
+
+    public static final Material BRANCH_NEW_ITEM_MATERIAL = Material.NETHER_STAR;
+    public static final Material BRANCH_EDIT_ITEM_MATERIAL = Material.WRITABLE_BOOK;
+    public static final Material BRANCH_DELETE_ITEM_MATERIAL = Material.BARRIER;
+    public static final Material BRANCH_BACK_ITEM_MATERIAL = Material.RED_STAINED_GLASS_PANE;
+
+    // Menu New Ramo
+
+    // Menu Edit Ramo
+
+    // Menu Delete Ramo
+
     public static ItemStack prepareMenuPoint(Material material, String displayName, List<String> lore) {
         ItemStack menuPoint = new ItemStack(material);
 
