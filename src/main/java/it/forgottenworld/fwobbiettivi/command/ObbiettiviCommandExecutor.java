@@ -2,10 +2,7 @@ package it.forgottenworld.fwobbiettivi.command;
 
 import it.forgottenworld.fwobbiettivi.FWObbiettivi;
 import it.forgottenworld.fwobbiettivi.gui.ObbiettiviGUI;
-import it.forgottenworld.fwobbiettivi.utility.ChatFormatter;
-import it.forgottenworld.fwobbiettivi.utility.GUIUtil;
-import it.forgottenworld.fwobbiettivi.utility.Messages;
-import it.forgottenworld.fwobbiettivi.utility.NameUtil;
+import it.forgottenworld.fwobbiettivi.utility.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -26,7 +23,20 @@ public class ObbiettiviCommandExecutor implements TabExecutor {
             case 1:
                 switch (args[0].toLowerCase()){
                     case "gui":
-                        ObbiettiviGUI gui = new ObbiettiviGUI((Player) sender);
+                        // Deve essere un Player
+                        if (!(sender instanceof Player)){
+                            sender.sendMessage(Messages.NO_CONSOLE);
+                            return true;
+                        }
+
+                        Player player = (Player) sender;
+                        // Ha i permessi?
+                        if(!player.hasPermission(Permissions.PERM_GUI)){
+                            player.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
+                            return true;
+                        }
+                        
+                        ObbiettiviGUI gui = new ObbiettiviGUI(player);
                         gui.openGUI(GUIUtil.GOALS_STEP);
                         return true;
                     case "help":
