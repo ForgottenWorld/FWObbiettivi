@@ -1,2 +1,2 @@
 # FWObbiettivi
-Plugin per la gestione degli obbiettivi cittadini
+SpigotMC plugin for creating and managing town goals using the Towny plugin.

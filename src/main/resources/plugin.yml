@@ -6,7 +6,7 @@ prefix: FWObbiettivi
 load: STARTUP
 depend: [Towny]
 authors: [Markus__27]
-description: Plugin per la gestione degli Obbiettivi Cittadini
+description: SpigotMC plugin for creating and managing town goals using the Towny plugin.
 website: https://forgottenworld.it/
 commands:
   obbiettivo:
