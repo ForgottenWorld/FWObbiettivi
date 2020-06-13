@@ -1,4 +1,4 @@
-package it.forgottenworld.fwobbiettivi.goals;
+package it.forgottenworld.fwobbiettivi.objects;
 
 import org.bukkit.inventory.ItemStack;
 

@@ -1,8 +1,8 @@
 package it.forgottenworld.fwobbiettivi;
 
 import it.forgottenworld.fwobbiettivi.command.ObbiettiviCommandExecutor;
-import it.forgottenworld.fwobbiettivi.goals.Obbiettivo;
-import it.forgottenworld.fwobbiettivi.goals.Ramo;
+import it.forgottenworld.fwobbiettivi.objects.Obbiettivo;
+import it.forgottenworld.fwobbiettivi.objects.Ramo;
 import it.forgottenworld.fwobbiettivi.listeners.DisbandTownListener;
 import it.forgottenworld.fwobbiettivi.listeners.GUIObbiettiviListener;
 import org.bukkit.Bukkit;
