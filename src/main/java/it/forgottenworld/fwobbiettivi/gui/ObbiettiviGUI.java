@@ -41,6 +41,15 @@ public class ObbiettiviGUI {
             case GUIUtil.GOALS_DELETE_STEP:
                 openBranchListGUI();
                 break;
+            case GUIUtil.BRANCH_NEW_STEP:
+                openBranchListGUI();
+                break;
+            case GUIUtil.BRANCH_EDIT_STEP:
+                openBranchListGUI();
+                break;
+            case GUIUtil.BRANCH_DELETE_STEP:
+                openBranchListGUI();
+                break;
             case GUIUtil.BRANCH_STEP:
                 openBranchGUI();
                 break;

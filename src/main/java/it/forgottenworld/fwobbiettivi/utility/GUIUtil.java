@@ -90,9 +90,9 @@ public class GUIUtil {
 
     // Menu Lista Rami
     public static final String BRANCH_LIST_INVENTORY_TITLE = ConfigUtil.getConfigStringLang("branch_list_inventory_title");
-    public static int BRANCH_LIST_INVENTORY_SIZE = 54;
+    public static int BRANCH_LIST_INVENTORY_SIZE = 18;
 
-    public static final int BRANCH_LIST_BACK_ITEM_SLOT = 53;
+    public static final int BRANCH_LIST_BACK_ITEM_SLOT = 17;
 
     public static final String BRANCH_LIST_BACK_ITEM_NAME = ConfigUtil.getConfigStringLang("branch_back_item_name");
 

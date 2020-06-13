@@ -53,11 +53,11 @@ public class ObbiettiviCommandExecutor implements TabExecutor {
                         }
 
                         FWObbiettivi.info("Saving infos...");
-
+                        FWObbiettivi.saveData();
                         FWObbiettivi.info("Data saved");
 
                         FWObbiettivi.info("Loading infos...");
-
+                        FWObbiettivi.loadData();
                         FWObbiettivi.info("Data loades");
 
                         FWObbiettivi.instance.reloadConfig();
