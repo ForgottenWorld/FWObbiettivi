@@ -22,6 +22,16 @@ public class ObbiettiviCommandExecutor implements TabExecutor {
                 break;
             case 1:
                 switch (args[0].toLowerCase()){
+                    case CommandTypes.ADD_COMMAND:
+                        break;
+
+                    case CommandTypes.DELETE_COMMAND:
+                        break;
+
+
+                    case CommandTypes.EDIT_COMMAND:
+                        break;
+
                     case CommandTypes.GUI_COMMAND:
                         // Deve essere un Player
                         if (!(sender instanceof Player)){
@@ -39,12 +49,21 @@ public class ObbiettiviCommandExecutor implements TabExecutor {
                         ObbiettiviGUI gui = new ObbiettiviGUI(player);
                         gui.openGUI(GUIUtil.GOALS_STEP);
                         return true;
+
                     case CommandTypes.HELP_COMMAND:
                         sender.sendMessage(ChatFormatter.helpMessage());
                         return true;
+
+                    case CommandTypes.MOVE_COMMAND:
+                        break;
+
+                    case CommandTypes.NEW_COMMAND:
+                        break;
+
                     case CommandTypes.PAY_COMMAND:
                         // To do
                         return true;
+
                     case CommandTypes.RELOAD_COMMAND:
                         // Ha i permessi?
                         if(!sender.hasPermission(Permissions.PERM_RELOAD)){
@@ -63,6 +82,12 @@ public class ObbiettiviCommandExecutor implements TabExecutor {
                         FWObbiettivi.instance.reloadConfig();
                         FWObbiettivi.info(Messages.CONFIG_RELOAD);
                         return true;
+
+                    case CommandTypes.REMOVE_COMMAND:
+                        break;
+
+                    case CommandTypes.TP_COMMAND:
+                        break;
                 }
                 break;
         }
