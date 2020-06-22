@@ -1,7 +1,6 @@
 package it.forgottenworld.fwobbiettivi.command;
 
 import it.forgottenworld.fwobbiettivi.FWObbiettivi;
-import it.forgottenworld.fwobbiettivi.gui.GoalsGUI;
 import it.forgottenworld.fwobbiettivi.utility.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -27,10 +26,9 @@ public class GoalsCommandExecutor implements TabExecutor {
 
                     case CommandTypes.CREATE_COMMAND:
                         break;
-                        
+
                     case CommandTypes.DELETE_COMMAND:
                         break;
-
 
                     case CommandTypes.EDIT_COMMAND:
                         break;
@@ -49,8 +47,9 @@ public class GoalsCommandExecutor implements TabExecutor {
                             return true;
                         }
 
-                        GoalsGUI gui = new GoalsGUI(player);
-                        gui.openGUI(GUIUtil.GOALS_STEP);
+                        FWObbiettivi.instance.gui.setSteps(new ArrayList<Integer>());
+                        FWObbiettivi.instance.gui.setPlayer(player);
+                        FWObbiettivi.instance.gui.openGUI(GUIUtil.GOALS_STEP);
                         return true;
 
                     case CommandTypes.HELP_COMMAND:

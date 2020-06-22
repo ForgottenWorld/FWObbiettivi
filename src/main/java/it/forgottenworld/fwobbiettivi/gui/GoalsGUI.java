@@ -8,7 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GoalsGUI {
 
@@ -20,19 +21,44 @@ public class GoalsGUI {
 
     private Player player;
     private Action action;
-    private boolean firstStep;
+    private List<Integer> steps;
 
-    public GoalsGUI(Player player){
+    public GoalsGUI(){
+        this.steps = new ArrayList<Integer>();
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
         this.player = player;
     }
 
-    public GoalsGUI(Player player, Action action, boolean firstStep){
-        this.player = player;
+    public Action getAction() {
+        return action;
+    }
+
+    public void setAction(Action action) {
         this.action = action;
-        this.firstStep = firstStep;
     }
+
+    public List<Integer> getSteps() {
+        return steps;
+    }
+
+    public void setSteps(List<Integer> steps) {
+        this.steps = steps;
+    }
+
+    /**
+     *
+     * @param step
+     */
 
     public void openGUI(int step){
+        steps.add(step);
+        player.sendMessage(steps.toString());
         switch (step){
             case GUIUtil.GOALS_STEP:
                 openGoalsGUI();
@@ -57,6 +83,9 @@ public class GoalsGUI {
                 break;
             case GUIUtil.BRANCH_STEP:
                 openBranchGUI();
+                break;
+            default:
+
                 break;
         }
     }

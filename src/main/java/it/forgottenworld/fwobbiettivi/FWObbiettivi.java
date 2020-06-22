@@ -1,6 +1,7 @@
 package it.forgottenworld.fwobbiettivi;
 
 import it.forgottenworld.fwobbiettivi.command.GoalsCommandExecutor;
+import it.forgottenworld.fwobbiettivi.gui.GoalsGUI;
 import it.forgottenworld.fwobbiettivi.objects.Goal;
 import it.forgottenworld.fwobbiettivi.objects.Branch;
 import it.forgottenworld.fwobbiettivi.listeners.DisbandTownListener;
@@ -20,11 +21,12 @@ public final class FWObbiettivi extends JavaPlugin {
     public ArrayList<Branch> rami = new ArrayList<Branch>();
     public ArrayList<Goal> obbiettivi = new ArrayList<Goal>();
     public ArrayList<TownGoals> obbiettiviInTown = new ArrayList<TownGoals>();
+    public GoalsGUI gui = new GoalsGUI();
 
     @Override
     public void onEnable() {
         info("Enabled!");
-        FWObbiettivi.instance = this;
+        instance = this;
 
         info("Loading configuration...");
         loadConfiguration();

@@ -18,7 +18,7 @@ languages:
   default: "it_IT"
   it_IT:
     goals_inventory_title: "Obbiettivi Cittadini"
-    goals_new_item_name: "Aggiugni"
+    goals_new_item_name: "Aggiungi"
     goals_new_item_list:
       - test
     goals_edit_item_name: "Modifica"
@@ -34,7 +34,7 @@ languages:
     goals_close_item_list:
       - a
     branch_inventory_title: "Rami Obbiettivi"
-    branch_new_item_name: "Aggiugni"
+    branch_new_item_name: "Aggiungi"
     branch_new_item_list:
       - test
     branch_edit_item_name: "Modifica"
