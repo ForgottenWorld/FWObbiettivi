@@ -1,11 +1,16 @@
 package it.forgottenworld.fwobbiettivi.gui;
 
+import it.forgottenworld.fwobbiettivi.FWObbiettivi;
+import it.forgottenworld.fwobbiettivi.objects.Branch;
+import it.forgottenworld.fwobbiettivi.objects.Goal;
 import it.forgottenworld.fwobbiettivi.utility.GUIUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-public class ObbiettiviGUI {
+import java.util.Iterator;
+
+public class GoalsGUI {
 
     public enum Action {
         NEW,
@@ -17,11 +22,11 @@ public class ObbiettiviGUI {
     private Action action;
     private boolean firstStep;
 
-    public ObbiettiviGUI(Player player){
+    public GoalsGUI(Player player){
         this.player = player;
     }
 
-    public ObbiettiviGUI(Player player, Action action, boolean firstStep){
+    public GoalsGUI(Player player, Action action, boolean firstStep){
         this.player = player;
         this.action = action;
         this.firstStep = firstStep;
@@ -96,11 +101,22 @@ public class ObbiettiviGUI {
     private void openGoalsListGUI() {
         Inventory GUI = Bukkit.createInventory(null, GUIUtil.GOALS_LIST_INVENTORY_SIZE, GUIUtil.GOALS_LIST_INVENTORY_TITLE);
 
-        GUI.setItem(GUIUtil.BRANCH_LIST_BACK_ITEM_SLOT,
+        for(int i = 0; i < FWObbiettivi.instance.obbiettivi.size(); i++){
+            // Creo item per ogni ramo presente nell'array
+            Goal obbiettivo = FWObbiettivi.instance.obbiettivi.get(i);
+            GUI.setItem(i,
+                    GUIUtil.prepareMenuPoint(
+                            obbiettivo.getBranch().getMaterial(),
+                            obbiettivo.getName(),
+                            obbiettivo.getDescrizione()
+                    ));
+        }
+
+        GUI.setItem(GUIUtil.GOALS_LIST_BACK_ITEM_SLOT,
                 GUIUtil.prepareMenuPoint(
-                        GUIUtil.BRANCH_LIST_BACK_ITEM_MATERIAL,
-                        GUIUtil.BRANCH_LIST_BACK_ITEM_NAME,
-                        GUIUtil.BRANCH_LIST_BACK_ITEM_LORE
+                        GUIUtil.GOALS_LIST_BACK_ITEM_MATERIAL,
+                        GUIUtil.GOALS_LIST_BACK_ITEM_NAME,
+                        GUIUtil.GOALS_LIST_BACK_ITEM_LORE
                 ));
 
         player.openInventory(GUI);
@@ -139,6 +155,17 @@ public class ObbiettiviGUI {
 
     private void openBranchListGUI() {
         Inventory GUI = Bukkit.createInventory(null, GUIUtil.BRANCH_LIST_INVENTORY_SIZE, GUIUtil.BRANCH_LIST_INVENTORY_TITLE);
+
+        for(int i = 0; i < FWObbiettivi.instance.rami.size(); i++){
+            // Creo item per ogni ramo presente nell'array
+            Branch ramo = FWObbiettivi.instance.rami.get(i);
+            GUI.setItem(i,
+                    GUIUtil.prepareMenuPoint(
+                            ramo.getMaterial(),
+                            ramo.getName(),
+                            ramo.getDescrizione()
+                    ));
+        }
 
         GUI.setItem(GUIUtil.BRANCH_LIST_BACK_ITEM_SLOT,
                 GUIUtil.prepareMenuPoint(

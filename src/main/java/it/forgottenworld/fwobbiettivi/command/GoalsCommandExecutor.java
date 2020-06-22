@@ -1,7 +1,7 @@
 package it.forgottenworld.fwobbiettivi.command;
 
 import it.forgottenworld.fwobbiettivi.FWObbiettivi;
-import it.forgottenworld.fwobbiettivi.gui.ObbiettiviGUI;
+import it.forgottenworld.fwobbiettivi.gui.GoalsGUI;
 import it.forgottenworld.fwobbiettivi.utility.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ObbiettiviCommandExecutor implements TabExecutor {
+public class GoalsCommandExecutor implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -25,6 +25,9 @@ public class ObbiettiviCommandExecutor implements TabExecutor {
                     case CommandTypes.ADD_COMMAND:
                         break;
 
+                    case CommandTypes.CREATE_COMMAND:
+                        break;
+                        
                     case CommandTypes.DELETE_COMMAND:
                         break;
 
@@ -46,7 +49,7 @@ public class ObbiettiviCommandExecutor implements TabExecutor {
                             return true;
                         }
 
-                        ObbiettiviGUI gui = new ObbiettiviGUI(player);
+                        GoalsGUI gui = new GoalsGUI(player);
                         gui.openGUI(GUIUtil.GOALS_STEP);
                         return true;
 
@@ -55,9 +58,6 @@ public class ObbiettiviCommandExecutor implements TabExecutor {
                         return true;
 
                     case CommandTypes.MOVE_COMMAND:
-                        break;
-
-                    case CommandTypes.NEW_COMMAND:
                         break;
 
                     case CommandTypes.PAY_COMMAND:

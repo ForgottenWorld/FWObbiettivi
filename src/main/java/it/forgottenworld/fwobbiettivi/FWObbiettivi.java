@@ -1,10 +1,11 @@
 package it.forgottenworld.fwobbiettivi;
 
-import it.forgottenworld.fwobbiettivi.command.ObbiettiviCommandExecutor;
-import it.forgottenworld.fwobbiettivi.objects.Obbiettivo;
-import it.forgottenworld.fwobbiettivi.objects.Ramo;
+import it.forgottenworld.fwobbiettivi.command.GoalsCommandExecutor;
+import it.forgottenworld.fwobbiettivi.objects.Goal;
+import it.forgottenworld.fwobbiettivi.objects.Branch;
 import it.forgottenworld.fwobbiettivi.listeners.DisbandTownListener;
-import it.forgottenworld.fwobbiettivi.listeners.GUIObbiettiviListener;
+import it.forgottenworld.fwobbiettivi.listeners.GUIGoalsListener;
+import it.forgottenworld.fwobbiettivi.objects.TownGoals;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,8 +17,9 @@ public final class FWObbiettivi extends JavaPlugin {
 
     static FileConfiguration defaultConfig;
     public static FWObbiettivi instance;
-    public ArrayList<Ramo> listaRami = new ArrayList<Ramo>();
-    public ArrayList<Obbiettivo> listaObbiettivo = new ArrayList<Obbiettivo>();
+    public ArrayList<Branch> rami = new ArrayList<Branch>();
+    public ArrayList<Goal> obbiettivi = new ArrayList<Goal>();
+    public ArrayList<TownGoals> obbiettiviInTown = new ArrayList<TownGoals>();
 
     @Override
     public void onEnable() {
@@ -29,14 +31,14 @@ public final class FWObbiettivi extends JavaPlugin {
 
         // Registrazione CommandExecutor
         info("Registering commands...");
-        this.getCommand("obbiettivo").setExecutor(new ObbiettiviCommandExecutor());
-        this.getCommand("ob").setExecutor(new ObbiettiviCommandExecutor());
-        this.getCommand("goals").setExecutor(new ObbiettiviCommandExecutor());
+        this.getCommand("obbiettivo").setExecutor(new GoalsCommandExecutor());
+        this.getCommand("ob").setExecutor(new GoalsCommandExecutor());
+        this.getCommand("goals").setExecutor(new GoalsCommandExecutor());
 
         // Registrazione event-listeners
         info("Registering listeners...");
         this.getServer().getPluginManager().registerEvents(new DisbandTownListener(), this);
-        this.getServer().getPluginManager().registerEvents(new GUIObbiettiviListener(), this);
+        this.getServer().getPluginManager().registerEvents(new GUIGoalsListener(), this);
 
         // Caricamento da file
         info("Loading infos...");

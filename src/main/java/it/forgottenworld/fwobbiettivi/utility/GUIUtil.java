@@ -90,13 +90,13 @@ public class GUIUtil {
 
     // Menu Lista Rami
     public static final String BRANCH_LIST_INVENTORY_TITLE = ConfigUtil.getConfigStringLang("branch_list_inventory_title");
-    public static int BRANCH_LIST_INVENTORY_SIZE = 18;
+    public static int BRANCH_LIST_INVENTORY_SIZE = 27;
 
-    public static final int BRANCH_LIST_BACK_ITEM_SLOT = 17;
+    public static final int BRANCH_LIST_BACK_ITEM_SLOT = 26;
 
-    public static final String BRANCH_LIST_BACK_ITEM_NAME = ConfigUtil.getConfigStringLang("branch_back_item_name");
+    public static final String BRANCH_LIST_BACK_ITEM_NAME = ConfigUtil.getConfigStringLang("branch_list_back_item_name");
 
-    public static final List<String> BRANCH_LIST_BACK_ITEM_LORE = ConfigUtil.getConfigStringListLang("branch_back_item_list");
+    public static final List<String> BRANCH_LIST_BACK_ITEM_LORE = ConfigUtil.getConfigStringListLang("branch_list_back_item_list");
 
     public static final Material BRANCH_LIST_BACK_ITEM_MATERIAL = Material.BARRIER;
 
@@ -106,9 +106,9 @@ public class GUIUtil {
 
     public static final int GOALS_LIST_BACK_ITEM_SLOT = 53;
 
-    public static final String GOALS_LIST_BACK_ITEM_NAME = ConfigUtil.getConfigStringLang("branch_back_item_name");
+    public static final String GOALS_LIST_BACK_ITEM_NAME = ConfigUtil.getConfigStringLang("goals_list_back_item_name");
 
-    public static final List<String> GOALS_LIST_BACK_ITEM_LORE = ConfigUtil.getConfigStringListLang("branch_back_item_list");
+    public static final List<String> GOALS_LIST_BACK_ITEM_LORE = ConfigUtil.getConfigStringListLang("goals_list_back_item_list");
 
     public static final Material GOALS_LIST_BACK_ITEM_MATERIAL = Material.BARRIER;
 
