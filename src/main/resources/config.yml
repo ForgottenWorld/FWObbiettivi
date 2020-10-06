@@ -54,3 +54,8 @@ languages:
     goals_list_back_item_name: "Torna indietro"
     goals_list_back_item_list:
       - a
+    no_console: "Questo comando puo' essere eseguito solo da un player!"
+    no_perm: "Non hai abbastanza permessi."
+    config_reload: "Ricaricato file di configurazione."
+    no_town_loc: "Non sei sul suolo di una citta'."
+    no_goal: "L'obbiettivo non esiste."
