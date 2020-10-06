@@ -59,3 +59,22 @@ languages:
     config_reload: "Ricaricato file di configurazione."
     no_town_loc: "Non sei sul suolo di una citta'."
     no_goal: "L'obbiettivo non esiste."
+
+### Obbiettivi
+obiettivi:
+  obiettivoDiProva:
+    inputMaterial:
+      - COBBLESTONE
+      - WOOL
+    inputQuantity:
+      - 64
+      - 10
+    outputMaterial:
+      - GOLD_BLOCK
+    outputQuantity:
+      - 1
+
+### Mantenimento Bonus
+mantenimentoBonus:
+  plotNames:
+    Tesoreria: 0.001
