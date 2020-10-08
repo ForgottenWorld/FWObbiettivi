@@ -58,21 +58,35 @@ languages:
     no_perm: "Non hai abbastanza permessi."
     config_reload: "Ricaricato file di configurazione."
     no_town_loc: "Non sei sul suolo di una citta'."
-    no_goal: "L'obbiettivo non esiste."
+    no_goal: "Specifica un obbiettivo."
+    no_goal_in_list: "L'obbiettivo non esiste."
 
-### Obbiettivi
-obiettivi:
+### Goals
+goal:
   obiettivoDiProva:
-    inputMaterial:
+    branch: test
+    requiredGoals:
+      - test
+    payment:
       - COBBLESTONE
       - WOOL
-    inputQuantity:
+    paymentQuantity:
       - 64
       - 10
-    outputMaterial:
+    reward:
       - GOLD_BLOCK
-    outputQuantity:
+    rewardQuantity:
       - 1
+    description:
+      - Obbiettivo di test
+
+### Branches
+branch:
+  test:
+    material:
+      - COBBLESTONE
+    description:
+      - Ramo di test
 
 ### Mantenimento Bonus
 mantenimentoBonus:
