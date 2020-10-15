@@ -17,12 +17,12 @@ public class Goal {
      */
     private String name;
     private Branch branch;
-    private String[] requiredGoals;
-    private ItemStack[] payment;
-    private ItemStack[] reward;
+    private List<String> requiredGoals;
+    private List<ItemStack>  payment;
+    private List<ItemStack>  reward;
     private List<String> descrizione;
 
-    public Goal(String name, Branch branch, String[] requiredGoals, ItemStack[] payment, ItemStack[] reward, List<String> descrizione){
+    public Goal(String name, Branch branch, List<String> requiredGoals, List<ItemStack> payment, List<ItemStack> reward, List<String> descrizione){
         this.name = name;
         this.branch = branch;
         this.requiredGoals = requiredGoals;
@@ -47,27 +47,27 @@ public class Goal {
         this.branch = branch;
     }
 
-    public String[] getRequiredGoals() {
+    public List<String> getRequiredGoals() {
         return requiredGoals;
     }
 
-    public void setRequiredGoals(String[] requiredGoals) {
+    public void setRequiredGoals(List<String> requiredGoals) {
         this.requiredGoals = requiredGoals;
     }
 
-    public ItemStack[] getPayment() {
+    public List<ItemStack> getPayment() {
         return payment;
     }
 
-    public void setPayment(ItemStack[] payment) {
+    public void setPayment(List<ItemStack> payment) {
         this.payment = payment;
     }
 
-    public ItemStack[] getReward() {
+    public List<ItemStack> getReward() {
         return reward;
     }
 
-    public void setReward(ItemStack[] reward) {
+    public void setReward(List<ItemStack> reward) {
         this.reward = reward;
     }
 
@@ -86,18 +86,15 @@ public class Goal {
         Goal goal = (Goal) o;
         return Objects.equals(getName(), goal.getName()) &&
                 Objects.equals(getBranch(), goal.getBranch()) &&
-                Arrays.equals(getRequiredGoals(), goal.getRequiredGoals()) &&
-                Arrays.equals(getPayment(), goal.getPayment()) &&
-                Arrays.equals(getReward(), goal.getReward()) &&
+                Objects.equals(getRequiredGoals(), goal.getRequiredGoals()) &&
+                Objects.equals(getPayment(), goal.getPayment()) &&
+                Objects.equals(getReward(), goal.getReward()) &&
                 Objects.equals(getDescrizione(), goal.getDescrizione());
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(getName(), getBranch(), getDescrizione());
-        result = 31 * result + Arrays.hashCode(getRequiredGoals());
-        result = 31 * result + Arrays.hashCode(getPayment());
-        result = 31 * result + Arrays.hashCode(getReward());
+        int result = Objects.hash(getName(), getBranch(), getRequiredGoals(), getPayment(), getReward(), getDescrizione());
         return result;
     }
 
@@ -106,9 +103,9 @@ public class Goal {
         return "Goal{" +
                 "name='" + name + '\'' +
                 ", branch=" + branch +
-                ", requiredGoals=" + Arrays.toString(requiredGoals) +
-                ", payment=" + Arrays.toString(payment) +
-                ", reward=" + Arrays.toString(reward) +
+                ", requiredGoals=" + requiredGoals +
+                ", payment=" + payment +
+                ", reward=" + reward +
                 ", descrizione=" + descrizione +
                 '}';
     }

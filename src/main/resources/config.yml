@@ -12,6 +12,8 @@
 # |                                                                                              | #
 # +----------------------------------------------------------------------------------------------+ #
 ####################################################################################################
+# DEBUG MODE
+debug: true
 
 # Select your language
 languages:
@@ -60,16 +62,20 @@ languages:
     no_town_loc: "Non sei sul suolo di una citta'."
     no_goal: "Specifica un obbiettivo."
     no_goal_in_list: "L'obbiettivo non esiste."
+    no_chest: "Devi guardare una CHEST."
+    no_double_chest: "La CHEST deve essere singola."
+    goal_already_present: "L'obbiettivo e' gia' presente in questa citta'."
+    goal_added: "Obbiettivo aggiunto con successo."
 
 ### Goals
 goal:
   obiettivoDiProva:
-    branch: test
+    branch: "test"
     requiredGoals:
       - test
     payment:
       - COBBLESTONE
-      - WOOL
+      - WHITE_WOOL
     paymentQuantity:
       - 64
       - 10
@@ -83,8 +89,7 @@ goal:
 ### Branches
 branch:
   test:
-    material:
-      - COBBLESTONE
+    material: "COBBLESTONE"
     description:
       - Ramo di test
 

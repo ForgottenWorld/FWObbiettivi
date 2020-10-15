@@ -2,11 +2,13 @@ package it.forgottenworld.fwobbiettivi;
 
 import it.forgottenworld.fwobbiettivi.command.GoalsCommandExecutor;
 import it.forgottenworld.fwobbiettivi.gui.GoalsGUI;
+import it.forgottenworld.fwobbiettivi.listeners.GoalsChestEvent;
 import it.forgottenworld.fwobbiettivi.objects.Goal;
 import it.forgottenworld.fwobbiettivi.objects.Branch;
 import it.forgottenworld.fwobbiettivi.listeners.DisbandTownListener;
 import it.forgottenworld.fwobbiettivi.listeners.GUIGoalsListener;
 import it.forgottenworld.fwobbiettivi.objects.TownGoals;
+import it.forgottenworld.fwobbiettivi.utility.ConfigUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -20,9 +22,9 @@ public final class FWObbiettivi extends JavaPlugin {
 
     static FileConfiguration defaultConfig;
     public static FWObbiettivi instance;
-    public ArrayList<Branch> rami = new ArrayList<Branch>();
-    public ArrayList<Goal> obbiettivi = new ArrayList<Goal>();
-    public ArrayList<TownGoals> obbiettiviInTown = new ArrayList<TownGoals>();
+    public static ArrayList<Branch> rami = new ArrayList<Branch>();
+    public static ArrayList<Goal> obbiettivi = new ArrayList<Goal>();
+    public static ArrayList<TownGoals> obbiettiviInTown = new ArrayList<TownGoals>();
     public GoalsGUI gui = new GoalsGUI();
     public HashMap<Player, GoalsGUI> map = new HashMap<>();
 
@@ -44,6 +46,7 @@ public final class FWObbiettivi extends JavaPlugin {
         info("Registering listeners...");
         this.getServer().getPluginManager().registerEvents(new DisbandTownListener(), this);
         this.getServer().getPluginManager().registerEvents(new GUIGoalsListener(), this);
+        this.getServer().getPluginManager().registerEvents(new GoalsChestEvent(), this);
 
         // Caricamento da file
         info("Loading infos...");
@@ -69,6 +72,13 @@ public final class FWObbiettivi extends JavaPlugin {
 
     // Metodi per il salvataggio dei dati su file e per il loro caricamento
     public static void loadData() {
+        info("Loading Branch");
+        rami = ConfigUtil.loadBranchesList();
+        info("Finish loading Branch");
+
+        info("Loading Goals");
+        obbiettivi = ConfigUtil.loadGoalsList();
+        info("Finish loading Goals");
     }
 
     public static void saveData() {

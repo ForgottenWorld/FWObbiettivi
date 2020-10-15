@@ -10,12 +10,20 @@ import it.forgottenworld.fwobbiettivi.objects.Goal;
 import it.forgottenworld.fwobbiettivi.objects.TownGoals;
 import it.forgottenworld.fwobbiettivi.utility.*;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.DoubleChestInventory;
+import org.bukkit.metadata.FixedMetadataValue;
 
+import java.time.Clock;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -24,127 +32,172 @@ public class GoalsCommandExecutor implements TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        switch (args.length){
-            case 0:
+        if (args.length >= 1){
+            switch (args[0].toLowerCase()){
+                case CommandTypes.ADD_COMMAND:
+                    // Adding a Goal to a existing Town
+                    // Check if the sender is a player
+                    if (!(sender instanceof Player)){
+                        sender.sendMessage(Messages.NO_CONSOLE);
+                        return true;
+                    }
 
-                break;
-            case 1:
-                switch (args[0].toLowerCase()){
-                    case CommandTypes.ADD_COMMAND:
-                        // Adding a Goal to a existing Town
-                        // Check if the sender is a player
-                        if (!(sender instanceof Player)){
-                            sender.sendMessage(Messages.NO_CONSOLE);
+                    Player playerAdd = (Player) sender;
+
+                    // Do you have the permissions?
+                    if(!playerAdd.hasPermission(Permissions.PERM_ADD)){
+                        playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
+                        return true;
+                    }
+
+                    // Save location of chest
+                    Block b = playerAdd.getTargetBlock(null, 5);
+                    if(b.getType() != Material.CHEST){
+                        playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_CHEST));
+                        return true;
+                    }else{
+                        Chest chest = (Chest) b.getState();
+                        if (chest.getInventory() instanceof DoubleChestInventory){
+                            playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_DOUBLE_CHEST));
                             return true;
                         }
+                    }
 
-                        Player playerAdd = (Player) sender;
+                    Location loc = b.getLocation();
 
-                        // Save location
-                        Location loc = playerAdd.getLocation();
+                    // Check if the location is in a Town
+                    Town town = null;
+                    try {
+                        // Try to get the town where the player is Standing
+                        town = WorldCoord.parseWorldCoord(playerAdd.getLocation()).getTownBlock().getTown();
+                    } catch (NotRegisteredException e) {
+                        // Not in a town
+                        playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_LOC));
+                        return true;
+                    }
 
-                        // Check if the location is in a Town
-                        Town town = null;
-                        try {
-                            // Try to get the town where the player is Standing
-                            town = WorldCoord.parseWorldCoord(playerAdd.getLocation()).getTownBlock().getTown();
-                        } catch (NotRegisteredException e) {
-                            // Not in a town
-                            e.printStackTrace();
-                            playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_LOC));
-                        }
+                    // Check if the Goal exist
+                    if(args.length > 1){
+                        if(ConfigUtil.DEBUG)
+                            FWObbiettivi.info(ChatFormatter.formatDebugMessage(FWObbiettivi.instance.obbiettivi.toString()));
 
-                        // Check if the Goal exist
-                        boolean exist = false;
+                        boolean founded = false;
                         for (Iterator<Goal> it = FWObbiettivi.instance.obbiettivi.iterator(); it.hasNext(); ) {
                             Goal goal = it.next();
-                            if (goal.getName() == args[1]){
-                                exist = true;
+                            System.out.println(goal.toString());
+                            if (goal.getName().equals(args[1])){
+                                founded = true;
+                                // Check if the Goal is alredy present in Town
+                                for (TownGoals tg: FWObbiettivi.instance.obbiettiviInTown) {
+                                    if (tg.getTown().equals(town) && tg.getGoal().equals(goal)){
+                                        playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_ALREADY_PRESENT));
+                                        return true;
+                                    }
+                                }
+
                                 // Adding Goal to that Town
                                 FWObbiettivi.instance.obbiettiviInTown.add(new TownGoals(town, goal, loc));
-                            } else {
-                                playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_GOAL) + ChatFormatter.formatWarningMessage(args[1]));
-                                return true;
+                                if(ConfigUtil.DEBUG)
+                                    FWObbiettivi.info(ChatFormatter.formatDebugMessage(FWObbiettivi.instance.obbiettiviInTown.toString()));
+
+                                // Rename plot to Goal name
+                                try {
+                                    WorldCoord.parseWorldCoord(playerAdd.getLocation()).getTownBlock().setName(goal.getName());
+                                    // Saving new plot name
+                                    TownyUniverse.getInstance().getDataSource().saveTownBlock(WorldCoord.parseWorldCoord(playerAdd.getLocation()).getTownBlock());
+                                } catch (NotRegisteredException e) {
+
+                                }
+                                b.setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.instance, Boolean.TRUE));
+                                playerAdd.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_ADDED));
+                                break;
                             }
                         }
-                        break;
-
-                    case CommandTypes.CREATE_COMMAND:
-                        // Create a new Goal
-                        break;
-
-                    case CommandTypes.DELETE_COMMAND:
-                        // Delete a Goal
-                        break;
-
-                    case CommandTypes.EDIT_COMMAND:
-                        // Edit a Goal
-                        break;
-
-                    case CommandTypes.GUI_COMMAND:
-                        // Check if the sender is a player
-                        if (!(sender instanceof Player)){
-                            sender.sendMessage(Messages.NO_CONSOLE);
+                        if(!founded){
+                            playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_GOAL_IN_LIST) + ChatFormatter.formatWarningMessage(args[1]));
                             return true;
                         }
+                    } else {
+                        playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_GOAL));
+                        return true;
+                    }
+                    break;
 
-                        Player playerGui = (Player) sender;
-                        // Do you have the permissions?
-                        if(!playerGui.hasPermission(Permissions.PERM_GUI)){
-                            playerGui.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
-                            return true;
-                        }
+                case CommandTypes.CREATE_COMMAND:
+                    // TODO Create a new Goal
+                    break;
+
+                case CommandTypes.DELETE_COMMAND:
+                    // TODO Delete a Goal
+                    break;
+
+                case CommandTypes.EDIT_COMMAND:
+                    // TODO Edit a Goal
+                    break;
+
+                case CommandTypes.GUI_COMMAND:
+                    // Check if the sender is a player
+                    if (!(sender instanceof Player)){
+                        sender.sendMessage(Messages.NO_CONSOLE);
+                        return true;
+                    }
+
+                    Player playerGui = (Player) sender;
+                    // Do you have the permissions?
+                    if(!playerGui.hasPermission(Permissions.PERM_GUI)){
+                        playerGui.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
+                        return true;
+                    }
 
 //                        FWObbiettivi.instance.gui.setSteps(new ArrayList<Integer>());
 //                        FWObbiettivi.instance.gui.setPlayer(player);
 //                        FWObbiettivi.instance.gui.openGUI(GUIUtil.GOALS_STEP);
-                        FWObbiettivi.instance.map.put(playerGui, new GoalsGUI());
-                        FWObbiettivi.instance.map.get(playerGui).setPlayer(playerGui);
-                        FWObbiettivi.instance.map.get(playerGui).openGUI(GUIUtil.GOALS_STEP);
+                    FWObbiettivi.instance.map.put(playerGui, new GoalsGUI());
+                    FWObbiettivi.instance.map.get(playerGui).setPlayer(playerGui);
+                    FWObbiettivi.instance.map.get(playerGui).openGUI(GUIUtil.GOALS_STEP);
+                    return true;
+
+                case CommandTypes.HELP_COMMAND:
+                    // Send list of available commands
+                    sender.sendMessage(ChatFormatter.helpMessage());
+                    return true;
+
+                case CommandTypes.MOVE_COMMAND:
+                    // TODO Move Goal
+                    break;
+
+                case CommandTypes.PAY_COMMAND:
+                    // TODO Pay all Goals
+                    return true;
+
+                case CommandTypes.RELOAD_COMMAND:
+                    // Reload the server config.yml
+                    // Do you have the permissions?
+                    if(!sender.hasPermission(Permissions.PERM_RELOAD)){
+                        sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
                         return true;
+                    }
 
-                    case CommandTypes.HELP_COMMAND:
-                        // Send list of available commands
-                        sender.sendMessage(ChatFormatter.helpMessage());
-                        return true;
+                    FWObbiettivi.info("Saving infos...");
+                    FWObbiettivi.saveData();
+                    FWObbiettivi.info("Data saved");
 
-                    case CommandTypes.MOVE_COMMAND:
-                        // Move Goal
-                        break;
+                    FWObbiettivi.info("Loading infos...");
+                    FWObbiettivi.loadData();
+                    FWObbiettivi.info("Data loades");
 
-                    case CommandTypes.PAY_COMMAND:
-                        // Pay all Goals
-                        return true;
+                    FWObbiettivi.instance.reloadConfig();
+                    FWObbiettivi.info(Messages.CONFIG_RELOAD);
+                    return true;
 
-                    case CommandTypes.RELOAD_COMMAND:
-                        // Reload the server config.yml
-                        // Do you have the permissions?
-                        if(!sender.hasPermission(Permissions.PERM_RELOAD)){
-                            sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
-                            return true;
-                        }
+                case CommandTypes.REMOVE_COMMAND:
+                    // TODO Remove a Goal from a Town
+                    break;
 
-                        FWObbiettivi.info("Saving infos...");
-                        FWObbiettivi.saveData();
-                        FWObbiettivi.info("Data saved");
-
-                        FWObbiettivi.info("Loading infos...");
-                        FWObbiettivi.loadData();
-                        FWObbiettivi.info("Data loades");
-
-                        FWObbiettivi.instance.reloadConfig();
-                        FWObbiettivi.info(Messages.CONFIG_RELOAD);
-                        return true;
-
-                    case CommandTypes.REMOVE_COMMAND:
-                        // Remove a Goal from a Town
-                        break;
-
-                    case CommandTypes.TP_COMMAND:
-                        // Teleport to a Goal
-                        break;
-                }
-                break;
+                case CommandTypes.TP_COMMAND:
+                    // TODO Teleport to a Goal
+                    break;
+            }
         }
 
         return false;
@@ -157,6 +210,9 @@ public class GoalsCommandExecutor implements TabExecutor {
 
         switch (args.length){
             case 1:
+                if (sender.hasPermission(Permissions.PERM_ADD))
+                    suggestions.add(CommandTypes.ADD_COMMAND);
+
                 if (sender.hasPermission(Permissions.PERM_GUI))
                     suggestions.add(CommandTypes.GUI_COMMAND);
 
@@ -172,6 +228,8 @@ public class GoalsCommandExecutor implements TabExecutor {
             case 2:
                 break;
         }
+
+        // TODO suggerimenti nome obbiettivi
 
         return NameUtil.filterByStart(suggestions, argsIndex);
     }

@@ -1,6 +1,7 @@
 package it.forgottenworld.fwobbiettivi.objects;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.Objects;
@@ -8,12 +9,12 @@ import java.util.Objects;
 public class Branch {
 
     private String name;
-    private Material material;
+    private ItemStack icon;
     private List<String> descrizione;
 
-    public Branch(String name, Material material, List<String> descrizione){
+    public Branch(String name, ItemStack icon, List<String> descrizione){
         this.name = name;
-        this.material = material;
+        this.icon = icon;
         this.descrizione = descrizione;
     }
 
@@ -25,12 +26,12 @@ public class Branch {
         this.name = name;
     }
 
-    public Material getMaterial() {
-        return material;
+    public ItemStack getIcon() {
+        return icon;
     }
 
-    public void setMaterial(Material material) {
-        this.material = material;
+    public void setIcon(ItemStack icon) {
+        this.icon = icon;
     }
 
     public List<String> getDescrizione() {
@@ -47,20 +48,20 @@ public class Branch {
         if (!(o instanceof Branch)) return false;
         Branch ramo = (Branch) o;
         return Objects.equals(getName(), ramo.getName()) &&
-                Objects.equals(getMaterial(), ramo.getMaterial()) &&
+                Objects.equals(getIcon(), ramo.getIcon()) &&
                 Objects.equals(getDescrizione(), ramo.getDescrizione());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getMaterial(), getDescrizione());
+        return Objects.hash(getName(), getIcon(), getDescrizione());
     }
 
     @Override
     public String toString() {
         return "Ramo{" +
                 "name='" + name + '\'' +
-                ", material=" + material +
+                ", icon=" + icon +
                 ", descrizione=" + descrizione +
                 '}';
     }

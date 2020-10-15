@@ -17,6 +17,12 @@ public class ChatFormatter {
                 ChatColor.AQUA + " ]-------------------";
     }
 
+    public static String debugPrefix() {
+        return  ChatColor.AQUA + "[ " +
+                ChatColor.RED + "DEBUG" +
+                ChatColor.AQUA + " ]";
+    }
+
     public static String formatSuccessMessage(String message) {
         message = pluginPrefix() + ChatColor.GREEN + message;
         return message;
@@ -29,6 +35,11 @@ public class ChatFormatter {
 
     public static String formatErrorMessage(String message) {
         message = pluginPrefix() + ChatColor.RED + message;
+        return message;
+    }
+
+    public static String formatDebugMessage(String message) {
+        message = pluginPrefix() + debugPrefix() + ChatColor.AQUA + message;
         return message;
     }
 

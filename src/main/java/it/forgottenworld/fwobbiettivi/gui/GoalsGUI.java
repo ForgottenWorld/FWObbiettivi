@@ -135,7 +135,7 @@ public class GoalsGUI {
             Goal obbiettivo = FWObbiettivi.instance.obbiettivi.get(i);
             GUI.setItem(i,
                     GUIUtil.prepareMenuPoint(
-                            obbiettivo.getBranch().getMaterial(),
+                            obbiettivo.getBranch().getIcon().getType(),
                             obbiettivo.getName(),
                             obbiettivo.getDescrizione()
                     ));
@@ -190,7 +190,7 @@ public class GoalsGUI {
             Branch ramo = FWObbiettivi.instance.rami.get(i);
             GUI.setItem(i,
                     GUIUtil.prepareMenuPoint(
-                            ramo.getMaterial(),
+                            ramo.getIcon().getType(),
                             ramo.getName(),
                             ramo.getDescrizione()
                     ));
