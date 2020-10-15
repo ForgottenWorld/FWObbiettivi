@@ -11,12 +11,14 @@ import it.forgottenworld.fwobbiettivi.objects.TownGoals;
 import it.forgottenworld.fwobbiettivi.utility.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.DoubleChestInventory;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -111,7 +113,9 @@ public class GoalsCommandExecutor implements TabExecutor {
                                 ((Chest) b.getState()).setCustomName("FWChest");
                                 b.setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.instance, Boolean.TRUE));
                                 playerAdd.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_ADDED));
-                                // TODO Salvare
+
+                                // Saving
+                                FWObbiettivi.saveData();
                                 break;
                             }
                         }
@@ -151,9 +155,6 @@ public class GoalsCommandExecutor implements TabExecutor {
                         return true;
                     }
 
-//                        FWObbiettivi.instance.gui.setSteps(new ArrayList<Integer>());
-//                        FWObbiettivi.instance.gui.setPlayer(player);
-//                        FWObbiettivi.instance.gui.openGUI(GUIUtil.GOALS_STEP);
                     FWObbiettivi.instance.map.put(playerGui, new GoalsGUI());
                     FWObbiettivi.instance.map.get(playerGui).setPlayer(playerGui);
                     FWObbiettivi.instance.map.get(playerGui).openGUI(GUIUtil.GOALS_STEP);
@@ -190,11 +191,66 @@ public class GoalsCommandExecutor implements TabExecutor {
 
                     FWObbiettivi.instance.reloadConfig();
                     FWObbiettivi.info(Messages.CONFIG_RELOAD);
-                    // TODO Messaggio al sender
+                    if (sender instanceof Player){
+                        sender.sendMessage(ChatFormatter.formatSuccessMessage(Messages.CONFIG_RELOAD));
+                        return true;
+                    }
                     return true;
 
                 case CommandTypes.REMOVE_COMMAND:
-                    // TODO Remove a Goal from a Town
+                    // Removing a Goal to a existing Town
+                    if (!(sender instanceof Player)){
+                        sender.sendMessage(Messages.NO_CONSOLE);
+                        return true;
+                    }
+
+                    Player playerRemove = (Player) sender;
+
+                    // Do you have the permissions?
+                    if(!playerRemove.hasPermission(Permissions.PERM_REMOVE)){
+                        playerRemove.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
+                        return true;
+                    }
+
+                    // Get Goal from Location
+                    Location locRemove = playerRemove.getLocation();
+
+                    // Check if the location is in a Town
+                    Town townRemove = null;
+
+                    // Check if the Goal exist in this plot
+                    for (TownGoals townGoalsRemove:FWObbiettivi.instance.obbiettiviInTown){
+                        try {
+                            if(WorldCoord.parseWorldCoord(locRemove).getTownBlock() == WorldCoord.parseWorldCoord(townGoalsRemove.getLocation()).getTownBlock()){
+                                // Rename plot to Goal name
+                                try {
+                                    WorldCoord.parseWorldCoord(playerRemove.getLocation()).getTownBlock().setName("");
+                                    // Saving new plot name
+                                    TownyUniverse.getInstance().getDataSource().saveTownBlock(WorldCoord.parseWorldCoord(playerRemove.getLocation()).getTownBlock());
+                                } catch (NotRegisteredException e) {
+
+                                }
+                                Block bRemove = townGoalsRemove.getLocation().getBlock();
+                                ((Chest) bRemove.getState()).setCustomName("FWChest");
+                                bRemove.removeMetadata("goalchest", FWObbiettivi.instance);
+                                playerRemove.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_REMOVED));
+
+                                // Removing Goal to that Town
+                                FWObbiettivi.instance.obbiettiviInTown.remove(townGoalsRemove);
+
+                                // Saving
+                                FWObbiettivi.saveData();
+                            }else{
+                                // Not in a goal plot
+                                playerRemove.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_GOAL_LOC));
+                                return true;
+                            }
+                        } catch (NotRegisteredException e) {
+                            // Not in a town
+                            playerRemove.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_LOC));
+                            return true;
+                        }
+                    }
                     break;
 
                 case CommandTypes.TP_COMMAND:
@@ -216,10 +272,22 @@ public class GoalsCommandExecutor implements TabExecutor {
                 if (sender.hasPermission(Permissions.PERM_ADD))
                     suggestions.add(CommandTypes.ADD_COMMAND);
 
+                if (sender.hasPermission(Permissions.PERM_CREATE))
+                    suggestions.add(CommandTypes.CREATE_COMMAND);
+
+                if (sender.hasPermission(Permissions.PERM_DELETE))
+                    suggestions.add(CommandTypes.DELETE_COMMAND);
+
+                if (sender.hasPermission(Permissions.PERM_EDIT))
+                    suggestions.add(CommandTypes.EDIT_COMMAND);
+
                 if (sender.hasPermission(Permissions.PERM_GUI))
                     suggestions.add(CommandTypes.GUI_COMMAND);
 
                 suggestions.add(CommandTypes.HELP_COMMAND);
+
+                if (sender.hasPermission(Permissions.PERM_MOVE))
+                    suggestions.add(CommandTypes.MOVE_COMMAND);
 
                 if (sender.hasPermission(Permissions.PERM_PAY))
                     suggestions.add(CommandTypes.PAY_COMMAND);
@@ -227,12 +295,25 @@ public class GoalsCommandExecutor implements TabExecutor {
                 if (sender.hasPermission(Permissions.PERM_RELOAD))
                     suggestions.add(CommandTypes.RELOAD_COMMAND);
 
+                if (sender.hasPermission(Permissions.PERM_REMOVE))
+                    suggestions.add(CommandTypes.REMOVE_COMMAND);
+
+                if (sender.hasPermission(Permissions.PERM_TP))
+                    suggestions.add(CommandTypes.TP_COMMAND);
+
                 break;
             case 2:
+                List<String> subSuggestions = new ArrayList<>();
+                switch (args[1]){
+                    case CommandTypes.ADD_COMMAND:
+                        // TODO suggerimenti nome obbiettivi
+                        for (String goal:FWObbiettivi.instance.getConfig().getConfigurationSection("goal").getKeys(false)){
+                            suggestions.add(goal);
+                        }
+                        break;
+                }
                 break;
         }
-
-        // TODO suggerimenti nome obbiettivi
 
         return NameUtil.filterByStart(suggestions, argsIndex);
     }
