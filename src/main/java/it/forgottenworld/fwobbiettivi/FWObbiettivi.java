@@ -79,9 +79,16 @@ public final class FWObbiettivi extends JavaPlugin {
         info("Loading Goals");
         obbiettivi = ConfigUtil.loadGoalsList();
         info("Finish loading Goals");
+
+        info("Loading Data");
+        obbiettiviInTown = ConfigUtil.loadGoalsInTownList();
+        info("Finish loading Data");
     }
 
     public static void saveData() {
+        info("Saving Data");
+        ConfigUtil.saveGoalsInTownList(obbiettiviInTown);
+        info("Finish saving Data");
     }
 
     private void loadConfiguration() {

@@ -11,6 +11,8 @@ public class TownGoals {
     private Goal goal;
     private Location location;
 
+    public TownGoals(){}
+
     public TownGoals(Town t, Goal g, Location l){
         this.town = t;
         this.goal = g;

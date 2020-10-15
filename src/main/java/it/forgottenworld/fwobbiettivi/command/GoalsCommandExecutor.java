@@ -108,8 +108,10 @@ public class GoalsCommandExecutor implements TabExecutor {
                                 } catch (NotRegisteredException e) {
 
                                 }
+                                ((Chest) b.getState()).setCustomName("FWChest");
                                 b.setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.instance, Boolean.TRUE));
                                 playerAdd.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_ADDED));
+                                // TODO Salvare
                                 break;
                             }
                         }
@@ -188,6 +190,7 @@ public class GoalsCommandExecutor implements TabExecutor {
 
                     FWObbiettivi.instance.reloadConfig();
                     FWObbiettivi.info(Messages.CONFIG_RELOAD);
+                    // TODO Messaggio al sender
                     return true;
 
                 case CommandTypes.REMOVE_COMMAND:

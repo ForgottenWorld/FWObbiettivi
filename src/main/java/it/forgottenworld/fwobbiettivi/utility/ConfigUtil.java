@@ -1,16 +1,24 @@
 package it.forgottenworld.fwobbiettivi.utility;
 
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.db.TownyDataSource;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import it.forgottenworld.fwobbiettivi.FWObbiettivi;
 import it.forgottenworld.fwobbiettivi.objects.Branch;
 import it.forgottenworld.fwobbiettivi.objects.Goal;
+import it.forgottenworld.fwobbiettivi.objects.TownGoals;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import java.io.*;
+import java.util.*;
 
 public class ConfigUtil {
 
@@ -103,6 +111,88 @@ public class ConfigUtil {
         }
 
         return rami;
+    }
+
+    public static ArrayList<TownGoals> loadGoalsInTownList(){
+        ArrayList<TownGoals> townGoals = new ArrayList<>();
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream("plugins/FWObbiettivi/townGoals.markus");
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            String line;
+            StringBuilder sb = new StringBuilder();
+            while((line = bufferedReader.readLine()) != null){
+                sb.append(line);
+            }
+            FWObbiettivi.info(sb.toString());
+            inputStream.close();
+
+            List<String> file = Arrays.asList(sb.toString().split("\\|"));
+
+            for (String s: file){
+                String[] valueString = s.split("\\*");
+                TownGoals tg = new TownGoals();
+                System.out.println(valueString[0]);
+                System.out.println(UUID.fromString(valueString[0]).toString());
+                TownyDataSource tds = TownyUniverse.getInstance().getDataSource();
+                System.out.println(tds);
+                tg.setTown(tds.getTown(UUID.fromString(valueString[0])));
+
+                for(Goal g:FWObbiettivi.instance.obbiettivi){
+                    if(g.getName().equals(valueString[1])){
+                        tg.setGoal(g);
+                        break;
+                    }
+                }
+
+                tg.setLocation(FWLocation.getLocationFromString(valueString[2]));
+
+                Block b = tg.getLocation().getBlock();
+                ((Chest) b.getState()).setCustomName("FWChest");
+                b.setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.instance, Boolean.TRUE));
+
+                townGoals.add(tg);
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NotRegisteredException e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null){
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return townGoals;
+    }
+
+    public static void saveGoalsInTownList(ArrayList<TownGoals> townGoals) {
+        StringBuilder sb = new StringBuilder();
+        for(TownGoals tg: townGoals){
+            sb.append(tg.getTown().getUuid().toString()).append("*");
+            sb.append(tg.getGoal().getName()).append("*");
+            sb.append(FWLocation.getStringFromLocation(tg.getLocation())).append("|");
+        }
+
+        if (sb.length() > 0)
+            sb.setLength(sb.length() - 1);
+
+        try {
+            FWObbiettivi.info(sb.toString());
+            FileWriter writer = new FileWriter("plugins/FWObbiettivi/townGoals.markus");
+            writer.write(sb.toString());
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

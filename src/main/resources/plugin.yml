@@ -3,7 +3,7 @@ version: @version@
 main: it.forgottenworld.fwobbiettivi.FWObbiettivi
 api-version: 1.13
 prefix: FWObbiettivi
-load: STARTUP
+load: POSTWORLD
 depend: [Towny]
 authors: [Markus__27]
 description: SpigotMC plugin for creating and managing town goals using the Towny plugin.
