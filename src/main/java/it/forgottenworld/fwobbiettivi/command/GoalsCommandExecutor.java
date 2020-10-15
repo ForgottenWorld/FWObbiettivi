@@ -255,6 +255,31 @@ public class GoalsCommandExecutor implements TabExecutor {
 
                 case CommandTypes.TP_COMMAND:
                     // TODO Teleport to a Goal
+                    // Teleport a player to a goal
+                    if (!(sender instanceof Player)){
+                        sender.sendMessage(Messages.NO_CONSOLE);
+                        return true;
+                    }
+
+                    Player playerTp = (Player) sender;
+
+                    // Do you have the permissions?
+                    if(!playerTp.hasPermission(Permissions.PERM_TP)){
+                        playerTp.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
+                        return true;
+                    }
+
+                    Location locationTp = null;
+
+                    if(args.length > 2) {
+                        for (TownGoals townGoalsTp : FWObbiettivi.instance.obbiettiviInTown) {
+                            if (args[1].equals(townGoalsTp.getGoal().getName()) && args[2].equals(townGoalsTp.getTown().getName())) {
+                                locationTp = townGoalsTp.getLocation();
+                            }
+                        }
+                    }
+
+                    playerTp.teleport(locationTp);
                     break;
             }
         }
