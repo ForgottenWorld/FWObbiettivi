@@ -235,7 +235,7 @@ public class GoalsCommandExecutor implements TabExecutor {
 
                                 }
                                 Block bRemove = townGoalsRemove.getLocation().getBlock();
-                                ((Chest) bRemove.getState()).setCustomName("FWChest");
+                                ((Chest) bRemove.getState()).setCustomName("Chest");
                                 bRemove.removeMetadata("goalchest", FWObbiettivi.instance);
                                 playerRemove.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_REMOVED));
 
