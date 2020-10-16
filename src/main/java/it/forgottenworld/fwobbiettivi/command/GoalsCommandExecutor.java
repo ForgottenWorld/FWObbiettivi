@@ -110,7 +110,8 @@ public class GoalsCommandExecutor implements TabExecutor {
                                 } catch (NotRegisteredException e) {
 
                                 }
-                                ((Chest) b.getState()).setCustomName("FWChest");
+                                Chest chestState = (Chest) b.getState();
+                                chestState.setCustomName("FWChest");
                                 b.setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.instance, Boolean.TRUE));
                                 playerAdd.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_ADDED) + " " + ChatColor.GOLD + args[1]);
 
@@ -220,6 +221,9 @@ public class GoalsCommandExecutor implements TabExecutor {
 
                     // TODO Fixing Internal server error
                     // Check if the Goal exist in this plot
+                    if(ConfigUtil.DEBUG)
+                        FWObbiettivi.debug(FWObbiettivi.instance.obbiettiviInTown.toString());
+
                     for (TownGoals townGoalsRemove:FWObbiettivi.instance.obbiettiviInTown){
                         try {
                             if(WorldCoord.parseWorldCoord(locRemove).getTownBlock() == WorldCoord.parseWorldCoord(townGoalsRemove.getLocation()).getTownBlock()){
@@ -241,6 +245,7 @@ public class GoalsCommandExecutor implements TabExecutor {
 
                                 // Saving
                                 FWObbiettivi.saveData();
+                                break;
                             }else{
                                 // Not in a goal plot
                                 playerRemove.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_GOAL_LOC));
@@ -284,6 +289,7 @@ public class GoalsCommandExecutor implements TabExecutor {
                         }
                     } else {
                         playerTp.sendMessage(ChatFormatter.formatErrorMessage(Messages.TELEPORTED_MISSING_INFO));
+                        return true;
                     }
 
                     // Teleport failed

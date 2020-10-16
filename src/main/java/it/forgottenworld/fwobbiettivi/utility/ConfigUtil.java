@@ -128,28 +128,31 @@ public class ConfigUtil {
                 FWObbiettivi.debug(sb.toString());
             inputStream.close();
 
-            List<String> file = Arrays.asList(sb.toString().split("\\|"));
+            if(sb.length() != 0){
+                List<String> file = Arrays.asList(sb.toString().split("\\|"));
 
-            for (String s: file){
-                String[] valueString = s.split("\\*");
-                TownGoals tg = new TownGoals();
-                TownyDataSource tds = TownyUniverse.getInstance().getDataSource();
-                tg.setTown(tds.getTown(UUID.fromString(valueString[0])));
+                for (String s: file){
+                    String[] valueString = s.split("\\*");
+                    TownGoals tg = new TownGoals();
+                    TownyDataSource tds = TownyUniverse.getInstance().getDataSource();
+                    tg.setTown(tds.getTown(UUID.fromString(valueString[0])));
 
-                for(Goal g:FWObbiettivi.instance.obbiettivi){
-                    if(g.getName().equals(valueString[1])){
-                        tg.setGoal(g);
-                        break;
+                    for(Goal g:FWObbiettivi.instance.obbiettivi){
+                        if(g.getName().equals(valueString[1])){
+                            tg.setGoal(g);
+                            break;
+                        }
                     }
+
+                    tg.setLocation(FWLocation.getLocationFromString(valueString[2]));
+
+                    Block b = tg.getLocation().getBlock();
+                    Chest chestState = (Chest) b.getState();
+                    chestState.setCustomName("FWChest");
+                    b.setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.instance, Boolean.TRUE));
+
+                    townGoals.add(tg);
                 }
-
-                tg.setLocation(FWLocation.getLocationFromString(valueString[2]));
-
-                Block b = tg.getLocation().getBlock();
-                ((Chest) b.getState()).setCustomName("FWChest");
-                b.setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.instance, Boolean.TRUE));
-
-                townGoals.add(tg);
             }
 
         } catch (FileNotFoundException e) {
@@ -187,7 +190,11 @@ public class ConfigUtil {
             if(DEBUG)
                 FWObbiettivi.debug(sb.toString());
             FileWriter writer = new FileWriter("plugins/FWObbiettivi/townGoals.markus");
-            writer.write(sb.toString());
+            if(sb.length() == 0){
+                writer.write("");
+            }else {
+                writer.write(sb.toString());
+            }
             writer.flush();
             writer.close();
         } catch (IOException e) {
