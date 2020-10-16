@@ -219,7 +219,6 @@ public class GoalsCommandExecutor implements TabExecutor {
                     // Check if the location is in a Town
                     Town townRemove = null;
 
-                    // TODO Fixing Internal server error
                     // Check if the Goal exist in this plot
                     if(ConfigUtil.DEBUG)
                         FWObbiettivi.debug(FWObbiettivi.instance.obbiettiviInTown.toString());
@@ -260,7 +259,6 @@ public class GoalsCommandExecutor implements TabExecutor {
                     break;
 
                 case CommandTypes.TP_COMMAND:
-                    // TODO Teleport to a Goal
                     // Teleport a player to a goal
                     if (!(sender instanceof Player)){
                         sender.sendMessage(Messages.NO_CONSOLE);
