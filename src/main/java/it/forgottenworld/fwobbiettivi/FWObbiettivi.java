@@ -67,7 +67,12 @@ public final class FWObbiettivi extends JavaPlugin {
     // Metodi statici per semplificare il logging
     public static void info(String msg)
     {
-        Bukkit.getLogger().log(Level.INFO,"["+"FWObbiettivi"+"] " + msg);
+        Bukkit.getLogger().log(Level.INFO,"[FWObbiettivi] " + msg);
+    }
+
+    public static void debug(String msg)
+    {
+        Bukkit.getLogger().log(Level.INFO,"[FWObbiettivi] [Debug]" + msg);
     }
 
     // Metodi per il salvataggio dei dati su file e per il loro caricamento

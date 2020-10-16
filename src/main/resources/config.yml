@@ -67,10 +67,13 @@ languages:
     no_goal_loc: "Non sei sul plot di un obbiettivo."
     no_place_near_goal: "Non puoi piazzare una CHEST vicino una FWChest."
     no_break_goal: "Non puoi rompere una FWChest."
+    no_existing_file_data: "Il file di salvataggio non esiste."
     goal_already_present: "L'obbiettivo e' gia' presente in questa citta'."
     goal_added: "Obbiettivo aggiunto con successo:"
     goal_removed: "Obbiettivo rimosso con successo."
     teleported_to: "Sei stato teletrasportato all'obbiettivo:"
+    teleported_missing_info: "Non hai inserito tutti i dati richiesti."
+    teleported_failed: "Teletrasporto non riuscito, assicurati che esista l'obbiettivo e/o la citta'."
 
 ### Goals
 goal:

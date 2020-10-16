@@ -82,7 +82,7 @@ public class GoalsCommandExecutor implements TabExecutor {
                     // Check if the Goal exist
                     if(args.length > 1){
                         if(ConfigUtil.DEBUG)
-                            FWObbiettivi.info(ChatFormatter.formatDebugMessage(FWObbiettivi.instance.obbiettivi.toString()));
+                            FWObbiettivi.debug(FWObbiettivi.instance.obbiettivi.toString());
 
                         boolean founded = false;
                         for (Iterator<Goal> it = FWObbiettivi.instance.obbiettivi.iterator(); it.hasNext(); ) {
@@ -100,7 +100,7 @@ public class GoalsCommandExecutor implements TabExecutor {
                                 // Adding Goal to that Town
                                 FWObbiettivi.instance.obbiettiviInTown.add(new TownGoals(town, goal, loc));
                                 if(ConfigUtil.DEBUG)
-                                    FWObbiettivi.info(ChatFormatter.formatDebugMessage(FWObbiettivi.instance.obbiettiviInTown.toString()));
+                                    FWObbiettivi.debug(FWObbiettivi.instance.obbiettiviInTown.toString());
 
                                 // Rename plot to Goal name
                                 try {
@@ -278,11 +278,16 @@ public class GoalsCommandExecutor implements TabExecutor {
                                 locationTp = townGoalsTp.getLocation();
                                 playerTp.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TELEPORTED_TO) + " " + ChatColor.GOLD + townGoalsTp.getGoal().getName());
                                 playerTp.teleport(locationTp);
-                                break;
+                                // Teleport success
+                                return true;
                             }
                         }
+                    } else {
+                        playerTp.sendMessage(ChatFormatter.formatErrorMessage(Messages.TELEPORTED_MISSING_INFO));
                     }
 
+                    // Teleport failed
+                    playerTp.sendMessage(ChatFormatter.formatErrorMessage(Messages.TELEPORTED_FAILED));
                     break;
             }
         }

@@ -13,9 +13,12 @@ public class Messages {
     public static final String NO_GOAL_LOC = ConfigUtil.getConfigStringLang("no_goal_loc");
     public static final String NO_PLACE_NEAR_GOAL = ConfigUtil.getConfigStringLang("no_place_near_goal");
     public static final String NO_BREAK_GOAL = ConfigUtil.getConfigStringLang("no_break_goal");
+    public static final String NO_EXISTING_FILE_DATA = ConfigUtil.getConfigStringLang("no_existing_file_data");
 
     public static final String GOAL_ALREADY_PRESENT = ConfigUtil.getConfigStringLang("goal_already_present");
     public static final String GOAL_ADDED = ConfigUtil.getConfigStringLang("goal_added");
     public static final String GOAL_REMOVED = ConfigUtil.getConfigStringLang("goal_removed");
     public static final String TELEPORTED_TO = ConfigUtil.getConfigStringLang("teleported_to");
+    public static final String TELEPORTED_MISSING_INFO = ConfigUtil.getConfigStringLang("teleported_missing_info");
+    public static final String TELEPORTED_FAILED = ConfigUtil.getConfigStringLang("teleported_failed");
 }

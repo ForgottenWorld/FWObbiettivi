@@ -60,16 +60,16 @@ public class ConfigUtil {
             ArrayList<String> paymentsMaterial = new ArrayList<String>();
             paymentsMaterial.addAll(FWObbiettivi.instance.getConfig().getStringList("goal." + goal + ".payment"));
             if(DEBUG)
-                FWObbiettivi.info("paymentsMaterial=" + paymentsMaterial.toString());
+                FWObbiettivi.debug("paymentsMaterial=" + paymentsMaterial.toString());
             ArrayList<Integer> paymentsQuantity = new ArrayList<Integer>();
             paymentsQuantity.addAll(FWObbiettivi.instance.getConfig().getIntegerList("goal." + goal + ".paymentQuantity"));
             if(DEBUG)
-                FWObbiettivi.info("paymentsQuantity=" + paymentsQuantity.toString());
+                FWObbiettivi.debug("paymentsQuantity=" + paymentsQuantity.toString());
             ArrayList<ItemStack> payment = new ArrayList<ItemStack>();
 
             for (int i = 0; i < paymentsMaterial.size(); i++) {
                 if(DEBUG)
-                    FWObbiettivi.info("paymentsMaterial=" + paymentsMaterial.get(i).toString());
+                    FWObbiettivi.debug("paymentsMaterial=" + paymentsMaterial.get(i).toString());
                 payment.add(new ItemStack(Material.getMaterial(paymentsMaterial.get(i)),
                         paymentsQuantity.get(i)));
             }
@@ -124,7 +124,8 @@ public class ConfigUtil {
             while((line = bufferedReader.readLine()) != null){
                 sb.append(line);
             }
-            FWObbiettivi.info(sb.toString());
+            if(DEBUG)
+                FWObbiettivi.debug(sb.toString());
             inputStream.close();
 
             List<String> file = Arrays.asList(sb.toString().split("\\|"));
@@ -152,7 +153,7 @@ public class ConfigUtil {
             }
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            FWObbiettivi.info(Messages.NO_EXISTING_FILE_DATA);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NotRegisteredException e) {
@@ -172,6 +173,7 @@ public class ConfigUtil {
 
     public static void saveGoalsInTownList(ArrayList<TownGoals> townGoals) {
         StringBuilder sb = new StringBuilder();
+
         for(TownGoals tg: townGoals){
             sb.append(tg.getTown().getUuid().toString()).append("*");
             sb.append(tg.getGoal().getName()).append("*");
@@ -182,7 +184,8 @@ public class ConfigUtil {
             sb.setLength(sb.length() - 1);
 
         try {
-            FWObbiettivi.info(sb.toString());
+            if(DEBUG)
+                FWObbiettivi.debug(sb.toString());
             FileWriter writer = new FileWriter("plugins/FWObbiettivi/townGoals.markus");
             writer.write(sb.toString());
             writer.flush();
