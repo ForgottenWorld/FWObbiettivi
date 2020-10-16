@@ -60,16 +60,17 @@ languages:
     no_perm: "Non hai abbastanza permessi."
     config_reload: "Ricaricato file di configurazione."
     no_town_loc: "Non sei sul suolo di una citta'."
-    no_goal: "Specifica un obbiettivo."
-    no_goal_in_list: "L'obbiettivo non esiste."
+    no_goal: "Non hai specificato nessun obbiettivo."
+    no_goal_in_list: "L'obbiettivo non esiste:"
     no_chest: "Devi guardare una CHEST."
     no_double_chest: "La CHEST deve essere singola."
     no_goal_loc: "Non sei sul plot di un obbiettivo."
     no_place_near_goal: "Non puoi piazzare una CHEST vicino una FWChest."
     no_break_goal: "Non puoi rompere una FWChest."
     goal_already_present: "L'obbiettivo e' gia' presente in questa citta'."
-    goal_added: "Obbiettivo aggiunto con successo."
+    goal_added: "Obbiettivo aggiunto con successo:"
     goal_removed: "Obbiettivo rimosso con successo."
+    teleported_to: "Sei stato teletrasportato all'obbiettivo:"
 
 ### Goals
 goal:

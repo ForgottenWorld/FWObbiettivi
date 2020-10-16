@@ -17,4 +17,5 @@ public class Messages {
     public static final String GOAL_ALREADY_PRESENT = ConfigUtil.getConfigStringLang("goal_already_present");
     public static final String GOAL_ADDED = ConfigUtil.getConfigStringLang("goal_added");
     public static final String GOAL_REMOVED = ConfigUtil.getConfigStringLang("goal_removed");
+    public static final String TELEPORTED_TO = ConfigUtil.getConfigStringLang("teleported_to");
 }

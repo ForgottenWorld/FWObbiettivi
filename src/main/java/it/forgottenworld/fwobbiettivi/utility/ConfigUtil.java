@@ -132,10 +132,7 @@ public class ConfigUtil {
             for (String s: file){
                 String[] valueString = s.split("\\*");
                 TownGoals tg = new TownGoals();
-                System.out.println(valueString[0]);
-                System.out.println(UUID.fromString(valueString[0]).toString());
                 TownyDataSource tds = TownyUniverse.getInstance().getDataSource();
-                System.out.println(tds);
                 tg.setTown(tds.getTown(UUID.fromString(valueString[0])));
 
                 for(Goal g:FWObbiettivi.instance.obbiettivi){

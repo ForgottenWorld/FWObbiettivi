@@ -9,6 +9,7 @@ import it.forgottenworld.fwobbiettivi.gui.GoalsGUI;
 import it.forgottenworld.fwobbiettivi.objects.Goal;
 import it.forgottenworld.fwobbiettivi.objects.TownGoals;
 import it.forgottenworld.fwobbiettivi.utility.*;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -86,7 +87,6 @@ public class GoalsCommandExecutor implements TabExecutor {
                         boolean founded = false;
                         for (Iterator<Goal> it = FWObbiettivi.instance.obbiettivi.iterator(); it.hasNext(); ) {
                             Goal goal = it.next();
-                            System.out.println(goal.toString());
                             if (goal.getName().equals(args[1])){
                                 founded = true;
                                 // Check if the Goal is alredy present in Town
@@ -112,7 +112,7 @@ public class GoalsCommandExecutor implements TabExecutor {
                                 }
                                 ((Chest) b.getState()).setCustomName("FWChest");
                                 b.setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.instance, Boolean.TRUE));
-                                playerAdd.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_ADDED));
+                                playerAdd.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_ADDED) + " " + ChatColor.GOLD + args[1]);
 
                                 // Saving
                                 FWObbiettivi.saveData();
@@ -120,7 +120,7 @@ public class GoalsCommandExecutor implements TabExecutor {
                             }
                         }
                         if(!founded){
-                            playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_GOAL_IN_LIST) + ChatFormatter.formatWarningMessage(args[1]));
+                            playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_GOAL_IN_LIST) + " " + ChatColor.GOLD + args[1]);
                             return true;
                         }
                     } else {
@@ -218,6 +218,7 @@ public class GoalsCommandExecutor implements TabExecutor {
                     // Check if the location is in a Town
                     Town townRemove = null;
 
+                    // TODO Fixing Internal server error
                     // Check if the Goal exist in this plot
                     for (TownGoals townGoalsRemove:FWObbiettivi.instance.obbiettiviInTown){
                         try {
@@ -275,11 +276,13 @@ public class GoalsCommandExecutor implements TabExecutor {
                         for (TownGoals townGoalsTp : FWObbiettivi.instance.obbiettiviInTown) {
                             if (args[1].equals(townGoalsTp.getGoal().getName()) && args[2].equals(townGoalsTp.getTown().getName())) {
                                 locationTp = townGoalsTp.getLocation();
+                                playerTp.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TELEPORTED_TO) + " " + ChatColor.GOLD + townGoalsTp.getGoal().getName());
+                                playerTp.teleport(locationTp);
+                                break;
                             }
                         }
                     }
 
-                    playerTp.teleport(locationTp);
                     break;
             }
         }
@@ -292,55 +295,82 @@ public class GoalsCommandExecutor implements TabExecutor {
         List<String> suggestions = new ArrayList<>();
         String argsIndex = "";
 
-        switch (args.length){
-            case 1:
-                if (sender.hasPermission(Permissions.PERM_ADD))
-                    suggestions.add(CommandTypes.ADD_COMMAND);
+        if(suggestions.isEmpty()) {
+            if (sender.hasPermission(Permissions.PERM_ADD))
+                suggestions.add(CommandTypes.ADD_COMMAND);
 
-                if (sender.hasPermission(Permissions.PERM_CREATE))
-                    suggestions.add(CommandTypes.CREATE_COMMAND);
+            if (sender.hasPermission(Permissions.PERM_CREATE))
+                suggestions.add(CommandTypes.CREATE_COMMAND);
 
-                if (sender.hasPermission(Permissions.PERM_DELETE))
-                    suggestions.add(CommandTypes.DELETE_COMMAND);
+            if (sender.hasPermission(Permissions.PERM_DELETE))
+                suggestions.add(CommandTypes.DELETE_COMMAND);
 
-                if (sender.hasPermission(Permissions.PERM_EDIT))
-                    suggestions.add(CommandTypes.EDIT_COMMAND);
+            if (sender.hasPermission(Permissions.PERM_EDIT))
+                suggestions.add(CommandTypes.EDIT_COMMAND);
 
-                if (sender.hasPermission(Permissions.PERM_GUI))
-                    suggestions.add(CommandTypes.GUI_COMMAND);
+            if (sender.hasPermission(Permissions.PERM_GUI))
+                suggestions.add(CommandTypes.GUI_COMMAND);
 
-                suggestions.add(CommandTypes.HELP_COMMAND);
+            suggestions.add(CommandTypes.HELP_COMMAND);
 
-                if (sender.hasPermission(Permissions.PERM_MOVE))
-                    suggestions.add(CommandTypes.MOVE_COMMAND);
+            if (sender.hasPermission(Permissions.PERM_MOVE))
+                suggestions.add(CommandTypes.MOVE_COMMAND);
 
-                if (sender.hasPermission(Permissions.PERM_PAY))
-                    suggestions.add(CommandTypes.PAY_COMMAND);
+            if (sender.hasPermission(Permissions.PERM_PAY))
+                suggestions.add(CommandTypes.PAY_COMMAND);
 
-                if (sender.hasPermission(Permissions.PERM_RELOAD))
-                    suggestions.add(CommandTypes.RELOAD_COMMAND);
+            if (sender.hasPermission(Permissions.PERM_RELOAD))
+                suggestions.add(CommandTypes.RELOAD_COMMAND);
 
-                if (sender.hasPermission(Permissions.PERM_REMOVE))
-                    suggestions.add(CommandTypes.REMOVE_COMMAND);
+            if (sender.hasPermission(Permissions.PERM_REMOVE))
+                suggestions.add(CommandTypes.REMOVE_COMMAND);
 
-                if (sender.hasPermission(Permissions.PERM_TP))
-                    suggestions.add(CommandTypes.TP_COMMAND);
-
-                break;
-            case 2:
-                List<String> subSuggestions = new ArrayList<>();
-                switch (args[1]){
-                    case CommandTypes.ADD_COMMAND:
-                        // TODO suggerimenti nome obbiettivi
-                        for (String goal:FWObbiettivi.instance.getConfig().getConfigurationSection("goal").getKeys(false)){
-                            suggestions.add(goal);
-                        }
-                        break;
-                }
-                break;
+            if (sender.hasPermission(Permissions.PERM_TP))
+                suggestions.add(CommandTypes.TP_COMMAND);
         }
 
-        return NameUtil.filterByStart(suggestions, argsIndex);
+        if(args.length == 1){
+            List<String> result = new ArrayList<String>();
+            for (String a : suggestions){
+                if(a.toLowerCase().startsWith(args[0].toLowerCase()))
+                    result.add(a);
+            }
+
+            return result;
+        }
+
+        if(args.length == 2){
+            List<String> result = new ArrayList<String>();
+            switch (args[1]){
+                // TODO Goals suggestion
+                case CommandTypes.ADD_COMMAND:
+                case CommandTypes.TP_COMMAND:
+                    for (Goal goal: FWObbiettivi.instance.obbiettivi){
+                        result.add(goal.getName());
+                    }
+                    break;
+            }
+
+            return result;
+        }
+
+        if(args.length == 3){
+            List<String> result = new ArrayList<String>();
+            switch (args[2]){
+                case CommandTypes.TP_COMMAND:
+                    Town[] towns = new Town[TownyUniverse.getInstance().getDataSource().getTowns().size()];
+                    TownyUniverse.getInstance().getDataSource().getTowns().toArray(towns);
+                    for (int i = 0; i < towns.length; i++) {
+                        if (towns[i].getName().toLowerCase().startsWith(args[1].toLowerCase()))
+                            result.add(towns[i].getName());
+                    }
+                    break;
+            }
+
+            return result;
+        }
+
+        return null;
     }
 
 }
