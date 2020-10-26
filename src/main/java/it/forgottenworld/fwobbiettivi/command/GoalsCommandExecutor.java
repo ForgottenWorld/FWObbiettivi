@@ -22,6 +22,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.DoubleChestInventory;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.time.Clock;
@@ -172,6 +173,27 @@ public class GoalsCommandExecutor implements TabExecutor {
 
                 case CommandTypes.PAY_COMMAND:
                     // TODO Pay all Goals
+                    // Do you have the permissions?
+                    if(!sender.hasPermission(Permissions.PERM_PAY)){
+                        sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
+                        return true;
+                    }
+
+                    for(TownGoals townGoals:FWObbiettivi.instance.obbiettiviInTown){
+                        // Get the block chest at the coords
+                        Block block = townGoals.getLocation().getBlock();
+                        Chest fwchest = (Chest) block.getState();
+
+                        // Check if the inventory contains items
+                        if(fwchest.getInventory().isEmpty()){
+                            // Inventory empty
+                            // TODO Error console message
+                            return true;
+                        }
+
+                        townGoals.pay();
+                        // TODO Pay console message
+                    }
                     return true;
 
                 case CommandTypes.RELOAD_COMMAND:
@@ -338,44 +360,51 @@ public class GoalsCommandExecutor implements TabExecutor {
                 suggestions.add(CommandTypes.TP_COMMAND);
         }
 
+        List<String> result = new ArrayList<String>();
         if(args.length == 1){
-            List<String> result = new ArrayList<String>();
             for (String a : suggestions){
                 if(a.toLowerCase().startsWith(args[0].toLowerCase()))
                     result.add(a);
             }
 
+            if(ConfigUtil.DEBUG)
+                FWObbiettivi.debug(result.toString());
             return result;
         }
 
         if(args.length == 2){
-            List<String> result = new ArrayList<String>();
+            List<String> sub = new ArrayList<>();
             switch (args[1]){
                 // TODO Goals suggestion
                 case CommandTypes.ADD_COMMAND:
                 case CommandTypes.TP_COMMAND:
                     for (Goal goal: FWObbiettivi.instance.obbiettivi){
-                        result.add(goal.getName());
+                        if(goal.getName().toLowerCase().startsWith(args[1].toLowerCase()))
+                            result.add(goal.getName());
                     }
                     break;
             }
 
+            if(ConfigUtil.DEBUG)
+                FWObbiettivi.debug(result.toString());
             return result;
         }
 
         if(args.length == 3){
-            List<String> result = new ArrayList<String>();
+            List<String> sub = new ArrayList<>();
             switch (args[2]){
                 case CommandTypes.TP_COMMAND:
                     Town[] towns = new Town[TownyUniverse.getInstance().getDataSource().getTowns().size()];
                     TownyUniverse.getInstance().getDataSource().getTowns().toArray(towns);
                     for (int i = 0; i < towns.length; i++) {
-                        if (towns[i].getName().toLowerCase().startsWith(args[1].toLowerCase()))
+                        if (towns[i].getName().toLowerCase().startsWith(args[2].toLowerCase()))
                             result.add(towns[i].getName());
                     }
                     break;
             }
 
+            if(ConfigUtil.DEBUG)
+                FWObbiettivi.debug(result.toString());
             return result;
         }
 
