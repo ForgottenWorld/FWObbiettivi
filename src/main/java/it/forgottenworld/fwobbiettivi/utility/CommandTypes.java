@@ -5,7 +5,9 @@ public class CommandTypes {
     public static final String ADD_COMMAND = "add";
     public static final String CREATE_COMMAND = "create";
     public static final String DELETE_COMMAND = "delete";
+    public static final String DISABLE_COMMAND = "disable";
     public static final String EDIT_COMMAND = "edit";
+    public static final String ENABLE_COMMAND = "enable";
     public static final String GUI_COMMAND = "gui";
     public static final String HELP_COMMAND = "help";
     public static final String MOVE_COMMAND = "move";

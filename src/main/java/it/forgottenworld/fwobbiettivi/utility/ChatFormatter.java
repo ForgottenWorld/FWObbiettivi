@@ -50,7 +50,9 @@ public class ChatFormatter {
                 "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.GRAY + ": ." +
                 "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "add " + "<Obbiettivo> <Town> " + ChatColor.GRAY + ": Aggiunge un obbiettivo a una Town." +
                 "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "delete " + "<Obbiettivo> " + ChatColor.GRAY + ": Cancella un obbiettivo." +
+                "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "disable " + "<Obbiettivo> <Town>" + ChatColor.GRAY + ": Disattiva un obbiettivo." +
                 "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "edit " + "<Obbiettivo> " + ChatColor.GRAY + ": Modifica un obbiettivo." +
+                "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "enable " + "<Obbiettivo> <Town>" + ChatColor.GRAY + ": Abilita un obbiettivo." +
                 "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "gui " + ChatColor.GRAY + ": Apre la GUI." +
                 "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "help " + ChatColor.GRAY + ": Mostra questa lista." +
                 "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "move " + "<Obbiettivo> <Town>" + ChatColor.GRAY + ": Sposta un obbiettivo di una Town sulla tua posizione." +

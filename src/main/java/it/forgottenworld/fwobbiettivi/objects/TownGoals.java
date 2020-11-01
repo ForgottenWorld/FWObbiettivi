@@ -1,14 +1,12 @@
 package it.forgottenworld.fwobbiettivi.objects;
 
 import com.palmergames.bukkit.towny.object.Town;
-import it.forgottenworld.fwobbiettivi.FWObbiettivi;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,13 +15,24 @@ public class TownGoals {
     private Town town;
     private Goal goal;
     private Location location;
+    private boolean active;
 
-    public TownGoals(){}
+    public TownGoals(){
+        this.active = true;
+    }
 
     public TownGoals(Town t, Goal g, Location l){
         this.town = t;
         this.goal = g;
         this.location = l;
+        this.active = true;
+    }
+
+    public TownGoals(Town t, Goal g, Location l, boolean active){
+        this.town = t;
+        this.goal = g;
+        this.location = l;
+        this.active = active;
     }
 
     public Town getTown() {
@@ -49,6 +58,10 @@ public class TownGoals {
     public void setLocation(Location location) {
         this.location = location;
     }
+
+    public boolean isActive() { return active; }
+
+    public void setActive(boolean active) { this.active = active; }
 
     public boolean pay(){
         convert(((Chest) this.getLocation().getBlock().getState()).getBlockInventory());
@@ -108,14 +121,15 @@ public class TownGoals {
         if (this == o) return true;
         if (!(o instanceof TownGoals)) return false;
         TownGoals townGoals = (TownGoals) o;
-        return Objects.equals(getTown(), townGoals.getTown()) &&
+        return isActive() == townGoals.isActive() &&
+                Objects.equals(getTown(), townGoals.getTown()) &&
                 Objects.equals(getGoal(), townGoals.getGoal()) &&
                 Objects.equals(getLocation(), townGoals.getLocation());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getTown(), getGoal(), getLocation());
+        return Objects.hash(getTown(), getGoal(), getLocation(), isActive());
     }
 
     @Override
@@ -124,6 +138,7 @@ public class TownGoals {
                 "town=" + town +
                 ", goal=" + goal +
                 ", location=" + location +
+                ", active=" + active +
                 '}';
     }
 }

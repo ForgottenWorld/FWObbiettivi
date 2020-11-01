@@ -72,8 +72,12 @@ languages:
     goal_added: "Obbiettivo aggiunto con successo:"
     goal_removed: "Obbiettivo rimosso con successo."
     teleported_to: "Sei stato teletrasportato all'obbiettivo:"
-    teleported_missing_info: "Non hai inserito tutti i dati richiesti."
+    missing_info: "Non hai inserito tutti i dati richiesti."
     teleported_failed: "Teletrasporto non riuscito, assicurati che esista l'obbiettivo e/o la citta'."
+    disable_failed: "Disattivazione non riuscita, assicurati che esista l'obbiettivo e/o la citta'."
+    enable_failed: "Abilitazione non riuscita, assicurati che esista l'obbiettivo e/o la citta'."
+    enable_goal: "Obbiettivo abilitato:"
+    disable_goal: "Obbiettivo disattivato:"
 
 ### Goals
 goal:

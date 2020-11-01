@@ -133,8 +133,76 @@ public class GoalsCommandExecutor implements TabExecutor {
                     // TODO Delete a Goal
                     break;
 
+                case CommandTypes.DISABLE_COMMAND:
+                    // Disabling a Goal to a existing Town
+                    if (!(sender instanceof Player)){
+                        sender.sendMessage(Messages.NO_CONSOLE);
+                        return true;
+                    }
+
+                    Player playerDisable = (Player) sender;
+
+                    // Do you have the permissions?
+                    if(!playerDisable.hasPermission(Permissions.PERM_DISABLE)){
+                        playerDisable.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
+                        return true;
+                    }
+
+                    // Check if a goal exist in that town
+                    if(args.length > 2) {
+                        for (TownGoals townGoalsDisable : FWObbiettivi.instance.obbiettiviInTown) {
+                            if (args[1].equals(townGoalsDisable.getGoal().getName()) && args[2].equals(townGoalsDisable.getTown().getName())) {
+                                // Disable success
+                                playerDisable.sendMessage(ChatFormatter.formatSuccessMessage(Messages.DISABLE_GOAL) + " " + ChatColor.GOLD + townGoalsDisable.getGoal().getName());
+                                townGoalsDisable.setActive(false);
+                                return true;
+                            }
+                        }
+                    } else {
+                        playerDisable.sendMessage(ChatFormatter.formatErrorMessage(Messages.MISSING_INFO));
+                        return true;
+                    }
+
+                    // Disable failed
+                    playerDisable.sendMessage(ChatFormatter.formatErrorMessage(Messages.DISABLE_FAILED));
+                    break;
+
                 case CommandTypes.EDIT_COMMAND:
                     // TODO Edit a Goal
+                    break;
+
+                case CommandTypes.ENABLE_COMMAND:
+                    // Enabling a Goal to a existing Town
+                    if (!(sender instanceof Player)){
+                        sender.sendMessage(Messages.NO_CONSOLE);
+                        return true;
+                    }
+
+                    Player playerEnable = (Player) sender;
+
+                    // Do you have the permissions?
+                    if(!playerEnable.hasPermission(Permissions.PERM_ENABLE)){
+                        playerEnable.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
+                        return true;
+                    }
+
+                    // Check if a goal exist in that town
+                    if(args.length > 2) {
+                        for (TownGoals townGoalsDisable : FWObbiettivi.instance.obbiettiviInTown) {
+                            if (args[1].equals(townGoalsDisable.getGoal().getName()) && args[2].equals(townGoalsDisable.getTown().getName())) {
+                                // Enable success
+                                playerEnable.sendMessage(ChatFormatter.formatSuccessMessage(Messages.ENABLE_GOAL) + " " + ChatColor.GOLD + townGoalsDisable.getGoal().getName());
+                                townGoalsDisable.setActive(true);
+                                return true;
+                            }
+                        }
+                    } else {
+                        playerEnable.sendMessage(ChatFormatter.formatErrorMessage(Messages.MISSING_INFO));
+                        return true;
+                    }
+
+                    // Enable failed
+                    playerEnable.sendMessage(ChatFormatter.formatErrorMessage(Messages.ENABLE_FAILED));
                     break;
 
                 case CommandTypes.GUI_COMMAND:
@@ -185,8 +253,12 @@ public class GoalsCommandExecutor implements TabExecutor {
                             return true;
                         }
 
-                        townGoals.pay();
+                        if (townGoals.isActive())
+                            townGoals.pay();
                         // TODO Pay console message
+
+                        // Saving
+                        FWObbiettivi.saveData();
                     }
                     return true;
 
@@ -302,7 +374,7 @@ public class GoalsCommandExecutor implements TabExecutor {
                             }
                         }
                     } else {
-                        playerTp.sendMessage(ChatFormatter.formatErrorMessage(Messages.TELEPORTED_MISSING_INFO));
+                        playerTp.sendMessage(ChatFormatter.formatErrorMessage(Messages.MISSING_INFO));
                         return true;
                     }
 

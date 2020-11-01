@@ -19,6 +19,10 @@ public class Messages {
     public static final String GOAL_ADDED = ConfigUtil.getConfigStringLang("goal_added");
     public static final String GOAL_REMOVED = ConfigUtil.getConfigStringLang("goal_removed");
     public static final String TELEPORTED_TO = ConfigUtil.getConfigStringLang("teleported_to");
-    public static final String TELEPORTED_MISSING_INFO = ConfigUtil.getConfigStringLang("teleported_missing_info");
+    public static final String MISSING_INFO = ConfigUtil.getConfigStringLang("missing_info");
     public static final String TELEPORTED_FAILED = ConfigUtil.getConfigStringLang("teleported_failed");
+    public static final String DISABLE_FAILED = ConfigUtil.getConfigStringLang("disable_failed");
+    public static final String ENABLE_FAILED = ConfigUtil.getConfigStringLang("enable_failed");
+    public static final String DISABLE_GOAL = ConfigUtil.getConfigStringLang("disable_goal");
+    public static final String ENABLE_GOAL = ConfigUtil.getConfigStringLang("enable_goal");
 }

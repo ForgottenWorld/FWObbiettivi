@@ -146,6 +146,8 @@ public class ConfigUtil {
 
                     tg.setLocation(FWLocation.getLocationFromString(valueString[2]));
 
+                    tg.setActive(Boolean.valueOf(valueString[3]));
+
                     Block b = tg.getLocation().getBlock();
                     Chest chestState = (Chest) b.getState();
                     chestState.setCustomName("FWChest");
@@ -180,7 +182,8 @@ public class ConfigUtil {
         for(TownGoals tg: townGoals){
             sb.append(tg.getTown().getUuid().toString()).append("*");
             sb.append(tg.getGoal().getName()).append("*");
-            sb.append(FWLocation.getStringFromLocation(tg.getLocation())).append("|");
+            sb.append(FWLocation.getStringFromLocation(tg.getLocation())).append("*");
+            sb.append(tg.isActive()).append("|");
         }
 
         if (sb.length() > 0)
