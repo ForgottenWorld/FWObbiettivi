@@ -12,22 +12,16 @@ import it.forgottenworld.fwobbiettivi.utility.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.DoubleChestInventory;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import java.time.Clock;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -185,7 +179,7 @@ public class GoalsCommandExecutor implements TabExecutor {
                         Chest fwchest = (Chest) block.getState();
 
                         // Check if the inventory contains items
-                        if(fwchest.getInventory().isEmpty()){
+                        if(fwchest.getBlockInventory().isEmpty()){
                             // Inventory empty
                             // TODO Error console message
                             return true;

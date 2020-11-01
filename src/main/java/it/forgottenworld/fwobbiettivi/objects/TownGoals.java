@@ -8,6 +8,7 @@ import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -60,8 +61,10 @@ public class TownGoals {
         List<ItemStack> outputStacks = this.getGoal().getReward();
 
         while (hasEnoughtItems){
-            for (ItemStack is : inputStacks)
+            for (ItemStack is : inputStacks) {
                 hasEnoughtItems &= containsAtLeast(inv, is.getType(), is.getAmount());
+                System.out.println("hasEnoughtItems step");
+            }
 
             if (hasEnoughtItems){
                 for (ItemStack is : inputStacks)
@@ -85,13 +88,17 @@ public class TownGoals {
 
     private void removeExactly(Inventory inv, Material material, int quantity) {
         for (int i=0; i<inv.getSize(); i++){
+            System.out.println(inv.getSize());
             if (quantity > 0 && inv.getItem(i) != null && inv.getItem(i).getType() == material)
                 if (quantity >= inv.getItem(i).getAmount()) {
+                    System.out.println("remove Item");
                     quantity -= inv.getItem(i).getAmount();
                     inv.setItem(i, null);
                 } else {
+                    System.out.println("refuse item");
                     int newAmount = inv.getItem(i).getAmount() - quantity;
                     quantity -= newAmount;
+                    inv.setItem(i, new ItemStack(material, newAmount));
                 }
         }
     }
