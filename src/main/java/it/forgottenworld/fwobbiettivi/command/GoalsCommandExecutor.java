@@ -430,13 +430,22 @@ public class GoalsCommandExecutor implements TabExecutor {
             if (sender.hasPermission(Permissions.PERM_DELETE))
                 suggestions.add(CommandTypes.DELETE_COMMAND);
 
+            if (sender.hasPermission(Permissions.PERM_DISABLE))
+                suggestions.add(CommandTypes.DISABLE_COMMAND);
+
             if (sender.hasPermission(Permissions.PERM_EDIT))
                 suggestions.add(CommandTypes.EDIT_COMMAND);
+
+            if (sender.hasPermission(Permissions.PERM_ENABLE))
+                suggestions.add(CommandTypes.ENABLE_COMMAND);
 
             if (sender.hasPermission(Permissions.PERM_GUI))
                 suggestions.add(CommandTypes.GUI_COMMAND);
 
             suggestions.add(CommandTypes.HELP_COMMAND);
+
+            if (sender.hasPermission(Permissions.PERM_LIST))
+                suggestions.add(CommandTypes.LIST_COMMAND);
 
             if (sender.hasPermission(Permissions.PERM_MOVE))
                 suggestions.add(CommandTypes.MOVE_COMMAND);
