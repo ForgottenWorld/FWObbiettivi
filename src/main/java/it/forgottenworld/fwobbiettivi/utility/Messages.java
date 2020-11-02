@@ -25,4 +25,7 @@ public class Messages {
     public static final String ENABLE_FAILED = ConfigUtil.getConfigStringLang("enable_failed");
     public static final String DISABLE_GOAL = ConfigUtil.getConfigStringLang("disable_goal");
     public static final String ENABLE_GOAL = ConfigUtil.getConfigStringLang("enable_goal");
+    public static final String GOAL_NOT_PAID = ConfigUtil.getConfigStringLang("goal_not_paid");
+    public static final String GOAL_PAID = ConfigUtil.getConfigStringLang("goal_paid");
+    public static final String GOAL_IS_DISABLE = ConfigUtil.getConfigStringLang("goal_is_disable");
 }

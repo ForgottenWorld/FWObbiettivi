@@ -153,7 +153,7 @@ public class GoalsCommandExecutor implements TabExecutor {
                         for (TownGoals townGoalsDisable : FWObbiettivi.instance.obbiettiviInTown) {
                             if (args[1].equals(townGoalsDisable.getGoal().getName()) && args[2].equals(townGoalsDisable.getTown().getName())) {
                                 // Disable success
-                                playerDisable.sendMessage(ChatFormatter.formatSuccessMessage(Messages.DISABLE_GOAL) + " " + ChatColor.GOLD + townGoalsDisable.getGoal().getName());
+                                playerDisable.sendMessage(ChatFormatter.formatSuccessMessage(Messages.DISABLE_GOAL) + " " + ChatColor.GOLD + townGoalsDisable.getGoal().getName() + " - " + townGoalsDisable.getTown().getName());
                                 townGoalsDisable.setActive(false);
                                 return true;
                             }
@@ -188,11 +188,11 @@ public class GoalsCommandExecutor implements TabExecutor {
 
                     // Check if a goal exist in that town
                     if(args.length > 2) {
-                        for (TownGoals townGoalsDisable : FWObbiettivi.instance.obbiettiviInTown) {
-                            if (args[1].equals(townGoalsDisable.getGoal().getName()) && args[2].equals(townGoalsDisable.getTown().getName())) {
+                        for (TownGoals townGoalsEnable : FWObbiettivi.instance.obbiettiviInTown) {
+                            if (args[1].equals(townGoalsEnable.getGoal().getName()) && args[2].equals(townGoalsEnable.getTown().getName())) {
                                 // Enable success
-                                playerEnable.sendMessage(ChatFormatter.formatSuccessMessage(Messages.ENABLE_GOAL) + " " + ChatColor.GOLD + townGoalsDisable.getGoal().getName());
-                                townGoalsDisable.setActive(true);
+                                playerEnable.sendMessage(ChatFormatter.formatSuccessMessage(Messages.ENABLE_GOAL) + " " + ChatColor.GOLD + townGoalsEnable.getGoal().getName() + " - " + townGoalsEnable.getTown().getName());
+                                townGoalsEnable.setActive(true);
                                 return true;
                             }
                         }
@@ -234,7 +234,6 @@ public class GoalsCommandExecutor implements TabExecutor {
                     break;
 
                 case CommandTypes.PAY_COMMAND:
-                    // TODO Pay all Goals
                     // Do you have the permissions?
                     if(!sender.hasPermission(Permissions.PERM_PAY)){
                         sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
@@ -244,18 +243,29 @@ public class GoalsCommandExecutor implements TabExecutor {
                     for(TownGoals townGoals:FWObbiettivi.instance.obbiettiviInTown){
                         // Get the block chest at the coords
                         Block block = townGoals.getLocation().getBlock();
+
+                        // Chest not found, I disable the goal
+                        if (block.getType() != Material.CHEST) {
+                            FWObbiettivi.info(Messages.DISABLE_GOAL + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                            townGoals.setActive(false);
+                            return true;
+                        }
+
                         Chest fwchest = (Chest) block.getState();
 
                         // Check if the inventory contains items
                         if(fwchest.getBlockInventory().isEmpty()){
                             // Inventory empty
-                            // TODO Error console message
+                            FWObbiettivi.info(Messages.GOAL_NOT_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
                             return true;
                         }
 
-                        if (townGoals.isActive())
+                        if (townGoals.isActive()) {
                             townGoals.pay();
-                        // TODO Pay console message
+                            FWObbiettivi.info(Messages.GOAL_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                        } else {
+                            FWObbiettivi.info(Messages.GOAL_IS_DISABLE + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                        }
 
                         // Saving
                         FWObbiettivi.saveData();
