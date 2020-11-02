@@ -333,12 +333,16 @@ public class GoalsCommandExecutor implements TabExecutor {
 
                                 }
                                 Block bRemove = townGoalsRemove.getLocation().getBlock();
-                                ((Chest) bRemove.getState()).setCustomName("Chest");
-                                bRemove.removeMetadata("goalchest", FWObbiettivi.instance);
-                                playerRemove.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_REMOVED));
 
+                                // Chest not found, I disable the goal
+                                if (bRemove.getType() != Material.CHEST) {
+                                    ((Chest) bRemove.getState()).setCustomName("Chest");
+                                    bRemove.removeMetadata("goalchest", FWObbiettivi.instance);
+                                }
                                 // Removing Goal to that Town
                                 FWObbiettivi.instance.obbiettiviInTown.remove(townGoalsRemove);
+
+                                playerRemove.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_REMOVED));
 
                                 // Saving
                                 FWObbiettivi.saveData();
