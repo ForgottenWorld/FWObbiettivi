@@ -2,18 +2,18 @@ package it.forgottenworld.fwobbiettivi.listeners;
 
 import it.forgottenworld.fwobbiettivi.utility.ChatFormatter;
 import it.forgottenworld.fwobbiettivi.utility.Messages;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class GoalsChestEvent implements Listener {
@@ -49,10 +49,26 @@ public class GoalsChestEvent implements Listener {
     }
 
     @EventHandler
+    public void onFWChestsExplodeEvent(EntityExplodeEvent e){
+        // Check if block is a FWChest
+        Iterator<Block> it = e.blockList().iterator();
+        while(it.hasNext()){
+            Block block = it.next();
+            if (block.getType().equals(Material.CHEST) && block.hasMetadata("goalchest")){
+                e.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
     public void onFWChestsExplodeEvent(BlockExplodeEvent e){
         // Check if block is a FWChest
-        if (e.getBlock().getType().equals(Material.CHEST) && e.getBlock().hasMetadata("goalchest")){
-            e.setCancelled(true);
+        Iterator<Block> it = e.blockList().iterator();
+        while(it.hasNext()){
+            Block block = it.next();
+            if (block.getType().equals(Material.CHEST) && block.hasMetadata("goalchest")){
+                e.setCancelled(true);
+            }
         }
     }
 
