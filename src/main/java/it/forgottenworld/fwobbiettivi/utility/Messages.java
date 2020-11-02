@@ -28,4 +28,5 @@ public class Messages {
     public static final String GOAL_NOT_PAID = ConfigUtil.getConfigStringLang("goal_not_paid");
     public static final String GOAL_PAID = ConfigUtil.getConfigStringLang("goal_paid");
     public static final String GOAL_IS_DISABLE = ConfigUtil.getConfigStringLang("goal_is_disable");
+    public static final String GOALS_LIST = ConfigUtil.getConfigStringLang("goals_list");
 }

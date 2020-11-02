@@ -229,6 +229,20 @@ public class GoalsCommandExecutor implements TabExecutor {
                     sender.sendMessage(ChatFormatter.helpMessage());
                     return true;
 
+                case CommandTypes.LIST_COMMAND:
+                    // Do you have the permissions?
+                    if(!sender.hasPermission(Permissions.PERM_LIST)){
+                        sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
+                        return true;
+                    }
+                    // TODO List Goals Pagination
+                    sender.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOALS_LIST));
+                    for (Goal g: FWObbiettivi.instance.obbiettivi) {
+                        sender.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("- " + g.getName()));
+                    }
+
+                    break;
+
                 case CommandTypes.MOVE_COMMAND:
                     // TODO Move Goal
                     break;

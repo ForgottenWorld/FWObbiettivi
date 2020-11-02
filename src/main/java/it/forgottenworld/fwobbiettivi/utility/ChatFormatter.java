@@ -38,6 +38,21 @@ public class ChatFormatter {
         return message;
     }
 
+    public static String formatSuccessMessageNoPrefix(String message) {
+        message = ChatColor.GREEN + message;
+        return message;
+    }
+
+    public static String formatWarningMessageNoPrefix(String message) {
+        message = ChatColor.GOLD + message;
+        return message;
+    }
+
+    public static String formatErrorMessageNoPrefix(String message) {
+        message = ChatColor.RED + message;
+        return message;
+    }
+
     public static String formatDebugMessage(String message) {
         message = pluginPrefix() + debugPrefix() + ChatColor.AQUA + message;
         return message;

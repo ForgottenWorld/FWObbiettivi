@@ -81,6 +81,7 @@ languages:
     goal_not_paid: "Obbiettivo non pagato:"
     goal_paid: "Obbiettivo pagato:"
     goal_is_disable: "Questo oobbiettivo e' disattivato:"
+    goals_list: "Lista degli obbiettivi presenti:"
 
 ### Goals
 # Use quantities less than or equal to 64

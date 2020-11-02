@@ -9,6 +9,7 @@ public class Permissions {
     public static final String PERM_EDIT = "forgotten.obbiettivi.edit";
     public static final String PERM_ENABLE = "forgotten.obbiettivi.enable";
     public static final String PERM_GUI = "forgotten.obbiettivi.gui";
+    public static final String PERM_LIST = "forgotten.obbiettivi.list";
     public static final String PERM_MOVE = "forgotten.obbiettivi.move";
     public static final String PERM_PAY = "forgotten.obbiettivi.pay";
     public static final String PERM_RELOAD = "forgotten.obbiettivi.reload";
