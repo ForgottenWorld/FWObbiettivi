@@ -80,6 +80,7 @@ languages:
     disable_goal: "Obbiettivo disattivato:"
 
 ### Goals
+# Use quantities less than or equal to 64
 goal:
   obiettivoDiProva:
     branch: "test"

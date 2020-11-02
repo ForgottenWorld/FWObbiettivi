@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import java.util.ArrayList;
@@ -18,8 +19,8 @@ import java.util.List;
 public class GoalsChestEvent implements Listener {
 
     @EventHandler
-    public void onGoalsChestDestroyEvent(BlockBreakEvent e){
-        // Check if block is a CHEST
+    public void onFWChestDestroyEvent(BlockBreakEvent e){
+        // Check if block is a FWChest
         if (e.getBlock().getType().equals(Material.CHEST) && e.getBlock().hasMetadata("goalchest")){
             e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_BREAK_GOAL));
             e.setCancelled(true);
@@ -44,6 +45,14 @@ public class GoalsChestEvent implements Listener {
                     return;
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onFWChestsExplodeEvent(BlockExplodeEvent e){
+        // Check if block is a FWChest
+        if (e.getBlock().getType().equals(Material.CHEST) && e.getBlock().hasMetadata("goalchest")){
+            e.setCancelled(true);
         }
     }
 
