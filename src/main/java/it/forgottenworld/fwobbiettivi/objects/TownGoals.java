@@ -10,6 +10,10 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Class that manages a single objective. This class is created
+ * for each chest that needs to convert an objective.
+ */
 public class TownGoals {
 
     private Town town;
@@ -17,23 +21,45 @@ public class TownGoals {
     private Location location;
     private boolean active;
 
+    /**
+     * Constructor
+     */
     public TownGoals(){
         this.active = true;
     }
 
-    public TownGoals(Town t, Goal g, Location l){
-        this.town = t;
-        this.goal = g;
-        this.location = l;
+    /**
+     * Constructor
+     * @param town Town object containing the town to which the goals belong.
+     * @param goal Goal object which contains all the information about the goal.
+     * @param location Position of the FWChest associated with this goal.
+     */
+    public TownGoals(Town town, Goal goal, Location location){
+        this.town = town;
+        this.goal = goal;
+        this.location = location;
         this.active = true;
     }
 
-    public TownGoals(Town t, Goal g, Location l, boolean active){
-        this.town = t;
-        this.goal = g;
-        this.location = l;
+    /**
+     * Constructor
+     * @param town Town object containing the town to which the goals belong.
+     * @param goal Goal object which contains all the information about the goal.
+     * @param location Position of the FWChest associated with this goal.
+     * @param active It defines a new goal differently, by default it is enabled.
+     */
+    public TownGoals(Town town, Goal goal, Location location, boolean active){
+        this.town = town;
+        this.goal = goal;
+        this.location = location;
         this.active = active;
     }
+
+    /*
+     * ==================================================================================
+     * 									Getters & Setters
+     * ==================================================================================
+     */
 
     public Town getTown() {
         return town;
@@ -59,9 +85,18 @@ public class TownGoals {
         this.location = location;
     }
 
-    public boolean isActive() { return active; }
+    public boolean isActive() {
+        return active;
+    }
 
-    public void setActive(boolean active) { this.active = active; }
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    /* ==================================================================================
+     *  								   CONVERSION
+     * ==================================================================================
+     */
 
     public boolean pay(){
         convert(((Chest) this.getLocation().getBlock().getState()).getBlockInventory());
@@ -74,10 +109,8 @@ public class TownGoals {
         List<ItemStack> outputStacks = this.getGoal().getReward();
 
         while (hasEnoughtItems){
-            for (ItemStack is : inputStacks) {
+            for (ItemStack is : inputStacks)
                 hasEnoughtItems &= containsAtLeast(inv, is.getType(), is.getAmount());
-                System.out.println("hasEnoughtItems step");
-            }
 
             if (hasEnoughtItems){
                 for (ItemStack is : inputStacks)
@@ -115,6 +148,11 @@ public class TownGoals {
                 }
         }
     }
+
+    /* ==================================================================================
+     *  								   	  UTILS
+     * ==================================================================================
+     */
 
     @Override
     public boolean equals(Object o) {
