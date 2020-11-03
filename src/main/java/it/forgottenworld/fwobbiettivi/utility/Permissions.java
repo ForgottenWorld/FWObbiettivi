@@ -14,5 +14,6 @@ public class Permissions {
     public static final String PERM_PAY = "forgotten.obbiettivi.pay";
     public static final String PERM_RELOAD = "forgotten.obbiettivi.reload";
     public static final String PERM_REMOVE = "forgotten.obbiettivi.remove";
+    public static final String PERM_SHOW = "forgotten.obbiettivi.show";
     public static final String PERM_TP = "forgotten.obbiettivi.teleport";
 }

@@ -374,6 +374,10 @@ public class GoalsCommandExecutor implements TabExecutor {
                     }
                     break;
 
+                case CommandTypes.SHOW_COMMAND:
+                    // TODO Show Goal
+                    break;
+
                 case CommandTypes.TP_COMMAND:
                     // Teleport a player to a goal
                     if (!(sender instanceof Player)){
@@ -458,6 +462,9 @@ public class GoalsCommandExecutor implements TabExecutor {
 
             if (sender.hasPermission(Permissions.PERM_REMOVE))
                 suggestions.add(CommandTypes.REMOVE_COMMAND);
+
+            if (sender.hasPermission(Permissions.PERM_SHOW))
+                suggestions.add(CommandTypes.SHOW_COMMAND);
 
             if (sender.hasPermission(Permissions.PERM_TP))
                 suggestions.add(CommandTypes.TP_COMMAND);

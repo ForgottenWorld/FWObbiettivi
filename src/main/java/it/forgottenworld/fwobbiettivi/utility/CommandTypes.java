@@ -15,6 +15,7 @@ public class CommandTypes {
     public static final String PAY_COMMAND = "pay";
     public static final String RELOAD_COMMAND = "reload";
     public static final String REMOVE_COMMAND = "remove";
+    public static final String SHOW_COMMAND = "show";
     public static final String TP_COMMAND = "tp";
 
 }
