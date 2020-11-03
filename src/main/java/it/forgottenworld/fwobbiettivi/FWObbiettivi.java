@@ -9,6 +9,7 @@ import it.forgottenworld.fwobbiettivi.listeners.DisbandTownListener;
 import it.forgottenworld.fwobbiettivi.listeners.GUIGoalsListener;
 import it.forgottenworld.fwobbiettivi.objects.TownGoals;
 import it.forgottenworld.fwobbiettivi.utility.ConfigUtil;
+import javafx.util.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -25,6 +26,7 @@ public final class FWObbiettivi extends JavaPlugin {
     public static ArrayList<Branch> rami = new ArrayList<Branch>();
     public static ArrayList<Goal> obbiettivi = new ArrayList<Goal>();
     public static ArrayList<TownGoals> obbiettiviInTown = new ArrayList<TownGoals>();
+    public HashMap<Pair<Integer, Integer>, TownGoals> chunk = new HashMap<Pair<Integer, Integer>, TownGoals>();
     public GoalsGUI gui = new GoalsGUI();
     public HashMap<Player, GoalsGUI> map = new HashMap<>();
 
