@@ -68,6 +68,8 @@ languages:
     no_place_near_goal: "Non puoi piazzare una CHEST vicino una FWChest."
     no_break_goal: "Non puoi rompere una FWChest."
     no_existing_file_data: "Il file di salvataggio non esiste."
+    no_place_in_goal: "Non puoi piazzare blocchi in un obbiettivo attivo."
+    no_break_in_goal: "Non puoi rompere blocchi in un obbiettivo attivo."
     goal_already_present: "L'obbiettivo e' gia' presente in questa citta'."
     goal_added: "Obbiettivo aggiunto con successo:"
     goal_removed: "Obbiettivo rimosso con successo."

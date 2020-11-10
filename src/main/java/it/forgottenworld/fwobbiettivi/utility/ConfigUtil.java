@@ -7,6 +7,7 @@ import it.forgottenworld.fwobbiettivi.FWObbiettivi;
 import it.forgottenworld.fwobbiettivi.objects.Branch;
 import it.forgottenworld.fwobbiettivi.objects.Goal;
 import it.forgottenworld.fwobbiettivi.objects.TownGoals;
+import javafx.util.Pair;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -14,9 +15,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import java.io.*;
 import java.util.*;
 
@@ -59,17 +57,13 @@ public class ConfigUtil {
             // Payment materials
             ArrayList<String> paymentsMaterial = new ArrayList<String>();
             paymentsMaterial.addAll(FWObbiettivi.instance.getConfig().getStringList("goal." + goal + ".payment"));
-            if(DEBUG)
-                FWObbiettivi.debug("paymentsMaterial=" + paymentsMaterial.toString());
+
             ArrayList<Integer> paymentsQuantity = new ArrayList<Integer>();
             paymentsQuantity.addAll(FWObbiettivi.instance.getConfig().getIntegerList("goal." + goal + ".paymentQuantity"));
-            if(DEBUG)
-                FWObbiettivi.debug("paymentsQuantity=" + paymentsQuantity.toString());
+
             ArrayList<ItemStack> payment = new ArrayList<ItemStack>();
 
             for (int i = 0; i < paymentsMaterial.size(); i++) {
-                if(DEBUG)
-                    FWObbiettivi.debug("paymentsMaterial=" + paymentsMaterial.get(i).toString());
                 payment.add(new ItemStack(Material.getMaterial(paymentsMaterial.get(i)),
                         paymentsQuantity.get(i)));
             }
@@ -124,8 +118,7 @@ public class ConfigUtil {
             while((line = bufferedReader.readLine()) != null){
                 sb.append(line);
             }
-            if(DEBUG)
-                FWObbiettivi.debug(sb.toString());
+
             inputStream.close();
 
             if(sb.length() != 0){
@@ -176,22 +169,75 @@ public class ConfigUtil {
         return townGoals;
     }
 
+    public static HashMap<Pair<Integer, Integer>, TownGoals> loadChunkList(){
+        HashMap<Pair<Integer, Integer>, TownGoals> chunks = new HashMap<>();
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream("plugins/FWObbiettivi/chunks.markus");
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            String line;
+            StringBuilder sb = new StringBuilder();
+            while((line = bufferedReader.readLine()) != null){
+                sb.append(line);
+            }
+
+            inputStream.close();
+
+            if(sb.length() != 0){
+                List<String> file = Arrays.asList(sb.toString().split("\\|"));
+
+                for (String s: file){
+                    String[] valueString = s.split("\\*");
+                    TownGoals tg = new TownGoals();
+                    TownyDataSource tds = TownyUniverse.getInstance().getDataSource();
+                    tg.setTown(tds.getTown(UUID.fromString(valueString[2])));
+
+                    for(Goal g:FWObbiettivi.instance.obbiettivi){
+                        if(g.getName().equals(valueString[3])){
+                            tg.setGoal(g);
+                            break;
+                        }
+                    }
+
+                    tg.setLocation(FWLocation.getLocationFromString(valueString[4]));
+
+                    tg.setActive(Boolean.valueOf(valueString[5]));
+
+                    chunks.put(new Pair<>(Integer.valueOf(valueString[0]), Integer.valueOf(valueString[1])), tg);
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            FWObbiettivi.info(Messages.NO_EXISTING_FILE_DATA);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NotRegisteredException e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null){
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return chunks;
+    }
+
     public static void saveGoalsInTownList(ArrayList<TownGoals> townGoals) {
         StringBuilder sb = new StringBuilder();
 
         for(TownGoals tg: townGoals){
-            sb.append(tg.getTown().getUuid().toString()).append("*");
-            sb.append(tg.getGoal().getName()).append("*");
-            sb.append(FWLocation.getStringFromLocation(tg.getLocation())).append("*");
-            sb.append(tg.isActive()).append("|");
+            generateTownGoalsString(sb, tg);
+            sb.append("|");
         }
 
         if (sb.length() > 0)
             sb.setLength(sb.length() - 1);
 
         try {
-            if(DEBUG)
-                FWObbiettivi.debug(sb.toString());
             FileWriter writer = new FileWriter("plugins/FWObbiettivi/townGoals.markus");
             if(sb.length() == 0){
                 writer.write("");
@@ -203,6 +249,41 @@ public class ConfigUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void saveChunkList(HashMap<Pair<Integer, Integer>, TownGoals> chunks) {
+        StringBuilder sb = new StringBuilder();
+
+        for (Pair<Integer, Integer> pair: chunks.keySet()){
+            TownGoals tg = chunks.get(pair);
+            sb.append(pair.getKey()).append("*");
+            sb.append(pair.getValue()).append("*");
+            generateTownGoalsString(sb, tg);
+            sb.append("|");
+        }
+
+        if (sb.length() > 0)
+            sb.setLength(sb.length() - 1);
+
+        try {
+            FileWriter writer = new FileWriter("plugins/FWObbiettivi/chunks.markus");
+            if(sb.length() == 0){
+                writer.write("");
+            }else {
+                writer.write(sb.toString());
+            }
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void generateTownGoalsString(StringBuilder sb, TownGoals tg){
+        sb.append(tg.getTown().getUuid().toString()).append("*");
+        sb.append(tg.getGoal().getName()).append("*");
+        sb.append(FWLocation.getStringFromLocation(tg.getLocation())).append("*");
+        sb.append(tg.isActive());
     }
 
 }

@@ -14,6 +14,8 @@ public class Messages {
     public static final String NO_PLACE_NEAR_GOAL = ConfigUtil.getConfigStringLang("no_place_near_goal");
     public static final String NO_BREAK_GOAL = ConfigUtil.getConfigStringLang("no_break_goal");
     public static final String NO_EXISTING_FILE_DATA = ConfigUtil.getConfigStringLang("no_existing_file_data");
+    public static final String NO_BREAK_IN_GOAL = ConfigUtil.getConfigStringLang("no_break_in_goal");
+    public static final String NO_PLACE_IN_GOAL = ConfigUtil.getConfigStringLang("no_place_in_goal");
 
     public static final String GOAL_ALREADY_PRESENT = ConfigUtil.getConfigStringLang("goal_already_present");
     public static final String GOAL_ADDED = ConfigUtil.getConfigStringLang("goal_added");

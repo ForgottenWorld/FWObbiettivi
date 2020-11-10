@@ -3,6 +3,7 @@ package it.forgottenworld.fwobbiettivi;
 import it.forgottenworld.fwobbiettivi.command.GoalsCommandExecutor;
 import it.forgottenworld.fwobbiettivi.gui.GoalsGUI;
 import it.forgottenworld.fwobbiettivi.listeners.GoalsChestEvent;
+import it.forgottenworld.fwobbiettivi.listeners.GoalsChunkEvent;
 import it.forgottenworld.fwobbiettivi.objects.Goal;
 import it.forgottenworld.fwobbiettivi.objects.Branch;
 import it.forgottenworld.fwobbiettivi.listeners.DisbandTownListener;
@@ -26,7 +27,7 @@ public final class FWObbiettivi extends JavaPlugin {
     public static ArrayList<Branch> rami = new ArrayList<Branch>();
     public static ArrayList<Goal> obbiettivi = new ArrayList<Goal>();
     public static ArrayList<TownGoals> obbiettiviInTown = new ArrayList<TownGoals>();
-    public HashMap<Pair<Integer, Integer>, TownGoals> chunk = new HashMap<Pair<Integer, Integer>, TownGoals>();
+    public static HashMap<Pair<Integer, Integer>, TownGoals> chunks = new HashMap<Pair<Integer, Integer>, TownGoals>();
     public GoalsGUI gui = new GoalsGUI();
     public HashMap<Player, GoalsGUI> map = new HashMap<>();
 
@@ -49,6 +50,7 @@ public final class FWObbiettivi extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new DisbandTownListener(), this);
         this.getServer().getPluginManager().registerEvents(new GUIGoalsListener(), this);
         this.getServer().getPluginManager().registerEvents(new GoalsChestEvent(), this);
+        this.getServer().getPluginManager().registerEvents(new GoalsChunkEvent(), this);
 
         // Caricamento da file
         info("Loading infos...");
@@ -81,21 +83,21 @@ public final class FWObbiettivi extends JavaPlugin {
     public static void loadData() {
         info("Loading Branch");
         rami = ConfigUtil.loadBranchesList();
-        info("Finish loading Branch");
 
         info("Loading Goals");
         obbiettivi = ConfigUtil.loadGoalsList();
-        info("Finish loading Goals");
 
         info("Loading Data");
         obbiettiviInTown = ConfigUtil.loadGoalsInTownList();
-        info("Finish loading Data");
+        chunks = ConfigUtil.loadChunkList();
+        info("Finish loading saves");
     }
 
     public static void saveData() {
         info("Saving Data");
         ConfigUtil.saveGoalsInTownList(obbiettiviInTown);
-        info("Finish saving Data");
+        ConfigUtil.saveChunkList(chunks);
+        info("Finish saving saves");
     }
 
     private void loadConfiguration() {
