@@ -134,14 +134,11 @@ public class TownGoals {
 
     private void removeExactly(Inventory inv, Material material, int quantity) {
         for (int i=0; i<inv.getSize(); i++){
-            System.out.println(inv.getSize());
             if (quantity > 0 && inv.getItem(i) != null && inv.getItem(i).getType() == material)
                 if (quantity >= inv.getItem(i).getAmount()) {
-                    System.out.println("remove Item");
                     quantity -= inv.getItem(i).getAmount();
                     inv.setItem(i, null);
                 } else {
-                    System.out.println("refuse item");
                     int newAmount = inv.getItem(i).getAmount() - quantity;
                     quantity -= newAmount;
                     inv.setItem(i, new ItemStack(material, newAmount));
