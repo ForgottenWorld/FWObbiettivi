@@ -1,5 +1,7 @@
 package it.forgottenworld.fwobbiettivi.utility;
 
+import org.bukkit.command.CommandSender;
+
 public class Permissions {
 
     public static final String PERM_ADD = "forgotten.obbiettivi.add";
@@ -16,4 +18,11 @@ public class Permissions {
     public static final String PERM_REMOVE = "forgotten.obbiettivi.remove";
     public static final String PERM_SHOW = "forgotten.obbiettivi.show";
     public static final String PERM_TP = "forgotten.obbiettivi.teleport";
+
+    public static boolean playerHasPermission(CommandSender sender, String permission) {
+        if (!sender.hasPermission(permission))
+            sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
+
+        return sender.hasPermission(permission);
+    }
 }

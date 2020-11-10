@@ -43,8 +43,7 @@ public class GoalsCommandExecutor implements TabExecutor {
                     Player playerAdd = (Player) sender;
 
                     // Do you have the permissions?
-                    if(!playerAdd.hasPermission(Permissions.PERM_ADD)){
-                        playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
+                    if(!Permissions.playerHasPermission(sender, Permissions.PERM_ADD))
                         return true;
                     }
 
@@ -143,8 +142,7 @@ public class GoalsCommandExecutor implements TabExecutor {
                     Player playerDisable = (Player) sender;
 
                     // Do you have the permissions?
-                    if(!playerDisable.hasPermission(Permissions.PERM_DISABLE)){
-                        playerDisable.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
+                    if(!Permissions.playerHasPermission(sender, Permissions.PERM_DISABLE))
                         return true;
                     }
 
@@ -181,8 +179,7 @@ public class GoalsCommandExecutor implements TabExecutor {
                     Player playerEnable = (Player) sender;
 
                     // Do you have the permissions?
-                    if(!playerEnable.hasPermission(Permissions.PERM_ENABLE)){
-                        playerEnable.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
+                    if(!Permissions.playerHasPermission(sender, Permissions.PERM_ENABLE))
                         return true;
                     }
 
@@ -214,8 +211,7 @@ public class GoalsCommandExecutor implements TabExecutor {
 
                     Player playerGui = (Player) sender;
                     // Do you have the permissions?
-                    if(!playerGui.hasPermission(Permissions.PERM_GUI)){
-                        playerGui.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
+                    if(!Permissions.playerHasPermission(sender, Permissions.PERM_GUI))
                         return true;
                     }
 
@@ -231,8 +227,7 @@ public class GoalsCommandExecutor implements TabExecutor {
 
                 case CommandTypes.LIST_COMMAND:
                     // Do you have the permissions?
-                    if(!sender.hasPermission(Permissions.PERM_LIST)){
-                        sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
+                    if(!Permissions.playerHasPermission(sender, Permissions.PERM_LIST))
                         return true;
                     }
                     // TODO List Goals Pagination
@@ -249,8 +244,7 @@ public class GoalsCommandExecutor implements TabExecutor {
 
                 case CommandTypes.PAY_COMMAND:
                     // Do you have the permissions?
-                    if(!sender.hasPermission(Permissions.PERM_PAY)){
-                        sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
+                    if(!Permissions.playerHasPermission(sender, Permissions.PERM_PAY))
                         return true;
                     }
 
@@ -289,8 +283,7 @@ public class GoalsCommandExecutor implements TabExecutor {
                 case CommandTypes.RELOAD_COMMAND:
                     // Reload the server config.yml
                     // Do you have the permissions?
-                    if(!sender.hasPermission(Permissions.PERM_RELOAD)){
-                        sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
+                    if(!Permissions.playerHasPermission(sender, Permissions.PERM_RELOAD))
                         return true;
                     }
 
@@ -320,8 +313,7 @@ public class GoalsCommandExecutor implements TabExecutor {
                     Player playerRemove = (Player) sender;
 
                     // Do you have the permissions?
-                    if(!playerRemove.hasPermission(Permissions.PERM_REMOVE)){
-                        playerRemove.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
+                    if(!Permissions.playerHasPermission(sender, Permissions.PERM_REMOVE))
                         return true;
                     }
 
@@ -388,8 +380,7 @@ public class GoalsCommandExecutor implements TabExecutor {
                     Player playerTp = (Player) sender;
 
                     // Do you have the permissions?
-                    if(!playerTp.hasPermission(Permissions.PERM_TP)){
-                        playerTp.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PERM));
+                    if(!Permissions.playerHasPermission(sender, Permissions.PERM_TP))
                         return true;
                     }
 
