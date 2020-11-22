@@ -42,6 +42,9 @@ public class ConfigUtil {
             ArrayList<String> requiredGoal = new ArrayList<String>();
             requiredGoal.addAll(FWObbiettivi.getInstance().getConfig().getStringList("goal." + goal + ".requiredGoals"));
 
+            // Required Zenar
+            double requiredZenar = FWObbiettivi.getInstance().getConfig().getDouble("goal." + goal + ".requiredZenar");
+
             // Check if the Branch exist
             Branch ramo = null;
             for (Iterator<Branch> it = FWObbiettivi.getInstance().rami.iterator(); it.hasNext(); ) {
@@ -78,6 +81,9 @@ public class ConfigUtil {
             rewardsQuantity.addAll(FWObbiettivi.getInstance().getConfig().getIntegerList("goal." + goal + ".rewardQuantity"));
             ArrayList<ItemStack> reward = new ArrayList<ItemStack>();
 
+            // Reward Zenar
+            double rewardZenar = FWObbiettivi.getInstance().getConfig().getDouble("goal." + goal + ".rewardZenar");
+
             for (int i = 0; i < rewardsMaterial.size(); i++) {
                 reward.add(new ItemStack(Material.getMaterial(rewardsMaterial.get(i)),
                         rewardsQuantity.get(i)));
@@ -87,7 +93,7 @@ public class ConfigUtil {
             ArrayList<String> description = new ArrayList<String>();
             description.addAll(FWObbiettivi.getInstance().getConfig().getStringList("goal." + goal + ".description"));
 
-            obbiettivi.add(new Goal(goal, ramo, numPlot, requiredGoal, payment, reward, description));
+            obbiettivi.add(new Goal(goal, ramo, numPlot, requiredGoal, requiredZenar, payment, reward, rewardZenar, description));
         }
         
         return obbiettivi;

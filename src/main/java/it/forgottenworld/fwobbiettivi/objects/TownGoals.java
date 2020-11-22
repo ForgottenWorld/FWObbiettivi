@@ -1,5 +1,6 @@
 package it.forgottenworld.fwobbiettivi.objects;
 
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -100,6 +101,11 @@ public class TownGoals {
 
     public boolean pay(){
         convert(((Chest) this.getLocation().getBlock().getState()).getBlockInventory());
+        try {
+            town.collect(goal.getRewardZenar());
+        } catch (EconomyException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 

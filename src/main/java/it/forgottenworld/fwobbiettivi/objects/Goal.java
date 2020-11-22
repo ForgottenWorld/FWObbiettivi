@@ -19,17 +19,21 @@ public class Goal {
     private Branch branch;
     private int numPlot;
     private List<String> requiredGoals;
+    private double requiredZenar;
     private List<ItemStack>  payment;
     private List<ItemStack>  reward;
+    private double rewardZenar;
     private List<String> descrizione;
 
-    public Goal(String name, Branch branch, int numPlot, List<String> requiredGoals, List<ItemStack> payment, List<ItemStack> reward, List<String> descrizione){
+    public Goal(String name, Branch branch, int numPlot, List<String> requiredGoals, double requiredZenar, List<ItemStack> payment, List<ItemStack> reward, double rewardZenar, List<String> descrizione){
         this.name = name;
         this.branch = branch;
         this.numPlot = numPlot;
         this.requiredGoals = requiredGoals;
+        this.requiredZenar = requiredZenar;
         this.payment = payment;
         this.reward = reward;
+        this.rewardZenar = rewardZenar;
         this.descrizione = descrizione;
     }
 
@@ -65,6 +69,14 @@ public class Goal {
         this.requiredGoals = requiredGoals;
     }
 
+    public double getRequiredZenar() {
+        return requiredZenar;
+    }
+
+    public void setRequiredZenar(double requiredZenar) {
+        this.requiredZenar = requiredZenar;
+    }
+
     public List<ItemStack> getPayment() {
         return payment;
     }
@@ -81,6 +93,14 @@ public class Goal {
         this.reward = reward;
     }
 
+    public double getRewardZenar() {
+        return rewardZenar;
+    }
+
+    public void setRewardZenar(double rewardZenar) {
+        this.rewardZenar = rewardZenar;
+    }
+
     public List<String> getDescrizione() {
         return descrizione;
     }
@@ -94,9 +114,11 @@ public class Goal {
         if (this == o) return true;
         if (!(o instanceof Goal)) return false;
         Goal goal = (Goal) o;
-        return Objects.equals(getName(), goal.getName()) &&
+        return getNumPlot() == goal.getNumPlot() &&
+                Double.compare(goal.getRequiredZenar(), getRequiredZenar()) == 0 &&
+                Double.compare(goal.getRewardZenar(), getRewardZenar()) == 0 &&
+                Objects.equals(getName(), goal.getName()) &&
                 Objects.equals(getBranch(), goal.getBranch()) &&
-                Objects.equals(getNumPlot(), goal.getNumPlot()) &&
                 Objects.equals(getRequiredGoals(), goal.getRequiredGoals()) &&
                 Objects.equals(getPayment(), goal.getPayment()) &&
                 Objects.equals(getReward(), goal.getReward()) &&
@@ -105,8 +127,7 @@ public class Goal {
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(getName(), getBranch(), getNumPlot(), getRequiredGoals(), getPayment(), getReward(), getDescrizione());
-        return result;
+        return Objects.hash(getName(), getBranch(), getNumPlot(), getRequiredGoals(), getRequiredZenar(), getPayment(), getReward(), getRewardZenar(), getDescrizione());
     }
 
     @Override
@@ -116,8 +137,10 @@ public class Goal {
                 ", branch=" + branch +
                 ", numPlot=" + numPlot +
                 ", requiredGoals=" + requiredGoals +
+                ", requiredZenar=" + requiredZenar +
                 ", payment=" + payment +
                 ", reward=" + reward +
+                ", rewardZenar=" + rewardZenar +
                 ", descrizione=" + descrizione +
                 '}';
     }

@@ -71,6 +71,7 @@ languages:
     no_place_in_goal: "Non puoi piazzare blocchi in un obbiettivo attivo."
     no_break_in_goal: "Non puoi rompere blocchi in un obbiettivo attivo."
     abort_add_goal: "Player disconnesso, aggiunta obbiettivo rimossa."
+    goal_unclaim_removed: "Obbiettivo rimosso per unclaim:"
     goal_already_present: "L'obbiettivo e' gia' presente in questa citta'."
     goal_added: "Obbiettivo aggiunto con successo:"
     goal_removed: "Obbiettivo rimosso con successo."
@@ -99,6 +100,7 @@ goal:
     plot: 1
     requiredGoals:
       - test
+    requiredZenar: 500.0
     payment:
       - COBBLESTONE
       - WHITE_WOOL
@@ -109,6 +111,7 @@ goal:
       - GOLD_BLOCK
     rewardQuantity:
       - 1
+    rewardZenar: 500.0
     description:
       - Obbiettivo di test
 
