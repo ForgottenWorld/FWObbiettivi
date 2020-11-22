@@ -20,46 +20,49 @@ import java.util.*;
 
 public class ConfigUtil {
 
-    public static final boolean DEBUG = FWObbiettivi.instance.getConfig().getBoolean("debug");
+    public static final boolean DEBUG = FWObbiettivi.getInstance().getConfig().getBoolean("debug");
 
     public static List<String> getConfigStringListLang(String path){
-        return FWObbiettivi.instance.getConfig().getStringList("languages." + getConfLang() + "." + path);
+        return FWObbiettivi.getInstance().getConfig().getStringList("languages." + getConfLang() + "." + path);
     }
 
     public static String getConfigStringLang(String path){
-        return FWObbiettivi.instance.getConfig().getString("languages." + getConfLang() + "." + path);
+        return FWObbiettivi.getInstance().getConfig().getString("languages." + getConfLang() + "." + path);
     }
 
     public static String getConfLang(){
-        return FWObbiettivi.instance.getConfig().getString("languages.default");
+        return FWObbiettivi.getInstance().getConfig().getString("languages.default");
     }
 
     public static ArrayList<Goal> loadGoalsList(){
         ArrayList<Goal> obbiettivi = new ArrayList<Goal>();
-        ConfigurationSection sec = FWObbiettivi.instance.getConfig().getConfigurationSection("goal");
+        ConfigurationSection sec = FWObbiettivi.getInstance().getConfig().getConfigurationSection("goal");
 
         for (String goal: sec.getKeys(false)) {
             ArrayList<String> requiredGoal = new ArrayList<String>();
-            requiredGoal.addAll(FWObbiettivi.instance.getConfig().getStringList("goal." + goal + ".requiredGoals"));
+            requiredGoal.addAll(FWObbiettivi.getInstance().getConfig().getStringList("goal." + goal + ".requiredGoals"));
 
             // Check if the Branch exist
             Branch ramo = null;
-            for (Iterator<Branch> it = FWObbiettivi.instance.rami.iterator(); it.hasNext(); ) {
+            for (Iterator<Branch> it = FWObbiettivi.getInstance().rami.iterator(); it.hasNext(); ) {
                 Branch branch = it.next();
-                if (branch.getName().equals(FWObbiettivi.instance.getConfig().getString("goal." + goal + ".branch"))){
+                if (branch.getName().equals(FWObbiettivi.getInstance().getConfig().getString("goal." + goal + ".branch"))){
                     // Adding Goal to that Town
                     ramo = branch;
                 } else {
-                    FWObbiettivi.info(ChatFormatter.formatErrorMessage(Messages.NO_GOAL_IN_LIST) + ChatFormatter.formatWarningMessage(FWObbiettivi.instance.getConfig().getString("goal." + goal + ".branch")));
+                    FWObbiettivi.info(ChatFormatter.formatErrorMessage(Messages.NO_GOAL_IN_LIST) + ChatFormatter.formatWarningMessage(FWObbiettivi.getInstance().getConfig().getString("goal." + goal + ".branch")));
                 }
             }
 
+            // Number of Plot
+            int numPlot = FWObbiettivi.getInstance().getConfig().getInt("goal." + goal + ".plot");
+
             // Payment materials
             ArrayList<String> paymentsMaterial = new ArrayList<String>();
-            paymentsMaterial.addAll(FWObbiettivi.instance.getConfig().getStringList("goal." + goal + ".payment"));
+            paymentsMaterial.addAll(FWObbiettivi.getInstance().getConfig().getStringList("goal." + goal + ".payment"));
 
             ArrayList<Integer> paymentsQuantity = new ArrayList<Integer>();
-            paymentsQuantity.addAll(FWObbiettivi.instance.getConfig().getIntegerList("goal." + goal + ".paymentQuantity"));
+            paymentsQuantity.addAll(FWObbiettivi.getInstance().getConfig().getIntegerList("goal." + goal + ".paymentQuantity"));
 
             ArrayList<ItemStack> payment = new ArrayList<ItemStack>();
 
@@ -70,9 +73,9 @@ public class ConfigUtil {
 
             // Reward materials
             ArrayList<String> rewardsMaterial = new ArrayList<String>();
-            rewardsMaterial.addAll(FWObbiettivi.instance.getConfig().getStringList("goal." + goal + ".reward"));
+            rewardsMaterial.addAll(FWObbiettivi.getInstance().getConfig().getStringList("goal." + goal + ".reward"));
             ArrayList<Integer> rewardsQuantity = new ArrayList<Integer>();
-            rewardsQuantity.addAll(FWObbiettivi.instance.getConfig().getIntegerList("goal." + goal + ".rewardQuantity"));
+            rewardsQuantity.addAll(FWObbiettivi.getInstance().getConfig().getIntegerList("goal." + goal + ".rewardQuantity"));
             ArrayList<ItemStack> reward = new ArrayList<ItemStack>();
 
             for (int i = 0; i < rewardsMaterial.size(); i++) {
@@ -82,9 +85,9 @@ public class ConfigUtil {
 
             // Description
             ArrayList<String> description = new ArrayList<String>();
-            description.addAll(FWObbiettivi.instance.getConfig().getStringList("goal." + goal + ".description"));
+            description.addAll(FWObbiettivi.getInstance().getConfig().getStringList("goal." + goal + ".description"));
 
-            obbiettivi.add(new Goal(goal, ramo, requiredGoal, payment, reward, description));
+            obbiettivi.add(new Goal(goal, ramo, numPlot, requiredGoal, payment, reward, description));
         }
         
         return obbiettivi;
@@ -92,14 +95,14 @@ public class ConfigUtil {
 
     public static ArrayList<Branch> loadBranchesList(){
         ArrayList<Branch> rami = new ArrayList<Branch>();
-        Set<String> nameBranch = FWObbiettivi.instance.getConfig().getConfigurationSection("branch").getKeys(false);
+        Set<String> nameBranch = FWObbiettivi.getInstance().getConfig().getConfigurationSection("branch").getKeys(false);
 
         for (String branch: nameBranch) {
 
-            ItemStack icon = new ItemStack(Material.getMaterial(FWObbiettivi.instance.getConfig().getString("branch." + branch + ".material")));
+            ItemStack icon = new ItemStack(Material.getMaterial(FWObbiettivi.getInstance().getConfig().getString("branch." + branch + ".material")));
 
             ArrayList<String> description = new ArrayList<String>();
-            description.addAll(FWObbiettivi.instance.getConfig().getStringList("branch." + branch + ".description"));
+            description.addAll(FWObbiettivi.getInstance().getConfig().getStringList("branch." + branch + ".description"));
 
             rami.add(new Branch(branch, icon, description));
         }
@@ -130,7 +133,7 @@ public class ConfigUtil {
                     TownyDataSource tds = TownyUniverse.getInstance().getDataSource();
                     tg.setTown(tds.getTown(UUID.fromString(valueString[0])));
 
-                    for(Goal g:FWObbiettivi.instance.obbiettivi){
+                    for(Goal g:FWObbiettivi.getInstance().obbiettivi){
                         if(g.getName().equals(valueString[1])){
                             tg.setGoal(g);
                             break;
@@ -144,7 +147,7 @@ public class ConfigUtil {
                     Block b = tg.getLocation().getBlock();
                     Chest chestState = (Chest) b.getState();
                     chestState.setCustomName("FWChest");
-                    b.setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.instance, Boolean.TRUE));
+                    b.setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.getInstance(), Boolean.TRUE));
 
                     townGoals.add(tg);
                 }
@@ -192,7 +195,7 @@ public class ConfigUtil {
                     TownyDataSource tds = TownyUniverse.getInstance().getDataSource();
                     tg.setTown(tds.getTown(UUID.fromString(valueString[2])));
 
-                    for(Goal g:FWObbiettivi.instance.obbiettivi){
+                    for(Goal g:FWObbiettivi.getInstance().obbiettivi){
                         if(g.getName().equals(valueString[3])){
                             tg.setGoal(g);
                             break;

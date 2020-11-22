@@ -84,12 +84,15 @@ languages:
     goal_paid: "Obbiettivo pagato:"
     goal_is_disable: "Questo oobbiettivo e' disattivato:"
     goals_list: "Lista degli obbiettivi presenti:"
+    goals_plot_needed: "Chunk claimati per l'obbiettivo:"
+    goals_plot_not_near: "Il plot selezionato non e' vicino all'obbiettivo."
 
 ### Goals
 # Use quantities less than or equal to 64
 goal:
-  obiettivoDiProva:
+  obTest:
     branch: "test"
+    plot: 1
     requiredGoals:
       - test
     payment:

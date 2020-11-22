@@ -17,14 +17,16 @@ public class Goal {
      */
     private String name;
     private Branch branch;
+    private int numPlot;
     private List<String> requiredGoals;
     private List<ItemStack>  payment;
     private List<ItemStack>  reward;
     private List<String> descrizione;
 
-    public Goal(String name, Branch branch, List<String> requiredGoals, List<ItemStack> payment, List<ItemStack> reward, List<String> descrizione){
+    public Goal(String name, Branch branch, int numPlot, List<String> requiredGoals, List<ItemStack> payment, List<ItemStack> reward, List<String> descrizione){
         this.name = name;
         this.branch = branch;
+        this.numPlot = numPlot;
         this.requiredGoals = requiredGoals;
         this.payment = payment;
         this.reward = reward;
@@ -45,6 +47,14 @@ public class Goal {
 
     public void setBranch(Branch branch) {
         this.branch = branch;
+    }
+
+    public int getNumPlot() {
+        return numPlot;
+    }
+
+    public void setNumPlot(int numPlot) {
+        this.numPlot = numPlot;
     }
 
     public List<String> getRequiredGoals() {
@@ -86,6 +96,7 @@ public class Goal {
         Goal goal = (Goal) o;
         return Objects.equals(getName(), goal.getName()) &&
                 Objects.equals(getBranch(), goal.getBranch()) &&
+                Objects.equals(getNumPlot(), goal.getNumPlot()) &&
                 Objects.equals(getRequiredGoals(), goal.getRequiredGoals()) &&
                 Objects.equals(getPayment(), goal.getPayment()) &&
                 Objects.equals(getReward(), goal.getReward()) &&
@@ -94,7 +105,7 @@ public class Goal {
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(getName(), getBranch(), getRequiredGoals(), getPayment(), getReward(), getDescrizione());
+        int result = Objects.hash(getName(), getBranch(), getNumPlot(), getRequiredGoals(), getPayment(), getReward(), getDescrizione());
         return result;
     }
 
@@ -103,6 +114,7 @@ public class Goal {
         return "Goal{" +
                 "name='" + name + '\'' +
                 ", branch=" + branch +
+                ", numPlot=" + numPlot +
                 ", requiredGoals=" + requiredGoals +
                 ", payment=" + payment +
                 ", reward=" + reward +

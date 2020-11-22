@@ -130,9 +130,9 @@ public class GoalsGUI {
     private void openGoalsListGUI() {
         Inventory GUI = Bukkit.createInventory(null, GUIUtil.GOALS_LIST_INVENTORY_SIZE, GUIUtil.GOALS_LIST_INVENTORY_TITLE);
 
-        for(int i = 0; i < FWObbiettivi.instance.obbiettivi.size(); i++){
+        for(int i = 0; i < FWObbiettivi.getInstance().obbiettivi.size(); i++){
             // Creo item per ogni ramo presente nell'array
-            Goal obbiettivo = FWObbiettivi.instance.obbiettivi.get(i);
+            Goal obbiettivo = FWObbiettivi.getInstance().obbiettivi.get(i);
             GUI.setItem(i,
                     GUIUtil.prepareMenuPoint(
                             obbiettivo.getBranch().getIcon().getType(),
@@ -185,9 +185,9 @@ public class GoalsGUI {
     private void openBranchListGUI() {
         Inventory GUI = Bukkit.createInventory(null, GUIUtil.BRANCH_LIST_INVENTORY_SIZE, GUIUtil.BRANCH_LIST_INVENTORY_TITLE);
 
-        for(int i = 0; i < FWObbiettivi.instance.rami.size(); i++){
+        for(int i = 0; i < FWObbiettivi.getInstance().rami.size(); i++){
             // Creo item per ogni ramo presente nell'array
-            Branch ramo = FWObbiettivi.instance.rami.get(i);
+            Branch ramo = FWObbiettivi.getInstance().rami.get(i);
             GUI.setItem(i,
                     GUIUtil.prepareMenuPoint(
                             ramo.getIcon().getType(),

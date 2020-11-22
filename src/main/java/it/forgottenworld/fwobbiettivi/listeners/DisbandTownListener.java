@@ -14,17 +14,17 @@ public class DisbandTownListener implements Listener {
     @EventHandler(priority = org.bukkit.event.EventPriority.LOWEST)
     public void onDisbandTownEvent(DeleteTownEvent e){
         // Removing Goals from Town when it disband
-        for(TownGoals tg: FWObbiettivi.instance.obbiettiviInTown){
+        for(TownGoals tg: FWObbiettivi.getInstance().obbiettiviInTown){
             if(tg.getTown().getName() == e.getTownName()){
                 Block bRemove = tg.getLocation().getBlock();
                 ((Chest) bRemove.getState()).setCustomName("Chest");
-                bRemove.removeMetadata("goalchest", FWObbiettivi.instance);
+                bRemove.removeMetadata("goalchest", FWObbiettivi.getInstance());
 
                 if(ConfigUtil.DEBUG)
                     FWObbiettivi.debug("Rimosso: " + tg.getGoal().getName() + " da " + tg.getTown().getName());
 
                 // Removing Goal to that Town
-                FWObbiettivi.instance.obbiettiviInTown.remove(tg);
+                FWObbiettivi.getInstance().obbiettiviInTown.remove(tg);
             }
         }
 

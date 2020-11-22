@@ -2,8 +2,9 @@ package it.forgottenworld.fwobbiettivi;
 
 import it.forgottenworld.fwobbiettivi.command.GoalsCommandExecutor;
 import it.forgottenworld.fwobbiettivi.gui.GoalsGUI;
-import it.forgottenworld.fwobbiettivi.listeners.GoalsChestEvent;
-import it.forgottenworld.fwobbiettivi.listeners.GoalsChunkEvent;
+import it.forgottenworld.fwobbiettivi.listeners.GoalsChestListener;
+import it.forgottenworld.fwobbiettivi.listeners.GoalsChunkListener;
+import it.forgottenworld.fwobbiettivi.listeners.area.GoalAreaCreationListener;
 import it.forgottenworld.fwobbiettivi.objects.Goal;
 import it.forgottenworld.fwobbiettivi.objects.Branch;
 import it.forgottenworld.fwobbiettivi.listeners.DisbandTownListener;
@@ -22,14 +23,19 @@ import java.util.logging.Level;
 
 public final class FWObbiettivi extends JavaPlugin {
 
+    private static FWObbiettivi instance;
+
     static FileConfiguration defaultConfig;
-    public static FWObbiettivi instance;
     public static ArrayList<Branch> rami = new ArrayList<Branch>();
     public static ArrayList<Goal> obbiettivi = new ArrayList<Goal>();
     public static ArrayList<TownGoals> obbiettiviInTown = new ArrayList<TownGoals>();
     public static HashMap<Pair<Integer, Integer>, TownGoals> chunks = new HashMap<Pair<Integer, Integer>, TownGoals>();
     public GoalsGUI gui = new GoalsGUI();
     public HashMap<Player, GoalsGUI> map = new HashMap<>();
+
+    public static FWObbiettivi getInstance() {
+        return instance;
+    }
 
     @Override
     public void onEnable() {
@@ -49,8 +55,9 @@ public final class FWObbiettivi extends JavaPlugin {
         info("Registering listeners...");
         this.getServer().getPluginManager().registerEvents(new DisbandTownListener(), this);
         this.getServer().getPluginManager().registerEvents(new GUIGoalsListener(), this);
-        this.getServer().getPluginManager().registerEvents(new GoalsChestEvent(), this);
-        this.getServer().getPluginManager().registerEvents(new GoalsChunkEvent(), this);
+        this.getServer().getPluginManager().registerEvents(new GoalsChestListener(), this);
+        this.getServer().getPluginManager().registerEvents(new GoalsChunkListener(), this);
+        this.getServer().getPluginManager().registerEvents(new GoalAreaCreationListener(), this);
 
         // Caricamento da file
         info("Loading infos...");

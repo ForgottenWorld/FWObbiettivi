@@ -2,6 +2,7 @@ package it.forgottenworld.fwobbiettivi.listeners;
 
 import it.forgottenworld.fwobbiettivi.utility.ChatFormatter;
 import it.forgottenworld.fwobbiettivi.utility.Messages;
+import it.forgottenworld.fwobbiettivi.utility.Permissions;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class GoalsChestEvent implements Listener {
+public class GoalsChestListener implements Listener {
 
     @EventHandler
     public void onFWChestDestroyEvent(BlockBreakEvent e){
