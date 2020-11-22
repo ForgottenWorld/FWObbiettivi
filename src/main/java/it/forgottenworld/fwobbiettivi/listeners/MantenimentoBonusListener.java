@@ -1,8 +1,8 @@
 package it.forgottenworld.fwobbiettivi.listeners;
 
-import it.forgottenworld.customtownyupkeep.api.events.CustomTownUpkeepCalculationEvent;
 import it.forgottenworld.fwobbiettivi.FWObbiettivi;
 import it.forgottenworld.fwobbiettivi.objects.TownGoals;
+import it.forgottenworld.townycustomupkeep.api.events.CustomTownUpkeepCalculationEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 

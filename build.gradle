@@ -27,7 +27,7 @@ allprojects {
 dependencies {
     implementation 'org.jetbrains:annotations:19.0.0'
     implementation 'com.github.TownyAdvanced:Towny:0.96.3.7'
-    implementation 'com.github.ForgottenWorld:FWTownyCustomUpkeep:1.3.0'
+    implementation 'com.github.ForgottenWorld:FWTownyCustomUpkeep:1.3.1'
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compileOnly 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
     compileOnly fileTree(include: ['*.jar'], dir: 'libs')
