@@ -70,6 +70,7 @@ languages:
     no_existing_file_data: "Il file di salvataggio non esiste."
     no_place_in_goal: "Non puoi piazzare blocchi in un obbiettivo attivo."
     no_break_in_goal: "Non puoi rompere blocchi in un obbiettivo attivo."
+    abort_add_goal: "Player disconnesso, aggiunta obbiettivo rimossa."
     goal_already_present: "L'obbiettivo e' gia' presente in questa citta'."
     goal_added: "Obbiettivo aggiunto con successo:"
     goal_removed: "Obbiettivo rimosso con successo."
@@ -86,6 +87,9 @@ languages:
     goals_list: "Lista degli obbiettivi presenti:"
     goals_plot_needed: "Chunk claimati per l'obbiettivo:"
     goals_plot_not_near: "Il plot selezionato non e' vicino all'obbiettivo."
+
+### Treasury
+
 
 ### Goals
 # Use quantities less than or equal to 64
@@ -116,6 +120,8 @@ branch:
       - Ramo di test
 
 ### Mantenimento Bonus
+# Enter the name of the relative objective as the plot name
+# while as a value, the percentage value of the reduction in maintenance
 mantenimentoBonus:
   plotNames:
-    Tesoreria: 0.001
+    tesoreria: 10.0

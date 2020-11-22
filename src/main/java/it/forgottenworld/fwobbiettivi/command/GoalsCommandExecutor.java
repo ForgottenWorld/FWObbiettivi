@@ -339,7 +339,7 @@ public class GoalsCommandExecutor implements TabExecutor {
                                         try {
                                             WorldCoord.parseWorldCoord(new Location(playerRemove.getWorld(), (entry.getKey().getKey() * 16), 64, (entry.getKey().getValue() * 16))).getTownBlock().setName("");
                                             // Saving new plot name
-                                            TownyUniverse.getInstance().getDataSource().saveTownBlock(WorldCoord.parseWorldCoord(playerRemove.getLocation()).getTownBlock());
+                                            TownyUniverse.getInstance().getDataSource().saveTownBlock(WorldCoord.parseWorldCoord(new Location(playerRemove.getWorld(), (entry.getKey().getKey() * 16), 64, (entry.getKey().getValue() * 16))).getTownBlock());
                                         } catch (NotRegisteredException e) {}
                                         it.remove();
                                     }

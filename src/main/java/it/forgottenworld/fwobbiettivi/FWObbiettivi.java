@@ -3,7 +3,7 @@ package it.forgottenworld.fwobbiettivi;
 import it.forgottenworld.fwobbiettivi.command.GoalsCommandExecutor;
 import it.forgottenworld.fwobbiettivi.gui.GoalsGUI;
 import it.forgottenworld.fwobbiettivi.listeners.*;
-import it.forgottenworld.fwobbiettivi.listeners.area.GoalAreaCreationListener;
+import it.forgottenworld.fwobbiettivi.listeners.GoalAreaCreationListener;
 import it.forgottenworld.fwobbiettivi.objects.Goal;
 import it.forgottenworld.fwobbiettivi.objects.Branch;
 import it.forgottenworld.fwobbiettivi.objects.TownGoals;
@@ -50,7 +50,7 @@ public final class FWObbiettivi extends JavaPlugin {
 
         // Registrazione event-listeners
         info("Registering listeners...");
-        this.getServer().getPluginManager().registerEvents(new DisbandTownListener(), this);
+        this.getServer().getPluginManager().registerEvents(new TownListener(), this);
         this.getServer().getPluginManager().registerEvents(new GUIGoalsListener(), this);
         this.getServer().getPluginManager().registerEvents(new GoalsChestListener(), this);
         this.getServer().getPluginManager().registerEvents(new GoalsChunkListener(), this);
