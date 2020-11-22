@@ -2,13 +2,10 @@ package it.forgottenworld.fwobbiettivi;
 
 import it.forgottenworld.fwobbiettivi.command.GoalsCommandExecutor;
 import it.forgottenworld.fwobbiettivi.gui.GoalsGUI;
-import it.forgottenworld.fwobbiettivi.listeners.GoalsChestListener;
-import it.forgottenworld.fwobbiettivi.listeners.GoalsChunkListener;
+import it.forgottenworld.fwobbiettivi.listeners.*;
 import it.forgottenworld.fwobbiettivi.listeners.area.GoalAreaCreationListener;
 import it.forgottenworld.fwobbiettivi.objects.Goal;
 import it.forgottenworld.fwobbiettivi.objects.Branch;
-import it.forgottenworld.fwobbiettivi.listeners.DisbandTownListener;
-import it.forgottenworld.fwobbiettivi.listeners.GUIGoalsListener;
 import it.forgottenworld.fwobbiettivi.objects.TownGoals;
 import it.forgottenworld.fwobbiettivi.utility.ConfigUtil;
 import javafx.util.Pair;
@@ -58,6 +55,7 @@ public final class FWObbiettivi extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new GoalsChestListener(), this);
         this.getServer().getPluginManager().registerEvents(new GoalsChunkListener(), this);
         this.getServer().getPluginManager().registerEvents(new GoalAreaCreationListener(), this);
+        this.getServer().getPluginManager().registerEvents(new MantenimentoBonusListener(), this);
 
         // Caricamento da file
         info("Loading infos...");
