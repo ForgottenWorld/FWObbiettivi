@@ -1,9 +1,11 @@
 package it.forgottenworld.fwobbiettivi.listeners;
 
+import com.palmergames.bukkit.towny.event.TownUpkeepCalculationEvent;
 import it.forgottenworld.fwobbiettivi.FWObbiettivi;
+import it.forgottenworld.fwobbiettivi.objects.TownGoal;
 import it.forgottenworld.fwobbiettivi.objects.TownGoals;
-import it.forgottenworld.townycustomupkeep.api.events.CustomTownUpkeepCalculationEvent;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import java.util.HashMap;
@@ -12,11 +14,12 @@ public class MantenimentoBonusListener implements Listener {
 
     private static HashMap<String, Double> plotMantenimento = new HashMap<String, Double>();
 
-    @EventHandler
-    public void onCustomTownyUpkeeps(CustomTownUpkeepCalculationEvent e){
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onTownUpkeepCalculated(TownUpkeepCalculationEvent e) {
         updateDatasFromConfig();
-        for (TownGoals tg: FWObbiettivi.getInstance().obbiettiviInTown){
-            e.setUpkeep((plotMantenimento.get(tg.getGoal().getName()) * 100) / e.getUpkeep());
+        for (TownGoal tg: TownGoals.getObbiettiviInTown()){
+            if (e.getTown().equals(tg.getTown()))
+                e.setUpkeep((plotMantenimento.get(tg.getGoal().getName()) * 100) / e.getUpkeep());
         }
     }
 
