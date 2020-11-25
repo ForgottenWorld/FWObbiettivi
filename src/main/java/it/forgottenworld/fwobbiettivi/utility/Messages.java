@@ -17,12 +17,14 @@ public class Messages {
     public static final String NO_BREAK_IN_GOAL = ConfigUtil.getConfigStringLang("no_break_in_goal");
     public static final String NO_PLACE_IN_GOAL = ConfigUtil.getConfigStringLang("no_place_in_goal");
     public static final String ABORT_ADD_GOAL = ConfigUtil.getConfigStringLang("abort_add_goal");
+    public static final String GOAL_UNCLAIM_REMOVED = ConfigUtil.getConfigStringLang("goal_unclaim_removed");
 
     public static final String GOAL_ALREADY_PRESENT = ConfigUtil.getConfigStringLang("goal_already_present");
     public static final String GOAL_ADDED = ConfigUtil.getConfigStringLang("goal_added");
     public static final String GOAL_REMOVED = ConfigUtil.getConfigStringLang("goal_removed");
     public static final String TELEPORTED_TO = ConfigUtil.getConfigStringLang("teleported_to");
     public static final String MISSING_INFO = ConfigUtil.getConfigStringLang("missing_info");
+    public static final String TOO_MANY_INFO = ConfigUtil.getConfigStringLang("too_many_info");
     public static final String TELEPORTED_FAILED = ConfigUtil.getConfigStringLang("teleported_failed");
     public static final String DISABLE_FAILED = ConfigUtil.getConfigStringLang("disable_failed");
     public static final String ENABLE_FAILED = ConfigUtil.getConfigStringLang("enable_failed");
@@ -34,4 +36,5 @@ public class Messages {
     public static final String GOALS_LIST = ConfigUtil.getConfigStringLang("goals_list");
     public static final String GOAL_PLOT_NEEDED = ConfigUtil.getConfigStringLang("goals_plot_needed");
     public static final String GOAL_PLOT_NOT_NEAR = ConfigUtil.getConfigStringLang("goals_plot_not_near");
+    public static final String TREASURY_LIST = ConfigUtil.getConfigStringLang("treasury_list");
 }

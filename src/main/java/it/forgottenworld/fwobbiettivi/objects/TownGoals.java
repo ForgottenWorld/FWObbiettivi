@@ -1,185 +1,258 @@
 package it.forgottenworld.fwobbiettivi.objects;
 
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.object.Town;
+import it.forgottenworld.fwobbiettivi.FWObbiettivi;
+import it.forgottenworld.fwobbiettivi.objects.managers.GoalAreaManager;
+import it.forgottenworld.fwobbiettivi.utility.FWLocation;
+import it.forgottenworld.fwobbiettivi.utility.Messages;
+import it.forgottenworld.fwobbiettivi.utility.TownyUtil;
+import javafx.util.Pair;
 import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 
-import java.util.List;
-import java.util.Objects;
+import java.io.*;
+import java.util.*;
 
-/**
- * Class that manages a single objective. This class is created
- * for each chest that needs to convert an objective.
- */
 public class TownGoals {
 
-    private Town town;
-    private Goal goal;
-    private Location location;
-    private boolean active;
+    static ArrayList<TownGoal> obbiettiviInTown = new ArrayList<TownGoal>();
 
     /**
-     * Constructor
+     *
+     * @param tg
      */
-    public TownGoals(){
-        this.active = true;
+    public static void addTownGoal(TownGoal tg) {
+        if (!containsTownGoal(tg.getLocation())) {
+            //todo check requisiti
+            obbiettiviInTown.add(tg);
+            Chest chestState = (Chest) tg.getLocation().getBlock().getState();
+            chestState.setCustomName("FWChest");
+            tg.getLocation().getBlock().setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.getInstance(), Boolean.TRUE));
+        }
+
+        save();
     }
 
     /**
-     * Constructor
-     * @param town Town object containing the town to which the goals belong.
-     * @param goal Goal object which contains all the information about the goal.
-     * @param location Position of the FWChest associated with this goal.
+     *
+     * @param tg
      */
-    public TownGoals(Town town, Goal goal, Location location){
-        this.town = town;
-        this.goal = goal;
-        this.location = location;
-        this.active = true;
+    public static void removeTownGoal(TownGoal tg){
+        HashMap<Pair<Integer, Integer>, TownGoal> app = GoalAreaManager.getChunksFromTownGoal(tg);
+        if (app.isEmpty()) {
+            // todo message
+            FWObbiettivi.info("inpossibile trovare chunk");
+            return;
+        }
+
+        Iterator<Map.Entry<Pair<Integer, Integer>, TownGoal>> it = app.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<Pair<Integer, Integer>, TownGoal> entry = it.next();
+            if (tg.equals(entry.getValue())){
+                // Rename
+                TownyUtil.renamePlot(new Location(tg.getLocation().getWorld(), (entry.getKey().getKey() * 16), 64, (entry.getKey().getValue() * 16)), "");
+                // Remove chunk
+                GoalAreaManager.removeChunk(new Location(tg.getLocation().getWorld(), (entry.getKey().getKey() * 16), 64, (entry.getKey().getValue() * 16)));
+                it.remove();
+            }
+        }
+
+        obbiettiviInTown.remove(tg);
+
+        // Remove FWChest
+        Chest chestState = (Chest) tg.getLocation().getBlock().getState();
+        chestState.setCustomName("Chest");
+        tg.getLocation().getBlock().removeMetadata("goalchest", FWObbiettivi.getInstance());
+
+        save();
     }
 
     /**
-     * Constructor
-     * @param town Town object containing the town to which the goals belong.
-     * @param goal Goal object which contains all the information about the goal.
-     * @param location Position of the FWChest associated with this goal.
-     * @param active It defines a new goal differently, by default it is enabled.
+     *
+     * @param town
+     * @return
      */
-    public TownGoals(Town town, Goal goal, Location location, boolean active){
-        this.town = town;
-        this.goal = goal;
-        this.location = location;
-        this.active = active;
+    public static boolean townHasGoal(Town town){
+        for (TownGoal tg : obbiettiviInTown) {
+            if (town.getUuid().equals(tg.getTown().getUuid()))
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param town
+     * @return
+     */
+    public static ArrayList<Goal> getGoalFromTown(Town town){
+        ArrayList<Goal> goals = null;
+        for (TownGoal tg : obbiettiviInTown) {
+            if (town.getUuid().equals(tg.getTown().getUuid()))
+                goals.add(tg.getGoal());
+        }
+        return goals;
+    }
+
+    /**
+     *
+     * @param goal
+     * @return
+     */
+    public static boolean goalHasTown(Goal goal){
+        for (TownGoal tg : obbiettiviInTown) {
+            if (goal.getName().equals(tg.getGoal().getName()))
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param goal
+     * @return
+     */
+    public static ArrayList<Town> getTownFromGoal(Goal goal){
+        ArrayList<Town> towns = null;
+        for (TownGoal tg : obbiettiviInTown) {
+            if (goal.getName().equals(tg.getGoal().getName()))
+                towns.add(tg.getTown());
+        }
+        return towns;
+    }
+
+    /**
+     *
+     * @param goal
+     * @param town
+     * @return
+     */
+    public static TownGoal getTownGoalFromGoalAndTown(Goal goal, Town town){
+        for (TownGoal tg : obbiettiviInTown) {
+            if ((goal.equals(tg.getGoal())) && town.equals(tg.getTown()))
+                return tg;
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param location
+     * @return
+     */
+    public static boolean containsTownGoal(Location location) {
+        for (TownGoal tg : obbiettiviInTown)
+            if (tg.getLocation().equals(location))
+                return true;
+        return false;
+    }
+
+    /**
+     *
+     * @param goal
+     * @param town
+     * @return
+     */
+    public static boolean containsTownGoal(Goal goal, Town town) {
+        for (TownGoal tg : obbiettiviInTown)
+            if (tg.getGoal().equals(goal) && tg.getTown().equals(town))
+                return true;
+        return false;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static ArrayList<TownGoal> getObbiettiviInTown(){
+        return obbiettiviInTown;
     }
 
     /*
      * ==================================================================================
-     * 									Getters & Setters
+     * 										Save & Load
      * ==================================================================================
      */
 
-    public Town getTown() {
-        return town;
-    }
+    public static void save(){
+        StringBuilder sb = new StringBuilder();
 
-    public void setTown(Town town) {
-        this.town = town;
-    }
+        for(TownGoal tg: obbiettiviInTown){
+            sb.append(tg.getTown().getUuid().toString()).append("*");
+            sb.append(tg.getGoal().getName()).append("*");
+            sb.append(FWLocation.getStringFromLocation(tg.getLocation())).append("*");
+            sb.append(tg.isActive());
+            sb.append("|");
+        }
 
-    public Goal getGoal() {
-        return goal;
-    }
+        if (sb.length() > 0)
+            sb.setLength(sb.length() - 1);
 
-    public void setGoal(Goal goal) {
-        this.goal = goal;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    /* ==================================================================================
-     *  								   CONVERSION
-     * ==================================================================================
-     */
-
-    public boolean pay(){
-        convert(((Chest) this.getLocation().getBlock().getState()).getBlockInventory());
         try {
-            town.collect(goal.getRewardZenar());
-        } catch (EconomyException e) {
+            FileWriter writer = new FileWriter("plugins/FWObbiettivi/townGoals.markus");
+            if(sb.length() == 0){
+                writer.write("");
+            }else {
+                writer.write(sb.toString());
+            }
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return true;
     }
 
-    private void convert(Inventory inv) {
-        boolean hasEnoughtItems = true;
-        List<ItemStack> inputStacks = this.getGoal().getPayment();
-        List<ItemStack> outputStacks = this.getGoal().getReward();
-
-        while (hasEnoughtItems){
-            for (ItemStack is : inputStacks)
-                hasEnoughtItems &= containsAtLeast(inv, is.getType(), is.getAmount());
-
-            if (hasEnoughtItems){
-                for (ItemStack is : inputStacks)
-                    removeExactly(inv, is.getType(), is.getAmount());
-
-                for (ItemStack is : outputStacks)
-                    inv.addItem(is);
+    public static void load(){
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream("plugins/FWObbiettivi/townGoals.markus");
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            String line;
+            StringBuilder sb = new StringBuilder();
+            while((line = bufferedReader.readLine()) != null){
+                sb.append(line);
             }
-        }
-    }
 
-    private boolean containsAtLeast(Inventory inv, Material material, int quantity) {
-        int totalQuantity = 0;
-        for (ItemStack is : inv){
-            if (is != null && is.getType() == material ){
-                totalQuantity += is.getAmount();
-            }
-        }
-        return totalQuantity >= quantity;
-    }
+            inputStream.close();
 
-    private void removeExactly(Inventory inv, Material material, int quantity) {
-        for (int i=0; i<inv.getSize(); i++){
-            if (quantity > 0 && inv.getItem(i) != null && inv.getItem(i).getType() == material)
-                if (quantity >= inv.getItem(i).getAmount()) {
-                    quantity -= inv.getItem(i).getAmount();
-                    inv.setItem(i, null);
-                } else {
-                    int newAmount = inv.getItem(i).getAmount() - quantity;
-                    quantity -= newAmount;
-                    inv.setItem(i, new ItemStack(material, newAmount));
+            if(sb.length() != 0){
+                List<String> file = Arrays.asList(sb.toString().split("\\|"));
+
+                for (String s: file){
+                    String[] valueString = s.split("\\*");
+                    TownGoal tg = new TownGoal();
+                    tg.setTown(TownyUtil.getTownFromUUID(UUID.fromString(valueString[0])));
+
+                    tg.setGoal(Goals.getGoalFromString(valueString[1]));
+
+                    tg.setLocation(FWLocation.getLocationFromString(valueString[2]));
+
+                    tg.setActive(Boolean.valueOf(valueString[3]));
+
+                    Block b = tg.getLocation().getBlock();
+                    Chest chestState = (Chest) b.getState();
+                    chestState.setCustomName("FWChest");
+                    b.setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.getInstance(), Boolean.TRUE));
+
+                    obbiettiviInTown.add(tg);
                 }
+            }
+
+        } catch (FileNotFoundException e) {
+            FWObbiettivi.info(Messages.NO_EXISTING_FILE_DATA);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null){
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
-    /* ==================================================================================
-     *  								   	  UTILS
-     * ==================================================================================
-     */
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof TownGoals)) return false;
-        TownGoals townGoals = (TownGoals) o;
-        return isActive() == townGoals.isActive() &&
-                Objects.equals(getTown(), townGoals.getTown()) &&
-                Objects.equals(getGoal(), townGoals.getGoal()) &&
-                Objects.equals(getLocation(), townGoals.getLocation());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getTown(), getGoal(), getLocation(), isActive());
-    }
-
-    @Override
-    public String toString() {
-        return "TownGoals{" +
-                "town=" + town +
-                ", goal=" + goal +
-                ", location=" + location +
-                ", active=" + active +
-                '}';
-    }
 }

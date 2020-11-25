@@ -1,8 +1,9 @@
 package it.forgottenworld.fwobbiettivi.gui;
 
-import it.forgottenworld.fwobbiettivi.FWObbiettivi;
 import it.forgottenworld.fwobbiettivi.objects.Branch;
+import it.forgottenworld.fwobbiettivi.objects.Branches;
 import it.forgottenworld.fwobbiettivi.objects.Goal;
+import it.forgottenworld.fwobbiettivi.objects.Goals;
 import it.forgottenworld.fwobbiettivi.utility.GUIUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -130,9 +131,9 @@ public class GoalsGUI {
     private void openGoalsListGUI() {
         Inventory GUI = Bukkit.createInventory(null, GUIUtil.GOALS_LIST_INVENTORY_SIZE, GUIUtil.GOALS_LIST_INVENTORY_TITLE);
 
-        for(int i = 0; i < FWObbiettivi.getInstance().obbiettivi.size(); i++){
+        for(int i = 0; i < Goals.getObbiettivi().size(); i++){
             // Creo item per ogni ramo presente nell'array
-            Goal obbiettivo = FWObbiettivi.getInstance().obbiettivi.get(i);
+            Goal obbiettivo = Goals.getObbiettivi().get(i);
             GUI.setItem(i,
                     GUIUtil.prepareMenuPoint(
                             obbiettivo.getBranch().getIcon().getType(),
@@ -185,9 +186,9 @@ public class GoalsGUI {
     private void openBranchListGUI() {
         Inventory GUI = Bukkit.createInventory(null, GUIUtil.BRANCH_LIST_INVENTORY_SIZE, GUIUtil.BRANCH_LIST_INVENTORY_TITLE);
 
-        for(int i = 0; i < FWObbiettivi.getInstance().rami.size(); i++){
+        for(int i = 0; i < Branches.getRami().size(); i++){
             // Creo item per ogni ramo presente nell'array
-            Branch ramo = FWObbiettivi.getInstance().rami.get(i);
+            Branch ramo = Branches.getRami().get(i);
             GUI.setItem(i,
                     GUIUtil.prepareMenuPoint(
                             ramo.getIcon().getType(),
