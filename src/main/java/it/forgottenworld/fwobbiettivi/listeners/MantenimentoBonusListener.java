@@ -27,7 +27,6 @@ public class MantenimentoBonusListener implements Listener {
         plotMantenimento.clear();
         for (String s : FWObbiettivi.getInstance().getConfig().getConfigurationSection("mantenimentoBonus.plotNames").getKeys(false))
             plotMantenimento.put(s, FWObbiettivi.getInstance().getConfig().getDouble("mantenimentoBonus.plotNames." + s));
-        System.out.println(plotMantenimento.size());
     }
 
 }
