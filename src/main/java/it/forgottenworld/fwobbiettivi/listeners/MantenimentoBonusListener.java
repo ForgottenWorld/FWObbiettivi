@@ -19,14 +19,15 @@ public class MantenimentoBonusListener implements Listener {
         updateDatasFromConfig();
         for (TownGoal tg: TownGoals.getObbiettiviInTown()){
             if (e.getTown().equals(tg.getTown()))
-                e.setUpkeep((plotMantenimento.get(tg.getGoal().getName()) * 100) / e.getUpkeep());
+                e.setUpkeep(e.getUpkeep() - ((e.getUpkeep() / 100) * plotMantenimento.get(tg.getGoal().getName())));
         }
     }
 
     private static void updateDatasFromConfig(){
         plotMantenimento.clear();
         for (String s : FWObbiettivi.getInstance().getConfig().getConfigurationSection("mantenimentoBonus.plotNames").getKeys(false))
-            plotMantenimento.put(s.toLowerCase(), FWObbiettivi.getInstance().getConfig().getDouble("mantenimentoBonus.plotNames." + s));
+            plotMantenimento.put(s, FWObbiettivi.getInstance().getConfig().getDouble("mantenimentoBonus.plotNames." + s));
+        System.out.println(plotMantenimento.size());
     }
 
 }
