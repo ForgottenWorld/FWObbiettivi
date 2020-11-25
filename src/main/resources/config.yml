@@ -74,9 +74,10 @@ languages:
     goal_unclaim_removed: "Obbiettivo rimosso per unclaim:"
     goal_already_present: "L'obbiettivo e' gia' presente in questa citta'."
     goal_added: "Obbiettivo aggiunto con successo:"
-    goal_removed: "Obbiettivo rimosso con successo."
+    goal_removed: "Obbiettivo rimosso con successo:"
     teleported_to: "Sei stato teletrasportato all'obbiettivo:"
     missing_info: "Non hai inserito tutti i dati richiesti."
+    too_many_info: "Hai inserito troppi parametri."
     teleported_failed: "Teletrasporto non riuscito, assicurati che esista l'obbiettivo e/o la citta'."
     disable_failed: "Disattivazione non riuscita, assicurati che esista l'obbiettivo e/o la citta'."
     enable_failed: "Abilitazione non riuscita, assicurati che esista l'obbiettivo e/o la citta'."
@@ -88,9 +89,7 @@ languages:
     goals_list: "Lista degli obbiettivi presenti:"
     goals_plot_needed: "Chunk claimati per l'obbiettivo:"
     goals_plot_not_near: "Il plot selezionato non e' vicino all'obbiettivo."
-
-### Treasury
-
+    treasury_list: "Lista delle tesorerie presenti:"
 
 ### Goals
 # Use quantities less than or equal to 64
@@ -122,9 +121,16 @@ branch:
     description:
       - Ramo di test
 
-### Mantenimento Bonus
+### Bonus maintenance
 # Enter the name of the relative objective as the plot name
 # while as a value, the percentage value of the reduction in maintenance
 mantenimentoBonus:
   plotNames:
     tesoreria: 10.0
+    obTest: 10.0
+
+### Exemptions from bonus maintenance
+# list of town names exempt from goal bonuses
+# there must be a town already present
+exemprionBonus:
+  - Spes

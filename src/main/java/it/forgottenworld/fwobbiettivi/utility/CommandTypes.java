@@ -17,5 +17,11 @@ public class CommandTypes {
     public static final String REMOVE_COMMAND = "remove";
     public static final String SHOW_COMMAND = "show";
     public static final String TP_COMMAND = "tp";
+    public static final String TREASURY_COMMAND = "treasury";
+    public static final String TREASURY_ADD_COMMAND = "add";
+    public static final String TREASURY_OPEN_COMMAND = "open";
+    public static final String TREASURY_REMOVE_COMMAND = "remove";
+    public static final String TREASURY_SHOW_COMMAND = "show";
+    public static final String TREASURY_TP_COMMAND = "tp";
 
 }
