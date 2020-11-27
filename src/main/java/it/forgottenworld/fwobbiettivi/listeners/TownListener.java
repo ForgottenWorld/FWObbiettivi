@@ -6,6 +6,7 @@ import it.forgottenworld.fwobbiettivi.FWObbiettivi;
 import it.forgottenworld.fwobbiettivi.objects.TownGoal;
 import it.forgottenworld.fwobbiettivi.objects.TownGoals;
 import it.forgottenworld.fwobbiettivi.objects.managers.GoalAreaManager;
+import it.forgottenworld.fwobbiettivi.utility.Messages;
 import javafx.util.Pair;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
@@ -40,8 +41,7 @@ public class TownListener implements Listener {
                 return;
 
             e.setCancelled(true);
-            //todo messaggio
-            FWObbiettivi.info("Ha cercato di unclaimare un obbiettivo: " + e.getTown().getName());
+            FWObbiettivi.info(Messages.GOAL_UNCLAIM_REMOVED + " " + e.getTown().getName());
         }
     }
 
