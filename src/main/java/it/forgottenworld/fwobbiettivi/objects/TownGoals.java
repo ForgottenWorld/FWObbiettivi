@@ -25,7 +25,6 @@ public class TownGoals {
      */
     public static void addTownGoal(TownGoal tg) {
         if (!containsTownGoal(tg.getLocation())) {
-            //todo check requisiti
             obbiettiviInTown.add(tg);
             Chest chestState = (Chest) tg.getLocation().getBlock().getState();
             chestState.setCustomName("FWChest");

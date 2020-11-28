@@ -2,30 +2,51 @@ package it.forgottenworld.fwobbiettivi.objects;
 
 import com.palmergames.bukkit.towny.object.Town;
 import it.forgottenworld.fwobbiettivi.FWObbiettivi;
+import it.forgottenworld.fwobbiettivi.objects.managers.GoalAreaManager;
 import it.forgottenworld.fwobbiettivi.utility.FWLocation;
 import it.forgottenworld.fwobbiettivi.utility.Messages;
 import it.forgottenworld.fwobbiettivi.utility.TownyUtil;
+import javafx.util.Pair;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Treasuries {
 
-    static List<Treasury> treasuries = new ArrayList<>();
+    static ArrayList<Treasury> treasuries = new ArrayList<>();
 
     /**
      *
      * @param tes
      */
     public static void addTreasury(Treasury tes) {
-        if (!containsTreasury(tes.getTown()))
+        if (!containsTreasury(tes.getTown())) {
             treasuries.add(tes);
+
+            Chest chestStateRight = (Chest) tes.getLocationChestRight().getBlock().getState();
+            chestStateRight.setCustomName("FWChest");
+            tes.getLocationChestRight().getBlock().setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.getInstance(), Boolean.TRUE));
+
+            Chest chestStateLeft = (Chest) tes.getLocationChestLeft().getBlock().getState();
+            chestStateLeft.setCustomName("FWChest");
+            tes.getLocationChestLeft().getBlock().setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.getInstance(), Boolean.TRUE));
+
+            save();
+        }
+    }
+
+    /**
+     *
+     * @param locationRight
+     * @param locationLeft
+     * @return
+     */
+    public static boolean isSameChunk(Location locationRight, Location locationLeft){
+        return (locationRight.getChunk().getX() == locationLeft.getChunk().getX()) && (locationRight.getChunk().getZ() == locationLeft.getChunk().getZ());
     }
 
     /**
@@ -33,7 +54,37 @@ public class Treasuries {
      * @param tes
      */
     public static void removeTreasury(Treasury tes) {
+        HashMap<Pair<Integer, Integer>, Treasury> app = GoalAreaManager.getChunksFromTownTes(tes);
+        if (app.isEmpty()) {
+            // todo message
+            FWObbiettivi.info("inpossibile trovare chunk");
+            return;
+        }
+
+        Iterator<Map.Entry<Pair<Integer, Integer>, Treasury>> it = app.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<Pair<Integer, Integer>, Treasury> entry = it.next();
+            if (tes.equals(entry.getValue())){
+                // Rename
+                TownyUtil.renamePlot(new Location(tes.getLocationChestRight().getWorld(), (entry.getKey().getKey() * 16), 64, (entry.getKey().getValue() * 16)), "");
+                // Remove chunk
+                GoalAreaManager.removeChunkTes(new Location(tes.getLocationChestRight().getWorld(), (entry.getKey().getKey() * 16), 64, (entry.getKey().getValue() * 16)));
+                it.remove();
+            }
+        }
+
         treasuries.remove(tes);
+
+        // Remove FWChest
+        Chest chestStateRight = (Chest) tes.getLocationChestRight().getBlock().getState();
+        chestStateRight.setCustomName("Chest");
+        tes.getLocationChestRight().getBlock().removeMetadata("goalchest", FWObbiettivi.getInstance());
+
+        Chest chestStateLeft = (Chest) tes.getLocationChestLeft().getBlock().getState();
+        chestStateLeft.setCustomName("Chest");
+        tes.getLocationChestLeft().getBlock().removeMetadata("goalchest", FWObbiettivi.getInstance());
+
+        save();
     }
 
     /**
@@ -64,10 +115,14 @@ public class Treasuries {
      * Returns a printable list of all objectives present
      */
     public static String getPrintableList() {
-        String out = "";
+        StringBuilder sb = new StringBuilder();
         for (Treasury t : treasuries)
-            out = out + "* " + t.toString() + "\n";
-        return out;
+            sb.append("- ").append(t.getTown().getName()).append("\n");
+        return sb.toString();
+    }
+
+    public static ArrayList<Treasury> getTreasuries(){
+        return treasuries;
     }
 
     /*
@@ -83,8 +138,11 @@ public class Treasuries {
         StringBuilder sb = new StringBuilder();
 
         for(Treasury tes: treasuries){
+            sb.append(tes.getName()).append("*");
             sb.append(tes.getTown().getUuid().toString()).append("*");
-            sb.append(FWLocation.getStringFromLocation(tes.getLocation()));
+            sb.append(FWLocation.getStringFromLocation(tes.getLocationChestRight())).append("*");
+            sb.append(FWLocation.getStringFromLocation(tes.getLocationChestLeft())).append("*");
+            sb.append(tes.getNumPlot());
             sb.append("|");
         }
 
@@ -128,12 +186,17 @@ public class Treasuries {
 
                 for (String s: file){
                     String[] valueString = s.split("\\*");
-                    Treasury tes = new Treasury(TownyUtil.getTownFromUUID(UUID.fromString(valueString[0])), FWLocation.getLocationFromString(valueString[1]));
+                    Treasury tes = new Treasury(valueString[0], TownyUtil.getTownFromUUID(UUID.fromString(valueString[1])), FWLocation.getLocationFromString(valueString[2]), FWLocation.getLocationFromString(valueString[3]), Integer.parseInt(valueString[4]));
 
-                    Block b = tes.getLocation().getBlock();
-                    Chest chestState = (Chest) b.getState();
-                    chestState.setCustomName("FWChest");
-                    b.setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.getInstance(), Boolean.TRUE));
+                    Block right = tes.getLocationChestRight().getBlock();
+                    Chest chestStateRight = (Chest) right.getState();
+                    chestStateRight.setCustomName("FWChest");
+                    right.setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.getInstance(), Boolean.TRUE));
+
+                    Block left = tes.getLocationChestLeft().getBlock();
+                    Chest chestStateLeft = (Chest) left.getState();
+                    chestStateLeft.setCustomName("FWChest");
+                    left.setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.getInstance(), Boolean.TRUE));
 
                     treasuries.add(tes);
                 }

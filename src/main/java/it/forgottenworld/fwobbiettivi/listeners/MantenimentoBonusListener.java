@@ -4,6 +4,8 @@ import com.palmergames.bukkit.towny.event.TownUpkeepCalculationEvent;
 import it.forgottenworld.fwobbiettivi.FWObbiettivi;
 import it.forgottenworld.fwobbiettivi.objects.TownGoal;
 import it.forgottenworld.fwobbiettivi.objects.TownGoals;
+import it.forgottenworld.fwobbiettivi.objects.Treasuries;
+import it.forgottenworld.fwobbiettivi.objects.Treasury;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -21,8 +23,13 @@ public class MantenimentoBonusListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onTownUpkeepCalculated(TownUpkeepCalculationEvent e) {
         updateDatasFromConfig();
+        for (Treasury tes: Treasuries.getTreasuries()){
+            if (e.getTown().getUuid().equals(tes.getTown().getUuid()) && !exemprion.contains(e.getTown().getName()))
+                e.setUpkeep(e.getUpkeep() - ((e.getUpkeep() / 100) * plotMantenimento.get(tes.getName())));
+        }
+
         for (TownGoal tg: TownGoals.getObbiettiviInTown()){
-            if (e.getTown().equals(tg.getTown()) && !exemprion.contains(e.getTown().getName()))
+            if (e.getTown().getUuid().equals(tg.getTown().getUuid()) && !exemprion.contains(e.getTown().getName()))
                 e.setUpkeep(e.getUpkeep() - ((e.getUpkeep() / 100) * plotMantenimento.get(tg.getGoal().getName())));
         }
     }

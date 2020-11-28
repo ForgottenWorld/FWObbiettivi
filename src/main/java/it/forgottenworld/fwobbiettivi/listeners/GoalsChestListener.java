@@ -2,7 +2,6 @@ package it.forgottenworld.fwobbiettivi.listeners;
 
 import it.forgottenworld.fwobbiettivi.utility.ChatFormatter;
 import it.forgottenworld.fwobbiettivi.utility.Messages;
-import it.forgottenworld.fwobbiettivi.utility.Permissions;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;

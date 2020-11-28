@@ -48,8 +48,7 @@ public class GoalAreaCreationListener implements Listener {
         chunksList.add(new Pair<>(e.getClickedBlock().getChunk().getX(), e.getClickedBlock().getChunk().getZ() - 1));
 
         for (Pair<Integer, Integer> chunk:chunksList){
-            if (GoalAreaManager.getChunks().containsKey(chunk) &&
-                    GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId()).equals(GoalAreaManager.getChunks().get(chunk))){
+            if (GoalAreaManager.getChunks().containsKey(chunk) && GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId()).equals(GoalAreaManager.getChunks().get(chunk))){
                 int maxPlot = GoalAreaManager.getChunks().get(chunk).getGoal().getNumPlot();
                 long chunkCount = GoalAreaManager.getChunks().values().stream().filter(v -> v.equals(GoalAreaManager.getChunks().get(chunk))).count();
 

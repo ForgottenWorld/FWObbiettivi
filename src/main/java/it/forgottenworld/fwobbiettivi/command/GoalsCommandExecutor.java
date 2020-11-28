@@ -92,8 +92,27 @@ public class GoalsCommandExecutor implements TabExecutor {
                             return true;
                         }
 
+                        // Check if a Treasury is alredy present in Town
+                        if (GoalAreaManager.isOnTreasury(playerAdd.getLocation())) {
+                            playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_ALREADY_PRESENT));
+                            return true;
+                        }
+
                         // Adding Goal to that Town
                         TownGoal tg = new TownGoal(town, goal, loc);
+
+                        //todo check requisiti
+                        List<String> neededGoals = tg.getGoal().getRequiredGoals();
+                        if ((neededGoals.size() == 1) && (neededGoals.get(0) == "BASE")) {
+                            // todo message
+                            playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_ALREADY_PRESENT));
+                            return true;
+                        } else {
+                            for (String s : neededGoals){
+
+                            }
+                        }
+
                         TownGoals.addTownGoal(tg);
                         // Adding chunk to the chunk control system
                         GoalAreaManager.addChunk(loc, tg);
@@ -110,8 +129,6 @@ public class GoalsCommandExecutor implements TabExecutor {
                         if (goal.getNumPlot() > 1)
                             playerAdd.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_PLOT_NEEDED) + " " + ChatFormatter.formatWarningMessageNoPrefix("1/" + goal.getNumPlot()));
 
-                        // Saving
-                        FWObbiettivi.saveData();
                         return true;
                     } else {
                         playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_GOAL));
@@ -246,27 +263,24 @@ public class GoalsCommandExecutor implements TabExecutor {
                         if (block.getType() != Material.CHEST) {
                             FWObbiettivi.info(Messages.DISABLE_GOAL + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
                             townGoals.setActive(false);
+                            TownGoals.save();
                             return true;
                         }
 
                         Chest fwchest = (Chest) block.getState();
 
-                        // Check if the inventory contains items
-                        if (fwchest.getBlockInventory().isEmpty()) {
-                            // Inventory empty
-                            FWObbiettivi.info(Messages.GOAL_NOT_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
-                            return true;
-                        }
-
                         if (townGoals.isActive()) {
-                            townGoals.pay();
-                            FWObbiettivi.info(Messages.GOAL_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                            // Check if the inventory contains items
+                            if (fwchest.getBlockInventory().isEmpty()) {
+                                // Inventory empty
+                                FWObbiettivi.info(Messages.GOAL_NOT_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                            } else {
+                                townGoals.pay();
+                                FWObbiettivi.info(Messages.GOAL_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                            }
                         } else {
                             FWObbiettivi.info(Messages.GOAL_IS_DISABLE + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
                         }
-
-                        // Saving
-                        FWObbiettivi.saveData();
                     }
                     return true;
 
@@ -413,7 +427,6 @@ public class GoalsCommandExecutor implements TabExecutor {
 
                     switch (args[1].toLowerCase()) {
                         case CommandTypes.TREASURY_ADD_COMMAND:
-                            // TODO
                             // Teleport a player to a goal
                             if (!(sender instanceof Player)){
                                 sender.sendMessage(Messages.NO_CONSOLE);
@@ -426,8 +439,6 @@ public class GoalsCommandExecutor implements TabExecutor {
                             if(!Permissions.playerHasPermission(sender, Permissions.PERM_TREASURY_ADD))
                                 return true;
 
-
-                            // **************************************************************************************
                             // Save location of chest
                             Block bTesAdd = playerTesAdd.getTargetBlock(null, 5);
                             if (bTesAdd.getType() != Material.CHEST) {
@@ -436,17 +447,66 @@ public class GoalsCommandExecutor implements TabExecutor {
                             } else {
                                 Chest chest = (Chest) bTesAdd.getState();
                                 if (!(chest.getInventory() instanceof DoubleChestInventory)) {
-                                    //playerTesAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_SINGLE_CHEST));
+                                    playerTesAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_SINGLE_CHEST));
                                     return true;
                                 }
 
-                                System.out.println(((Chest)((DoubleChest) chest.getInventory().getHolder()).getLeftSide()).getLocation().getX());
-                                System.out.println(((Chest)((DoubleChest) chest.getInventory().getHolder()).getLeftSide()).getLocation().getZ());
-                                System.out.println(((Chest)((DoubleChest) chest.getInventory().getHolder()).getRightSide()).getLocation().getX());
-                                System.out.println(((Chest)((DoubleChest) chest.getInventory().getHolder()).getRightSide()).getLocation().getZ());
-                            }
+                                if (!TownyUtil.isInTown(bTesAdd.getLocation())){
+                                    // Not in a town
+                                    playerTesAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_LOC));
+                                    return true;
+                                }
 
-                            // **************************************************************************************
+                                Chest right = (Chest)((DoubleChest) chest.getInventory().getHolder()).getRightSide();
+                                Chest left = (Chest)((DoubleChest) chest.getInventory().getHolder()).getLeftSide();
+
+                                if (!Treasuries.isSameChunk(right.getLocation(), left.getLocation())){
+                                    // Not same location
+                                    playerTesAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NOT_SAME_LOC));
+                                    return true;
+                                }
+
+                                Town townTes = TownyUtil.getTownFromLocation(bTesAdd.getLocation());
+                                if (townTes == null) {
+                                    // Not in a town
+                                    playerTesAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_LOC));
+                                    return true;
+                                }
+
+                                if (args.length > 2) {
+                                    sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.TOO_MANY_INFO));
+                                    return true;
+                                }
+
+                                // Check if the Treasury exist
+                                if (args.length == 2) {
+                                    // Check if the Goal is alredy present in Town
+                                    if (Treasuries.containsTreasury(TownyUtil.getTownFromLocation(playerTesAdd.getLocation()))) {
+                                        playerTesAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.TREASURY_ALREADY_PRESENT));
+                                        return true;
+                                    }
+
+                                    // Adding Treaury to that Town
+                                    Treasury tes = new Treasury(ConfigUtil.getTreasuryName(), townTes, right.getLocation(), left.getLocation(), ConfigUtil.getTreasuryNumPlot());
+                                    Treasuries.addTreasury(tes);
+                                    // Adding chunk to the chunk control system
+                                    GoalAreaManager.addChunkTes(right.getLocation(), tes);
+                                    GoalAreaManager.getInstance().putTesAreaCreation(playerTesAdd.getUniqueId(), tes);
+
+                                    // Rename plot to Treasury name
+                                    TownyUtil.renamePlot(playerTesAdd.getLocation(), tes.getName());
+
+                                    playerTesAdd.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TREASURY_ADDED) + " " + ChatFormatter.formatWarningMessageNoPrefix(args[1]));
+
+                                    bTesAdd.getWorld().playSound(bTesAdd.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
+                                    GoalAreaManager.spawnEffectAtBlock(bTesAdd.getLocation());
+
+                                    if (tes.getNumPlot() > 1)
+                                        playerTesAdd.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TREASURY_PLOT_NEEDED) + " " + ChatFormatter.formatWarningMessageNoPrefix("1/" + tes.getNumPlot()));
+
+                                    return true;
+                                }
+                            }
                             break;
 
                         case CommandTypes.TREASURY_OPEN_COMMAND:
@@ -462,6 +522,11 @@ public class GoalsCommandExecutor implements TabExecutor {
 
                             if (args.length > 3){
                                 sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.TOO_MANY_INFO));
+                                return true;
+                            }
+
+                            if (args.length < 3){
+                                sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.MISSING_INFO));
                                 return true;
                             }
 
@@ -481,6 +546,14 @@ public class GoalsCommandExecutor implements TabExecutor {
                             break;
 
                         case CommandTypes.TREASURY_REMOVE_COMMAND:
+                            // Removing a Goal to a existing Town
+                            if (!(sender instanceof Player)) {
+                                sender.sendMessage(Messages.NO_CONSOLE);
+                                return true;
+                            }
+
+                            Player playerTesRemove = (Player) sender;
+
                             // Do you have the permissions?
                             if(!Permissions.playerHasPermission(sender, Permissions.PERM_TREASURY_REMOVE))
                                 return true;
@@ -490,21 +563,42 @@ public class GoalsCommandExecutor implements TabExecutor {
                                 return true;
                             }
 
-                            try {
-                                Treasury t = Treasuries.getFromTown(TownyAPI.getInstance().getDataSource().getTown(args[2]));
+                            // Check if the location is in a Town
+                            Town townTesRemove = null;
 
-                                if (t == null){
-                                    // todo
-                                    sender.sendMessage(ChatFormatter.formatErrorMessage("Tesoreria inesistente") + ChatFormatter.formatWarningMessageNoPrefix(args[2]));
+                            // Check if a goal exist in that town
+                            if (args.length == 2){
+                                // Check if the Goal exist in this plot
+                                if (TownyUtil.isInTown(playerTesRemove.getLocation())) {
+                                    if (GoalAreaManager.isOnTreasury(playerTesRemove.getLocation())) {
+                                        Treasury tes = GoalAreaManager.getTreasuryCurrentlyAre(playerTesRemove.getLocation());
+                                        playerTesRemove.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TREASURY_REMOVED) + " " + ChatFormatter.formatWarningMessageNoPrefix(tes.getTown().getName()));
+                                        Treasuries.removeTreasury(tes);
+                                        return true;
+                                    } else {
+                                        // Not in a goal plot
+                                        playerTesRemove.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_GOAL_LOC));
+                                        return true;
+                                    }
                                 } else {
-                                    Treasuries.removeTreasury(t);
-                                    sender.sendMessage(ChatFormatter.formatSuccessMessage("tesoreria rimossa"));
+                                    // Not in a town
+                                    playerTesRemove.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_LOC));
+                                    return true;
                                 }
-                            } catch (NotRegisteredException e) {
-                                // todo
-                                sender.sendMessage(ChatFormatter.formatErrorMessage("nessuna citta' con quel nome"));
+                            }else if(args.length <= 3) {
+                                if (!TownGoals.containsTownGoal(Goals.getGoalFromString(args[1]), TownyUtil.getTownFromString(args[2]))) {
+                                    // Enable failed
+                                    playerTesRemove.sendMessage(ChatFormatter.formatErrorMessage(Messages.ENABLE_FAILED));
+                                    return true;
+                                }
+                                Treasury tes = Treasuries.getFromTown(TownyUtil.getTownFromString(args[2]));
+                                playerTesRemove.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TREASURY_REMOVED) + " " + ChatFormatter.formatWarningMessageNoPrefix(tes.getTown().getName()));
+                                Treasuries.removeTreasury(tes);
+                                return true;
+                            } else {
+                                playerTesRemove.sendMessage(ChatFormatter.formatErrorMessage(Messages.TOO_MANY_INFO));
+                                return true;
                             }
-                            break;
 
                         case CommandTypes.TREASURY_SHOW_COMMAND:
                             // Do you have the permissions?
@@ -527,6 +621,27 @@ public class GoalsCommandExecutor implements TabExecutor {
                             if(!Permissions.playerHasPermission(sender, Permissions.PERM_TREASURY_TP))
                                 return true;
 
+                            Player playerTesTp = (Player) sender;
+
+                            Location locationTesTp = null;
+
+                            if(args.length > 2) {
+                                for (Treasury tes : Treasuries.getTreasuries()) {
+                                    if (args[2].equals(tes.getTown().getName())) {
+                                        locationTesTp = tes.getLocationChestRight();
+                                        playerTesTp.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TELEPORTED_TO) + " " + ChatFormatter.formatWarningMessageNoPrefix(tes.getTown().getName()));
+                                        playerTesTp.teleport(locationTesTp);
+                                        // Teleport success
+                                        return true;
+                                    }
+                                }
+                            } else {
+                                playerTesTp.sendMessage(ChatFormatter.formatErrorMessage(Messages.MISSING_INFO));
+                                return true;
+                            }
+
+                            // Teleport failed
+                            playerTesTp.sendMessage(ChatFormatter.formatErrorMessage(Messages.TELEPORTED_FAILED));
 
                             break;
                     }

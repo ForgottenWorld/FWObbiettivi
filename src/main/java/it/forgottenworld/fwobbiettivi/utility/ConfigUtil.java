@@ -20,4 +20,12 @@ public class ConfigUtil {
         return FWObbiettivi.getInstance().getConfig().getString("languages.default");
     }
 
+    public static String getTreasuryName(){
+        return FWObbiettivi.getInstance().getConfig().getString("treasury.name");
+    }
+
+    public static int getTreasuryNumPlot(){
+        return FWObbiettivi.getInstance().getConfig().getInt("treasury.plot");
+    }
+
 }

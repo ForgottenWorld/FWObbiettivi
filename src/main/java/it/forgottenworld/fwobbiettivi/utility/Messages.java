@@ -9,6 +9,7 @@ public class Messages {
     public static final String NO_GOAL = ConfigUtil.getConfigStringLang("no_goal");
     public static final String NO_GOAL_IN_LIST = ConfigUtil.getConfigStringLang("no_goal_in_list");
     public static final String NO_CHEST = ConfigUtil.getConfigStringLang("no_chest");
+    public static final String NO_SINGLE_CHEST = ConfigUtil.getConfigStringLang("no_single_chest");
     public static final String NO_DOUBLE_CHEST = ConfigUtil.getConfigStringLang("no_double_chest");
     public static final String NO_GOAL_LOC = ConfigUtil.getConfigStringLang("no_goal_loc");
     public static final String NO_PLACE_NEAR_GOAL = ConfigUtil.getConfigStringLang("no_place_near_goal");
@@ -17,8 +18,9 @@ public class Messages {
     public static final String NO_BREAK_IN_GOAL = ConfigUtil.getConfigStringLang("no_break_in_goal");
     public static final String NO_PLACE_IN_GOAL = ConfigUtil.getConfigStringLang("no_place_in_goal");
     public static final String ABORT_ADD_GOAL = ConfigUtil.getConfigStringLang("abort_add_goal");
-    public static final String GOAL_UNCLAIM_REMOVED = ConfigUtil.getConfigStringLang("goal_unclaim_removed");
+    public static final String NOT_SAME_LOC = ConfigUtil.getConfigStringLang("not_same_loc");
 
+    public static final String GOAL_UNCLAIM_REMOVED_ABORT = ConfigUtil.getConfigStringLang("goal_unclaim_removed");
     public static final String GOAL_ALREADY_PRESENT = ConfigUtil.getConfigStringLang("goal_already_present");
     public static final String GOAL_ADDED = ConfigUtil.getConfigStringLang("goal_added");
     public static final String GOAL_REMOVED = ConfigUtil.getConfigStringLang("goal_removed");
@@ -36,5 +38,11 @@ public class Messages {
     public static final String GOALS_LIST = ConfigUtil.getConfigStringLang("goals_list");
     public static final String GOAL_PLOT_NEEDED = ConfigUtil.getConfigStringLang("goals_plot_needed");
     public static final String GOAL_PLOT_NOT_NEAR = ConfigUtil.getConfigStringLang("goals_plot_not_near");
+
     public static final String TREASURY_LIST = ConfigUtil.getConfigStringLang("treasury_list");
+    public static final String TREASURY_ALREADY_PRESENT = ConfigUtil.getConfigStringLang("treasury_already_present");
+    public static final String TREASURY_ADDED = ConfigUtil.getConfigStringLang("treasury_added");
+    public static final String TREASURY_REMOVED = ConfigUtil.getConfigStringLang("treasury_removed");
+    public static final String TREASURY_PLOT_NEEDED = ConfigUtil.getConfigStringLang("treasury_plot_needed");
+    public static final String TREASURY_UNCLAIM_REMOVED_ABORT = ConfigUtil.getConfigStringLang("treasury_unclaim_removed");
 }

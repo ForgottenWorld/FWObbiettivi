@@ -20,12 +20,22 @@ public class GoalsChunkListener implements Listener {
             e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PLACE_IN_GOAL));
             e.setCancelled(true);
         }
+
+        if (GoalAreaManager.getChunksTes().get(chunk) != null){
+            e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PLACE_IN_GOAL));
+            e.setCancelled(true);
+        }
     }
 
     @EventHandler
     public void onBreakBlockOnChunkEvent(BlockBreakEvent e){
         Pair<Integer, Integer> chunk = new Pair<>(e.getBlock().getLocation().getChunk().getX(), e.getBlock().getLocation().getChunk().getZ());
         if (GoalAreaManager.getChunks().get(chunk) != null && GoalAreaManager.getChunks().get(chunk).isActive()){
+            e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_BREAK_IN_GOAL));
+            e.setCancelled(true);
+        }
+
+        if (GoalAreaManager.getChunksTes().get(chunk) != null){
             e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_BREAK_IN_GOAL));
             e.setCancelled(true);
         }
@@ -37,12 +47,20 @@ public class GoalsChunkListener implements Listener {
         if (GoalAreaManager.getChunks().get(chunk) != null && GoalAreaManager.getChunks().get(chunk).isActive()){
             e.setCancelled(true);
         }
+
+        if (GoalAreaManager.getChunksTes().get(chunk) != null){
+            e.setCancelled(true);
+        }
     }
 
     @EventHandler
     public void onBlockExplodeOnChunkEvent(BlockExplodeEvent e){
         Pair<Integer, Integer> chunk = new Pair<>(e.getBlock().getLocation().getChunk().getX(), e.getBlock().getLocation().getChunk().getZ());
         if (GoalAreaManager.getChunks().get(chunk) != null && GoalAreaManager.getChunks().get(chunk).isActive()){
+            e.setCancelled(true);
+        }
+
+        if (GoalAreaManager.getChunksTes().get(chunk) != null){
             e.setCancelled(true);
         }
     }

@@ -8,18 +8,34 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
+import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.DoubleChestInventory;
 
 import java.util.Objects;
 
 public class Treasury {
 
+    private String name;
     private Town town;
-    private Location location;
+    private Location chestRight;
+    private Location chestLeft;
+    private int numPlot;
 
-    public Treasury(Town town, Location location){
+    public Treasury(String name, Town town, Location chestRight, Location chestLeft, int numPlot){
+        this.name = name;
         this.town = town;
-        this.location = location;
+        this.chestRight = chestRight;
+        this.chestLeft = chestLeft;
+        this.numPlot = numPlot;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public void setName(String name){
+        this.name = name;
     }
 
     public Town getTown() {
@@ -30,20 +46,38 @@ public class Treasury {
         this.town = town;
     }
 
-    public Location getLocation() {
-        return location;
+    public Location getLocationChestRight() {
+        return chestRight;
     }
 
-    public void setLocation(Location chest) {
-        this.location = chest;
+    public void setLocationChestRight(Location chest) {
+        this.chestRight = chest;
+    }
+
+    public Location getLocationChestLeft() {
+        return chestLeft;
+    }
+
+    public void setLocationChestLeft(Location chest) {
+        this.chestLeft = chest;
+    }
+
+    public void setNumPlot(int numPlot) {
+        this.numPlot = numPlot;
+    }
+
+    public int getNumPlot() {
+        return numPlot;
     }
 
     public void openChest(Player player){
-        if (location.getBlock().getType().equals(Material.CHEST)){
-            if (TownyUniverse.getTownBlock(location) == null)
+        if (chestRight.getBlock().getType().equals(Material.CHEST)){
+            if (TownyUniverse.getTownBlock(chestRight) == null)
                 player.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_LOC));
 
-            player.openInventory(((Chest) location.getBlock().getState()).getBlockInventory());
+            Chest chest = (Chest) chestRight.getBlock().getState();
+            player.openInventory(chest.getInventory().getHolder().getInventory());
+
         } else {
             // TODO messages
             player.sendMessage(ChatColor.RED + "Attenzione, la chest non è stata trovata.");
@@ -55,21 +89,26 @@ public class Treasury {
         if (this == o) return true;
         if (!(o instanceof Treasury)) return false;
         Treasury treasury = (Treasury) o;
-        return Objects.equals(getTown(), treasury.getTown()) &&
-                Objects.equals(getLocation(), treasury.getLocation());
+        return Objects.equals(getName(), treasury.getName()) &&
+                Objects.equals(getTown(), treasury.getTown()) &&
+                Objects.equals(chestRight, treasury.chestRight) &&
+                Objects.equals(chestLeft, treasury.chestLeft) &&
+                Objects.equals(getNumPlot(), treasury.getNumPlot());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getTown(), getLocation());
+        return Objects.hash(getName(), getTown(), chestRight, chestLeft, getNumPlot());
     }
 
     @Override
     public String toString() {
         return "Treasury{" +
-                "town=" + town +
-                ", chest=" + location +
+                "name='" + name + '\'' +
+                ", town=" + town +
+                ", chestRight=" + chestRight +
+                ", chestLeft=" + chestLeft +
+                ", numPlot=" + numPlot +
                 '}';
     }
-
 }

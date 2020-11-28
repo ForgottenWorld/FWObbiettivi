@@ -90,6 +90,7 @@ public final class FWObbiettivi extends JavaPlugin {
         info("Loading Data");
         TownGoals.load();
         GoalAreaManager.load();
+        GoalAreaManager.loadTes();
         info("Finish loading saves");
     }
 
@@ -97,8 +98,10 @@ public final class FWObbiettivi extends JavaPlugin {
         info("Saving Data");
         Branches.save();
         Goals.save();
+        Treasuries.save();
         TownGoals.save();
         GoalAreaManager.save();
+        GoalAreaManager.saveTes();
         info("Finish saving saves");
     }
 
