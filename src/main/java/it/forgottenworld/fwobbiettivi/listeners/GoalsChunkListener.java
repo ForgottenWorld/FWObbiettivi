@@ -2,6 +2,7 @@ package it.forgottenworld.fwobbiettivi.listeners;
 
 import it.forgottenworld.fwobbiettivi.objects.managers.GoalAreaManager;
 import it.forgottenworld.fwobbiettivi.utility.ChatFormatter;
+import it.forgottenworld.fwobbiettivi.utility.ConfigUtil;
 import it.forgottenworld.fwobbiettivi.utility.Messages;
 import javafx.util.Pair;
 import org.bukkit.event.EventHandler;
@@ -15,53 +16,61 @@ public class GoalsChunkListener implements Listener {
 
     @EventHandler
     public void onPlaceBlockOnChunkEvent(BlockPlaceEvent e){
-        Pair<Integer, Integer> chunk = new Pair<>(e.getBlock().getLocation().getChunk().getX(), e.getBlock().getLocation().getChunk().getZ());
-        if (GoalAreaManager.getChunks().get(chunk) != null && GoalAreaManager.getChunks().get(chunk).isActive()){
-            e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PLACE_IN_GOAL));
-            e.setCancelled(true);
-        }
+        if (ConfigUtil.CHUNK) {
+            Pair<Integer, Integer> chunk = new Pair<>(e.getBlock().getLocation().getChunk().getX(), e.getBlock().getLocation().getChunk().getZ());
+            if (GoalAreaManager.getChunks().get(chunk) != null && GoalAreaManager.getChunks().get(chunk).isActive()) {
+                e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PLACE_IN_GOAL));
+                e.setCancelled(true);
+            }
 
-        if (GoalAreaManager.getChunksTes().get(chunk) != null){
-            e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PLACE_IN_GOAL));
-            e.setCancelled(true);
+            if (GoalAreaManager.getChunksTes().get(chunk) != null) {
+                e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_PLACE_IN_GOAL));
+                e.setCancelled(true);
+            }
         }
     }
 
     @EventHandler
     public void onBreakBlockOnChunkEvent(BlockBreakEvent e){
-        Pair<Integer, Integer> chunk = new Pair<>(e.getBlock().getLocation().getChunk().getX(), e.getBlock().getLocation().getChunk().getZ());
-        if (GoalAreaManager.getChunks().get(chunk) != null && GoalAreaManager.getChunks().get(chunk).isActive()){
-            e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_BREAK_IN_GOAL));
-            e.setCancelled(true);
-        }
+        if (ConfigUtil.CHUNK) {
+            Pair<Integer, Integer> chunk = new Pair<>(e.getBlock().getLocation().getChunk().getX(), e.getBlock().getLocation().getChunk().getZ());
+            if (GoalAreaManager.getChunks().get(chunk) != null && GoalAreaManager.getChunks().get(chunk).isActive()) {
+                e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_BREAK_IN_GOAL));
+                e.setCancelled(true);
+            }
 
-        if (GoalAreaManager.getChunksTes().get(chunk) != null){
-            e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_BREAK_IN_GOAL));
-            e.setCancelled(true);
+            if (GoalAreaManager.getChunksTes().get(chunk) != null) {
+                e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_BREAK_IN_GOAL));
+                e.setCancelled(true);
+            }
         }
     }
 
     @EventHandler
     public void onEntityExplodeOnChunkEvent(EntityExplodeEvent e){
-        Pair<Integer, Integer> chunk = new Pair<>(e.getLocation().getChunk().getX(), e.getLocation().getChunk().getZ());
-        if (GoalAreaManager.getChunks().get(chunk) != null && GoalAreaManager.getChunks().get(chunk).isActive()){
-            e.setCancelled(true);
-        }
+        if (ConfigUtil.CHUNK) {
+            Pair<Integer, Integer> chunk = new Pair<>(e.getLocation().getChunk().getX(), e.getLocation().getChunk().getZ());
+            if (GoalAreaManager.getChunks().get(chunk) != null && GoalAreaManager.getChunks().get(chunk).isActive()) {
+                e.setCancelled(true);
+            }
 
-        if (GoalAreaManager.getChunksTes().get(chunk) != null){
-            e.setCancelled(true);
+            if (GoalAreaManager.getChunksTes().get(chunk) != null) {
+                e.setCancelled(true);
+            }
         }
     }
 
     @EventHandler
     public void onBlockExplodeOnChunkEvent(BlockExplodeEvent e){
-        Pair<Integer, Integer> chunk = new Pair<>(e.getBlock().getLocation().getChunk().getX(), e.getBlock().getLocation().getChunk().getZ());
-        if (GoalAreaManager.getChunks().get(chunk) != null && GoalAreaManager.getChunks().get(chunk).isActive()){
-            e.setCancelled(true);
-        }
+        if (ConfigUtil.CHUNK) {
+            Pair<Integer, Integer> chunk = new Pair<>(e.getBlock().getLocation().getChunk().getX(), e.getBlock().getLocation().getChunk().getZ());
+            if (GoalAreaManager.getChunks().get(chunk) != null && GoalAreaManager.getChunks().get(chunk).isActive()) {
+                e.setCancelled(true);
+            }
 
-        if (GoalAreaManager.getChunksTes().get(chunk) != null){
-            e.setCancelled(true);
+            if (GoalAreaManager.getChunksTes().get(chunk) != null) {
+                e.setCancelled(true);
+            }
         }
     }
 

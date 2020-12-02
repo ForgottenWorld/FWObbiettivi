@@ -13,7 +13,12 @@
 # +----------------------------------------------------------------------------------------------+ #
 ####################################################################################################
 # DEBUG MODE
-debug: true
+debug: false
+
+# Chunk property
+chunk:
+  protection: false # Enable a protection against building and breaking blocks.
+  multiGoal: true   # Enable the ability to have multiple goals on the same chunk.
 
 # Select your language
 languages:
