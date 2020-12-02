@@ -8,6 +8,7 @@ import it.forgottenworld.fwobbiettivi.objects.TownGoal;
 import it.forgottenworld.fwobbiettivi.objects.TownGoals;
 import it.forgottenworld.fwobbiettivi.objects.managers.GoalAreaManager;
 import it.forgottenworld.fwobbiettivi.utility.ChatFormatter;
+import it.forgottenworld.fwobbiettivi.utility.ConfigUtil;
 import it.forgottenworld.fwobbiettivi.utility.Messages;
 import javafx.util.Pair;
 import org.bukkit.Location;
@@ -38,8 +39,17 @@ public class GoalAreaCreationListener implements Listener {
         if (!GoalAreaManager.getInstance().isPlayerInCreationMode(player))
             return;
 
-        if (GoalAreaManager.getChunks().containsKey(new Pair<>(e.getClickedBlock().getChunk().getX(), e.getClickedBlock().getChunk().getZ())))
-            return;
+        if (!ConfigUtil.MULTI_GOAL) {
+            if (GoalAreaManager.getChunks().containsKey(new Pair<>(e.getClickedBlock().getChunk().getX(), e.getClickedBlock().getChunk().getZ()))) {
+                e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_PLOT_ALREADY_SET) + " " + ChatFormatter.formatWarningMessageNoPrefix(GoalAreaManager.getTownGoalCurrentlyAre(e.getClickedBlock().getLocation()).getGoal().getName()));
+                return;
+            }
+
+            if (GoalAreaManager.getChunksTes().containsKey(new Pair<>(e.getClickedBlock().getChunk().getX(), e.getClickedBlock().getChunk().getZ()))) {
+                e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.TREASURY_PLOT_ALREADY_SET));
+                return;
+            }
+        }
 
         List<Pair<Integer, Integer>> chunksList = new ArrayList<>();
         chunksList.add(new Pair<>(e.getClickedBlock().getChunk().getX() + 1, e.getClickedBlock().getChunk().getZ()));
