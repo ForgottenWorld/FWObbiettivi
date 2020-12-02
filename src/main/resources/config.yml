@@ -90,6 +90,7 @@ languages:
     goals_list: "Lista degli obbiettivi presenti:"
     goals_plot_needed: "Chunk claimati per l'obbiettivo:"
     goals_plot_not_near: "Il plot selezionato non e' vicino all'obbiettivo."
+    goals_plot_already_set: "In questo chunk e' presente un obbiettivo:"
     treasury_list: "Lista delle tesorerie presenti:"
     treasury_already_present: "La tesoreria e' gia' presente in questa citta'."
     treasury_added: "Tesoreria aggiunta con successo citta':"
@@ -97,6 +98,7 @@ languages:
     treasury_plot_needed: "Chunk claimati per la tesoreria:"
     not_same_loc: "La CHEST e' tra due plot differenti."
     treasury_unclaim_removed_abort: "Tesoreria non rimossa per unclaim azione negata:"
+    treasury_plot_already_set: "In questo chunk e' presente una tesoreria."
 
 ### Treasury
 treasury:
@@ -105,13 +107,20 @@ treasury:
 
 ### Goals
 # Use quantities less than or equal to 64
+# there must be a requiredGoals already present default treasury
 goal:
   obTest:
     branch: "test"
     plot: 3
     requiredGoals:
-      - test
+      - Tesoreria
     requiredZenar: 500.0
+    requiredObject:
+      - DIRT
+      - GRASS_BLOCK
+    requiredQuantity:
+      - 10
+      - 20
     payment:
       - COBBLESTONE
       - WHITE_WOOL
@@ -138,7 +147,7 @@ branch:
 # while as a value, the percentage value of the reduction in maintenance
 mantenimentoBonus:
   plotNames:
-    tesoreria: 10.0
+    Tesoreria: 10.0
     obTest: 10.0
 
 ### Exemptions from bonus maintenance

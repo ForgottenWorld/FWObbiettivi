@@ -38,6 +38,7 @@ public class Messages {
     public static final String GOALS_LIST = ConfigUtil.getConfigStringLang("goals_list");
     public static final String GOAL_PLOT_NEEDED = ConfigUtil.getConfigStringLang("goals_plot_needed");
     public static final String GOAL_PLOT_NOT_NEAR = ConfigUtil.getConfigStringLang("goals_plot_not_near");
+    public static final String GOAL_PLOT_ALREADY_SET = ConfigUtil.getConfigStringLang("goals_plot_already_set");
 
     public static final String TREASURY_LIST = ConfigUtil.getConfigStringLang("treasury_list");
     public static final String TREASURY_ALREADY_PRESENT = ConfigUtil.getConfigStringLang("treasury_already_present");
@@ -45,4 +46,5 @@ public class Messages {
     public static final String TREASURY_REMOVED = ConfigUtil.getConfigStringLang("treasury_removed");
     public static final String TREASURY_PLOT_NEEDED = ConfigUtil.getConfigStringLang("treasury_plot_needed");
     public static final String TREASURY_UNCLAIM_REMOVED_ABORT = ConfigUtil.getConfigStringLang("treasury_unclaim_removed");
+    public static final String TREASURY_PLOT_ALREADY_SET = ConfigUtil.getConfigStringLang("treasury_plot_already_set");
 }

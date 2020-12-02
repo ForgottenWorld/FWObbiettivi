@@ -29,8 +29,9 @@ public class MantenimentoBonusListener implements Listener {
         }
 
         for (TownGoal tg: TownGoals.getObbiettiviInTown()){
-            if (e.getTown().getUuid().equals(tg.getTown().getUuid()) && !exemprion.contains(e.getTown().getName()))
+            if (e.getTown().getUuid().equals(tg.getTown().getUuid()) && !exemprion.contains(e.getTown().getName()) && plotMantenimento.get(tg.getGoal().getName()) != null) {
                 e.setUpkeep(e.getUpkeep() - ((e.getUpkeep() / 100) * plotMantenimento.get(tg.getGoal().getName())));
+            }
         }
     }
 
@@ -43,8 +44,6 @@ public class MantenimentoBonusListener implements Listener {
         List<String> list = FWObbiettivi.getInstance().getConfig().getStringList("exemprionBonus");
         if (!list.isEmpty())
             exemprion.addAll(list);
-
-        System.out.println(exemprion.get(0));
     }
 
 }

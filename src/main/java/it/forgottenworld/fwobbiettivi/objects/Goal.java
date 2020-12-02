@@ -20,17 +20,19 @@ public class Goal {
     private int numPlot;
     private List<String> requiredGoals;
     private double requiredZenar;
+    private List<ItemStack> requiredObjects;
     private List<ItemStack>  payment;
     private List<ItemStack>  reward;
     private double rewardZenar;
     private List<String> descrizione;
 
-    public Goal(String name, Branch branch, int numPlot, List<String> requiredGoals, double requiredZenar, List<ItemStack> payment, List<ItemStack> reward, double rewardZenar, List<String> descrizione){
+    public Goal(String name, Branch branch, int numPlot, List<String> requiredGoals, double requiredZenar, List<ItemStack> requiredObjects, List<ItemStack> payment, List<ItemStack> reward, double rewardZenar, List<String> descrizione){
         this.name = name;
         this.branch = branch;
         this.numPlot = numPlot;
         this.requiredGoals = requiredGoals;
         this.requiredZenar = requiredZenar;
+        this.requiredObjects = requiredObjects;
         this.payment = payment;
         this.reward = reward;
         this.rewardZenar = rewardZenar;
@@ -77,6 +79,14 @@ public class Goal {
         this.requiredZenar = requiredZenar;
     }
 
+    public List<ItemStack> getRequiredObjects() {
+        return requiredObjects;
+    }
+
+    public void setRequiredObjects(List<ItemStack> requiredObjects) {
+        this.requiredObjects = requiredObjects;
+    }
+
     public List<ItemStack> getPayment() {
         return payment;
     }
@@ -120,6 +130,7 @@ public class Goal {
                 Objects.equals(getName(), goal.getName()) &&
                 Objects.equals(getBranch(), goal.getBranch()) &&
                 Objects.equals(getRequiredGoals(), goal.getRequiredGoals()) &&
+                Objects.equals(getRequiredObjects(), goal.getRequiredObjects()) &&
                 Objects.equals(getPayment(), goal.getPayment()) &&
                 Objects.equals(getReward(), goal.getReward()) &&
                 Objects.equals(getDescrizione(), goal.getDescrizione());
@@ -127,7 +138,7 @@ public class Goal {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getBranch(), getNumPlot(), getRequiredGoals(), getRequiredZenar(), getPayment(), getReward(), getRewardZenar(), getDescrizione());
+        return Objects.hash(getName(), getBranch(), getNumPlot(), getRequiredGoals(), getRequiredZenar(), getRequiredObjects(), getPayment(), getReward(), getRewardZenar(), getDescrizione());
     }
 
     @Override
@@ -138,6 +149,7 @@ public class Goal {
                 ", numPlot=" + numPlot +
                 ", requiredGoals=" + requiredGoals +
                 ", requiredZenar=" + requiredZenar +
+                ", requiredObjects=" + requiredObjects +
                 ", payment=" + payment +
                 ", reward=" + reward +
                 ", rewardZenar=" + rewardZenar +

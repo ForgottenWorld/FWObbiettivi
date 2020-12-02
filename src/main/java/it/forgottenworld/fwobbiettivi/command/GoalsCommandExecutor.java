@@ -103,13 +103,54 @@ public class GoalsCommandExecutor implements TabExecutor {
 
                         //todo check requisiti
                         List<String> neededGoals = tg.getGoal().getRequiredGoals();
-                        if ((neededGoals.size() == 1) && (neededGoals.get(0) == "BASE")) {
-                            // todo message
-                            playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_ALREADY_PRESENT));
-                            return true;
-                        } else {
-                            for (String s : neededGoals){
+                        for (String s : neededGoals){
+                            if (!s.equals(ConfigUtil.TREASURY)){
+                                if (!TownGoals.containsTownGoal(Goals.getGoalFromString(s), town)){
+                                    // todo message
+                                    playerAdd.sendMessage(ChatFormatter.formatErrorMessage("Obbiettivo non presente: ") + ChatFormatter.formatWarningMessageNoPrefix(s));
+                                    return true;
+                                }
+                            } else {
+                                if (Treasuries.getFromTown(town) == null){
+                                    // todo message
+                                    playerAdd.sendMessage(ChatFormatter.formatErrorMessage("Tesoreria non presente."));
+                                    return true;
+                                }
+                            }
+                        }
 
+                        // objects
+                        Treasury tes = Treasuries.getFromTown(town);
+
+                        for (ItemStack is : goal.getRequiredObjects()) {
+                            int quantity = is.getAmount();
+                            for (int i = 0; i < tes.getTreasuryChestInventory().getSize(); i++) {
+                                if (quantity > 0 && tes.getTreasuryChestInventory().getItem(i) != null && tes.getTreasuryChestInventory().getItem(i).getType() == is.getType())
+                                    if (quantity >= tes.getTreasuryChestInventory().getItem(i).getAmount()) {
+                                        quantity -= tes.getTreasuryChestInventory().getItem(i).getAmount();
+                                    } else {
+                                        quantity = 0;
+                                    }
+                            }
+                            if (quantity > 0){
+                                // todo message
+                                playerAdd.sendMessage(ChatFormatter.formatErrorMessage("Non ci sono abbastanza oggetti in tesoreria"));
+                                return true;
+                            }
+                        }
+
+                        for (ItemStack is : goal.getRequiredObjects()) {
+                            int quantity = is.getAmount();
+                            for (int i = 0; i < tes.getTreasuryChestInventory().getSize(); i++) {
+                                if (quantity > 0 && tes.getTreasuryChestInventory().getItem(i) != null && tes.getTreasuryChestInventory().getItem(i).getType() == is.getType())
+                                    if (quantity >= tes.getTreasuryChestInventory().getItem(i).getAmount()) {
+                                        quantity -= tes.getTreasuryChestInventory().getItem(i).getAmount();
+                                        tes.getTreasuryChestInventory().setItem(i, null);
+                                    } else {
+                                        int newAmount = tes.getTreasuryChestInventory().getItem(i).getAmount() - quantity;
+                                        quantity = 0;
+                                        tes.getTreasuryChestInventory().setItem(i, new ItemStack(is.getType(), newAmount));
+                                    }
                             }
                         }
 
@@ -246,10 +287,6 @@ public class GoalsCommandExecutor implements TabExecutor {
 
                     break;
 
-                case CommandTypes.MOVE_COMMAND:
-                    // TODO Move Goal
-                    break;
-
                 case CommandTypes.PAY_COMMAND:
                     // Do you have the permissions?
                     if (!Permissions.playerHasPermission(sender, Permissions.PERM_PAY))
@@ -319,11 +356,16 @@ public class GoalsCommandExecutor implements TabExecutor {
                     if (!Permissions.playerHasPermission(sender, Permissions.PERM_REMOVE))
                         return true;
 
+                    if (TownGoals.getObbiettiviInTown().isEmpty()) {
+                        playerRemove.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_GOAL_LOC));
+                        return true;
+                    }
+
                     // Check if the location is in a Town
                     Town townRemove = null;
 
                     // Check if a goal exist in that town
-                    if (args.length == 1){
+                    if (args.length == 1) {
                         // Check if the Goal exist in this plot
                         if (TownyUtil.isInTown(playerRemove.getLocation())) {
                             if (GoalAreaManager.isOnTownGoal(playerRemove.getLocation())) {
@@ -341,7 +383,10 @@ public class GoalsCommandExecutor implements TabExecutor {
                             playerRemove.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_LOC));
                             return true;
                         }
-                    }else if(args.length <= 3) {
+                    } else if (args.length == 2) {
+                        playerRemove.sendMessage(ChatFormatter.formatErrorMessage(Messages.MISSING_INFO));
+                        return true;
+                    } else if (args.length == 3) {
                         if (!TownGoals.containsTownGoal(Goals.getGoalFromString(args[1]), TownyUtil.getTownFromString(args[2]))) {
                             // Enable failed
                             playerRemove.sendMessage(ChatFormatter.formatErrorMessage(Messages.ENABLE_FAILED));
@@ -496,7 +541,7 @@ public class GoalsCommandExecutor implements TabExecutor {
                                     // Rename plot to Treasury name
                                     TownyUtil.renamePlot(playerTesAdd.getLocation(), tes.getName());
 
-                                    playerTesAdd.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TREASURY_ADDED) + " " + ChatFormatter.formatWarningMessageNoPrefix(args[1]));
+                                    playerTesAdd.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TREASURY_ADDED) + " " + ChatFormatter.formatWarningMessageNoPrefix(townTes.getName()));
 
                                     bTesAdd.getWorld().playSound(bTesAdd.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
                                     GoalAreaManager.spawnEffectAtBlock(bTesAdd.getLocation());
@@ -685,9 +730,6 @@ public class GoalsCommandExecutor implements TabExecutor {
 
             if (sender.hasPermission(Permissions.PERM_LIST))
                 suggestions.add(CommandTypes.LIST_COMMAND);
-
-            if (sender.hasPermission(Permissions.PERM_MOVE))
-                suggestions.add(CommandTypes.MOVE_COMMAND);
 
             if (sender.hasPermission(Permissions.PERM_PAY))
                 suggestions.add(CommandTypes.PAY_COMMAND);

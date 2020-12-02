@@ -8,9 +8,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
-import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.DoubleChestInventory;
+import org.bukkit.inventory.Inventory;
 
 import java.util.Objects;
 
@@ -75,13 +74,16 @@ public class Treasury {
             if (TownyUniverse.getTownBlock(chestRight) == null)
                 player.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_LOC));
 
-            Chest chest = (Chest) chestRight.getBlock().getState();
-            player.openInventory(chest.getInventory().getHolder().getInventory());
-
+            player.openInventory(getTreasuryChestInventory());
         } else {
             // TODO messages
             player.sendMessage(ChatColor.RED + "Attenzione, la chest non è stata trovata.");
         }
+    }
+
+    public Inventory getTreasuryChestInventory(){
+        Chest chest = (Chest) chestRight.getBlock().getState();
+        return chest.getInventory().getHolder().getInventory();
     }
 
     @Override

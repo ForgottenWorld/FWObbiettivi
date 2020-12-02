@@ -78,6 +78,9 @@ public final class FWObbiettivi extends JavaPlugin {
 
     // Metodi per il salvataggio dei dati su file e per il loro caricamento
     public static void loadData() {
+        info("Loading Configurations...");
+        instance.reloadConfig();
+
         info("Loading Branches...");
         Branches.load();
 
@@ -87,19 +90,32 @@ public final class FWObbiettivi extends JavaPlugin {
         info("Loading Treasuries...");
         Treasuries.load();
 
-        info("Loading Data");
+        info("Loading TownGoals...");
         TownGoals.load();
+
+        info("Loading Data...");
         GoalAreaManager.load();
         GoalAreaManager.loadTes();
         info("Finish loading saves");
     }
 
     public static void saveData() {
-        info("Saving Data");
+        info("Saving Configurations...");
+        instance.saveConfig();
+
+        info("Saving Branches...");
         Branches.save();
+
+        info("Saving Goals...");
         Goals.save();
+
+        info("Saving Treasuries...");
         Treasuries.save();
+
+        info("Saving TownGoals...");
         TownGoals.save();
+
+        info("Saving Data...");
         GoalAreaManager.save();
         GoalAreaManager.saveTes();
         info("Finish saving saves");

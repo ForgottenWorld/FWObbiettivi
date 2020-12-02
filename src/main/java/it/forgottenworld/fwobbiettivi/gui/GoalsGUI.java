@@ -56,10 +56,8 @@ public class GoalsGUI {
      *
      * @param step
      */
-
     public void openGUI(int step){
         steps.add(step);
-        player.sendMessage(steps.toString());
         switch (step){
             case GUIUtil.GOALS_STEP:
                 openGoalsGUI();

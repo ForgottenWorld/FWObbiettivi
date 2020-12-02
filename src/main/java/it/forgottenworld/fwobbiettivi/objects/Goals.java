@@ -45,6 +45,19 @@ public class Goals {
             // Required Zenar
             double requiredZenar = FWObbiettivi.getInstance().getConfig().getDouble("goal." + goal + ".requiredZenar");
 
+            // Required Objects
+            ArrayList<String> requiredObjectsMaterial = new ArrayList<String>();
+            requiredObjectsMaterial.addAll(FWObbiettivi.getInstance().getConfig().getStringList("goal." + goal + ".requiredObject"));
+
+            ArrayList<Integer> requiredObjectsQuantity = new ArrayList<Integer>();
+            requiredObjectsQuantity.addAll(FWObbiettivi.getInstance().getConfig().getIntegerList("goal." + goal + ".requiredQuantity"));
+
+            ArrayList<ItemStack> requiredObjects = new ArrayList<ItemStack>();
+            for (int i = 0; i < requiredObjectsMaterial.size(); i++) {
+                requiredObjects.add(new ItemStack(Material.getMaterial(requiredObjectsMaterial.get(i)),
+                        requiredObjectsQuantity.get(i)));
+            }
+
             // Check if the Branch exist
             Branch ramo = null;
             for (Iterator<Branch> it = Branches.getRami().iterator(); it.hasNext(); ) {
@@ -93,7 +106,7 @@ public class Goals {
             ArrayList<String> description = new ArrayList<String>();
             description.addAll(FWObbiettivi.getInstance().getConfig().getStringList("goal." + goal + ".description"));
 
-            obbiettivi.add(new Goal(goal, ramo, numPlot, requiredGoal, requiredZenar, payment, reward, rewardZenar, description));
+            obbiettivi.add(new Goal(goal, ramo, numPlot, requiredGoal, requiredZenar, requiredObjects, payment, reward, rewardZenar, description));
         }
     }
 }

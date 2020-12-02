@@ -7,6 +7,9 @@ import java.util.*;
 public class ConfigUtil {
 
     public static final boolean DEBUG = FWObbiettivi.getInstance().getConfig().getBoolean("debug");
+    public static final boolean CHUNK = FWObbiettivi.getInstance().getConfig().getBoolean("chunk.protection");
+    public static final boolean MULTI_GOAL = FWObbiettivi.getInstance().getConfig().getBoolean("chunk.multiGoal");
+    public static final String TREASURY = FWObbiettivi.getInstance().getConfig().getString("treasury.name");
 
     public static List<String> getConfigStringListLang(String path){
         return FWObbiettivi.getInstance().getConfig().getStringList("languages." + getConfLang() + "." + path);
