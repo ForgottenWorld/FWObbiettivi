@@ -7,7 +7,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Location;
 
-import java.util.UUID;
+import java.util.*;
 
 public class TownyUtil {
 
@@ -60,10 +60,34 @@ public class TownyUtil {
      * Method for renaming the plot of a goal
      * @param location A Location
      * @param name The name for the plot
+     * @param state A boolean indicating whether the chunk is to be added or removed
      */
-    public static void renamePlot(Location location, String name){
+    public static void renamePlot(Location location, String name, boolean state){
         try {
-            WorldCoord.parseWorldCoord(location).getTownBlock().setName(name);
+            StringBuilder sb = new StringBuilder();
+            sb.append(WorldCoord.parseWorldCoord(location).getTownBlock().getName());
+            if (state) {
+                // Removing name from chunk
+                if (sb.length() != 0) {
+                    List<String> goalNames = Arrays.asList(sb.toString().split("\\~"));
+                    sb.setLength(0);
+
+                    for (String s : goalNames){
+                        if (!s.equals(name))
+                            sb.append(s).append("~");
+                    }
+
+                    if (sb.length() > 0)
+                        sb.setLength(sb.length() - 1);
+                }
+            } else {
+                // Adding name to the chunk
+                if (!sb.toString().equals(""))
+                    sb.append("~");
+                sb.append(name);
+            }
+            // Rename plot
+            WorldCoord.parseWorldCoord(location).getTownBlock().setName(sb.toString());
             // Saving new plot name
             TownyUniverse.getInstance().getDataSource().saveTownBlock(WorldCoord.parseWorldCoord(location).getTownBlock());
         } catch (NotRegisteredException ignored) {}

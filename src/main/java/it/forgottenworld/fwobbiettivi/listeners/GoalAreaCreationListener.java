@@ -1,16 +1,15 @@
 package it.forgottenworld.fwobbiettivi.listeners;
 
-import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.WorldCoord;
 import it.forgottenworld.fwobbiettivi.FWObbiettivi;
 import it.forgottenworld.fwobbiettivi.objects.TownGoal;
-import it.forgottenworld.fwobbiettivi.objects.TownGoals;
+import it.forgottenworld.fwobbiettivi.objects.managers.TownGoals;
 import it.forgottenworld.fwobbiettivi.objects.managers.GoalAreaManager;
 import it.forgottenworld.fwobbiettivi.utility.ChatFormatter;
 import it.forgottenworld.fwobbiettivi.utility.ConfigUtil;
 import it.forgottenworld.fwobbiettivi.utility.Messages;
+import it.forgottenworld.fwobbiettivi.utility.TownyUtil;
 import javafx.util.Pair;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -21,11 +20,13 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.UUID;
 
 public class GoalAreaCreationListener implements Listener {
+
+    static HashMap<UUID, Integer> numClick = new HashMap<>();
 
     @EventHandler
     public void onRightClickSelection(PlayerInteractEvent e) {
@@ -39,15 +40,32 @@ public class GoalAreaCreationListener implements Listener {
         if (!GoalAreaManager.getInstance().isPlayerInCreationMode(player))
             return;
 
+        if ((numClick.get(e.getPlayer().getUniqueId()) == null) || (numClick.get(e.getPlayer().getUniqueId()) % 2 == 0)) {
+            numClick.put(e.getPlayer().getUniqueId(), 1);
+        } else {
+            numClick.remove(e.getPlayer().getUniqueId());
+            return;
+        }
+
         if (!ConfigUtil.MULTI_GOAL) {
-            if (GoalAreaManager.getChunks().containsKey(new Pair<>(e.getClickedBlock().getChunk().getX(), e.getClickedBlock().getChunk().getZ()))) {
-                e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_PLOT_ALREADY_SET) + " " + ChatFormatter.formatWarningMessageNoPrefix(GoalAreaManager.getTownGoalCurrentlyAre(e.getClickedBlock().getLocation()).getGoal().getName()));
+            if (GoalAreaManager.getChunks().containsKey(e.getClickedBlock().getChunk()) && GoalAreaManager.getChunks().get(e.getClickedBlock().getChunk()).size() == 1) {
+                e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_PLOT_ALREADY_SET) + " " + ChatFormatter.formatWarningMessageNoPrefix(GoalAreaManager.getListTownGoalFromChunk(e.getClickedBlock().getLocation().getChunk()).get(0).getGoal().getName()));
                 return;
             }
 
-            if (GoalAreaManager.getChunksTes().containsKey(new Pair<>(e.getClickedBlock().getChunk().getX(), e.getClickedBlock().getChunk().getZ()))) {
+            if (GoalAreaManager.getChunksTes().containsKey(e.getClickedBlock().getChunk())) {
                 e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.TREASURY_PLOT_ALREADY_SET));
                 return;
+            }
+        } else {
+            List<TownGoal> townGoals = GoalAreaManager.getListTownGoalFromChunk(e.getClickedBlock().getLocation().getChunk());
+            if (townGoals.isEmpty()) {
+                e.getPlayer().sendMessage(ChatFormatter.formatSuccessMessage(Messages.NO_GOAL_LOC));
+            } else {
+                e.getPlayer().sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOALS_PRESENT));
+                for (TownGoal tg:townGoals){
+                    e.getPlayer().sendMessage(ChatFormatter.formatWarningMessageNoPrefix("- " + tg.getGoal().getName()));
+                }
             }
         }
 
@@ -57,26 +75,34 @@ public class GoalAreaCreationListener implements Listener {
         chunksList.add(new Pair<>(e.getClickedBlock().getChunk().getX(), e.getClickedBlock().getChunk().getZ() + 1));
         chunksList.add(new Pair<>(e.getClickedBlock().getChunk().getX(), e.getClickedBlock().getChunk().getZ() - 1));
 
-        for (Pair<Integer, Integer> chunk:chunksList){
-            if (GoalAreaManager.getChunks().containsKey(chunk) && GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId()).equals(GoalAreaManager.getChunks().get(chunk))){
-                int maxPlot = GoalAreaManager.getChunks().get(chunk).getGoal().getNumPlot();
-                long chunkCount = GoalAreaManager.getChunks().values().stream().filter(v -> v.equals(GoalAreaManager.getChunks().get(chunk))).count();
+        for (Pair<Integer, Integer> chunk : chunksList){
+            Location loc = new Location(Bukkit.getServer().getWorld(ConfigUtil.getWorldName()), chunk.getKey() * 16, 64, chunk.getValue() * 16);
+            if (GoalAreaManager.getChunks().containsKey(loc.getChunk()) && GoalAreaManager.getChunks().get(loc.getChunk()).contains(GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId()))){
+                int maxPlot = GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId()).getGoal().getNumPlot();
+                long chunkCount = GoalAreaManager.getChunks().values().stream().filter(v -> v.equals(GoalAreaManager.getChunks().get(loc.getChunk()))).count();
+
+                if (GoalAreaManager.getChunks().get(e.getClickedBlock().getLocation().getChunk()) != null) {
+                    if (GoalAreaManager.getListTownGoalFromChunk(e.getClickedBlock().getLocation().getChunk()).size() + (GoalAreaManager.getTreasuryCurrentlyFromChunk(e.getClickedBlock().getLocation().getChunk()) == null ? 0 : 1) >= ConfigUtil.MAX_GOAL_IN_CHUNK) {
+                        e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.MAX_GOAL_IN_CHUNK));
+                        return;
+                    }
+                }
 
                 if (chunkCount < maxPlot){
 
-                    try {
-                        if (WorldCoord.parseWorldCoord(e.getClickedBlock().getLocation()).getTownBlock() == WorldCoord.parseWorldCoord(e.getClickedBlock().getLocation()).getTownBlock()){
-                            WorldCoord.parseWorldCoord(e.getClickedBlock().getLocation()).getTownBlock().setName(GoalAreaManager.getChunks().get(chunk).getGoal().getName());
-                            // Saving new plot name
-                            TownyUniverse.getInstance().getDataSource().saveTownBlock(WorldCoord.parseWorldCoord(e.getClickedBlock().getLocation()).getTownBlock());
-                        }
+                    if (GoalAreaManager.getChunks().get(new Pair<>(e.getClickedBlock().getChunk().getX(), e.getClickedBlock().getChunk().getZ())) != null) {
+                        return;
+                    }
 
-                        GoalAreaManager.getChunks().put(new Pair<>(e.getClickedBlock().getChunk().getX(), e.getClickedBlock().getChunk().getZ()), GoalAreaManager.getChunks().get(chunk));
-                    } catch (NotRegisteredException event) {
+                    if (!TownyUtil.isInTown(e.getClickedBlock().getLocation())) {
                         // Not in a town
                         e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_LOC));
                         return;
                     }
+
+                    TownyUtil.renamePlot(e.getClickedBlock().getLocation(), GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId()).getGoal().getName(), false);
+                    GoalAreaManager.addChunk(e.getPlayer().getLocation().getChunk(), GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId()));
+                    GoalAreaManager.save();
 
                     e.getPlayer().sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_PLOT_NEEDED) + " " + ChatFormatter.formatWarningMessageNoPrefix((chunkCount + 1) + "/" + maxPlot));
 
@@ -106,18 +132,6 @@ public class GoalAreaCreationListener implements Listener {
 
         TownGoal tg = GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId());
 
-        Iterator<Map.Entry<Pair<Integer, Integer>, TownGoal>> it = GoalAreaManager.getChunks().entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<Pair<Integer, Integer>, TownGoal> entry = it.next();
-            if (tg.equals(entry.getValue())){
-                try {
-                    WorldCoord.parseWorldCoord(new Location(e.getPlayer().getWorld(), (entry.getKey().getKey() * 16), 64, (entry.getKey().getValue() * 16))).getTownBlock().setName("");
-                    // Saving new plot name
-                    TownyUniverse.getInstance().getDataSource().saveTownBlock(WorldCoord.parseWorldCoord(new Location(e.getPlayer().getWorld(), (entry.getKey().getKey() * 16), 64, (entry.getKey().getValue() * 16))).getTownBlock());
-                } catch (NotRegisteredException event) {}
-                it.remove();
-            }
-        }
         // Removing Goal to that Town
         TownGoals.removeTownGoal(tg);
         FWObbiettivi.info(Messages.ABORT_ADD_GOAL);

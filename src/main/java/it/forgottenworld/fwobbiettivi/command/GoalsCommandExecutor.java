@@ -2,6 +2,7 @@ package it.forgottenworld.fwobbiettivi.command;
 
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Town;
 import it.forgottenworld.fwobbiettivi.FWObbiettivi;
@@ -9,9 +10,9 @@ import it.forgottenworld.fwobbiettivi.gui.GoalsGUI;
 import it.forgottenworld.fwobbiettivi.objects.Goal;
 import it.forgottenworld.fwobbiettivi.objects.TownGoal;
 import it.forgottenworld.fwobbiettivi.objects.Treasury;
-import it.forgottenworld.fwobbiettivi.objects.Goals;
-import it.forgottenworld.fwobbiettivi.objects.TownGoals;
-import it.forgottenworld.fwobbiettivi.objects.Treasuries;
+import it.forgottenworld.fwobbiettivi.objects.managers.Goals;
+import it.forgottenworld.fwobbiettivi.objects.managers.TownGoals;
+import it.forgottenworld.fwobbiettivi.objects.managers.Treasuries;
 import it.forgottenworld.fwobbiettivi.objects.managers.GoalAreaManager;
 import it.forgottenworld.fwobbiettivi.utility.*;
 import org.bukkit.Location;
@@ -25,8 +26,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.DoubleChestInventory;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class GoalsCommandExecutor implements TabExecutor {
 
@@ -62,6 +65,14 @@ public class GoalsCommandExecutor implements TabExecutor {
                         }
                     }
 
+                    // Check if chest is already a goal
+                    if (!GoalAreaManager.getListTownGoalFromChunk(b.getChunk()).isEmpty() &&
+                            !GoalAreaManager.getListTownGoalFromChunk(b.getChunk()).stream().filter(c -> c.getLocation().equals(b.getLocation())).collect(Collectors.toList()).isEmpty()){
+
+                        playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_ALREADY_PRESENT_HERE));
+                        return true;
+                    }
+
                     Location loc = b.getLocation();
 
                     // Check if the location is in a Town
@@ -86,40 +97,58 @@ public class GoalsCommandExecutor implements TabExecutor {
                             return true;
                         }
 
-                        // Check if the Goal is alredy present in Town
+                        if (GoalAreaManager.getChunks().get(playerAdd.getLocation().getChunk()) != null) {
+                            if (GoalAreaManager.getListTownGoalFromChunk(playerAdd.getLocation().getChunk()).size() + (GoalAreaManager.getTreasuryCurrentlyFromChunk(playerAdd.getLocation().getChunk()) == null ? 0 : 1) >= ConfigUtil.MAX_GOAL_IN_CHUNK) {
+                                playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.MAX_GOAL_IN_CHUNK));
+                                return true;
+                            }
+                        }
+
+                        // Check if the Goal is already present in Town
                         if (TownGoals.containsTownGoal(goal, TownyUtil.getTownFromLocation(playerAdd.getLocation()))) {
                             playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_ALREADY_PRESENT));
                             return true;
                         }
 
-                        // Check if a Treasury is alredy present in Town
-                        if (GoalAreaManager.isOnTreasury(playerAdd.getLocation())) {
-                            playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_ALREADY_PRESENT));
-                            return true;
+                        // Check if a Treasury is already present in Town
+                        if (!ConfigUtil.MULTI_GOAL) {
+                            if (GoalAreaManager.isOnTreasury(playerAdd.getLocation().getChunk())) {
+                                playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.TREASURY_ALREADY_PRESENT));
+                                return true;
+                            }
                         }
 
                         // Adding Goal to that Town
                         TownGoal tg = new TownGoal(town, goal, loc);
 
-                        //todo check requisiti
+                        // Check if town has required zenar
+                        try {
+                            if (town.getAccount().getHoldingBalance() <= goal.getRequiredZenar()){
+                                playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NOT_ENOUGH_MONEY) + " " + ChatFormatter.formatWarningMessageNoPrefix(town.getName()));
+                                return true;
+                            }
+                        } catch (EconomyException e) {
+                            e.printStackTrace();
+                        }
+
+                        // Check if the town has required goals and if they are active
                         List<String> neededGoals = tg.getGoal().getRequiredGoals();
                         for (String s : neededGoals){
                             if (!s.equals(ConfigUtil.TREASURY)){
-                                if (!TownGoals.containsTownGoal(Goals.getGoalFromString(s), town)){
-                                    // todo message
-                                    playerAdd.sendMessage(ChatFormatter.formatErrorMessage("Obbiettivo non presente: ") + ChatFormatter.formatWarningMessageNoPrefix(s));
+                                if (!TownGoals.containsTownGoal(Goals.getGoalFromString(s), town) &&
+                                        !TownGoals.getTownGoalFromGoalAndTown(Goals.getGoalFromString(s), town).isActive()){
+                                    playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_FATHER_GOAL) + ChatFormatter.formatWarningMessageNoPrefix(s));
                                     return true;
                                 }
                             } else {
                                 if (Treasuries.getFromTown(town) == null){
-                                    // todo message
-                                    playerAdd.sendMessage(ChatFormatter.formatErrorMessage("Tesoreria non presente."));
+                                    playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TREASURY));
                                     return true;
                                 }
                             }
                         }
 
-                        // objects
+                        // Check objects
                         Treasury tes = Treasuries.getFromTown(town);
 
                         for (ItemStack is : goal.getRequiredObjects()) {
@@ -133,12 +162,31 @@ public class GoalsCommandExecutor implements TabExecutor {
                                     }
                             }
                             if (quantity > 0){
-                                // todo message
-                                playerAdd.sendMessage(ChatFormatter.formatErrorMessage("Non ci sono abbastanza oggetti in tesoreria"));
+                                playerAdd.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_REQUEST_OBJECT));
                                 return true;
                             }
                         }
 
+                        TownGoals.addTownGoal(tg);
+                        // Adding chunk to the chunk control system
+                        GoalAreaManager.addChunk(loc.getChunk(), tg);
+
+                        if (tg.getGoal().getNumPlot() > 1)
+                            GoalAreaManager.getInstance().putGoalAreaCreation(playerAdd.getUniqueId(), tg);
+
+                        // Rename plot to Goal name
+                        TownyUtil.renamePlot(b.getLocation(), goal.getName(), false);
+
+                        playerAdd.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_ADDED) + " " + ChatFormatter.formatWarningMessageNoPrefix(args[1]));
+
+                        b.getWorld().playSound(b.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
+                        GoalAreaManager.spawnEffectAtBlock(b.getLocation());
+
+                        if (goal.getNumPlot() > 1)
+                            playerAdd.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_PLOT_NEEDED) + " " + ChatFormatter.formatWarningMessageNoPrefix("1/" + goal.getNumPlot()));
+
+                        // At the end
+                        // Get objects
                         for (ItemStack is : goal.getRequiredObjects()) {
                             int quantity = is.getAmount();
                             for (int i = 0; i < tes.getTreasuryChestInventory().getSize(); i++) {
@@ -154,21 +202,13 @@ public class GoalsCommandExecutor implements TabExecutor {
                             }
                         }
 
-                        TownGoals.addTownGoal(tg);
-                        // Adding chunk to the chunk control system
-                        GoalAreaManager.addChunk(loc, tg);
-                        GoalAreaManager.getInstance().putGoalAreaCreation(playerAdd.getUniqueId(), tg);
-
-                        // Rename plot to Goal name
-                        TownyUtil.renamePlot(playerAdd.getLocation(), goal.getName());
-
-                        playerAdd.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_ADDED) + " " + ChatFormatter.formatWarningMessageNoPrefix(args[1]));
-
-                        b.getWorld().playSound(b.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
-                        GoalAreaManager.spawnEffectAtBlock(b.getLocation());
-
-                        if (goal.getNumPlot() > 1)
-                            playerAdd.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_PLOT_NEEDED) + " " + ChatFormatter.formatWarningMessageNoPrefix("1/" + goal.getNumPlot()));
+                        // Withdraw zenar
+                        try {
+                            town.getAccount().withdraw(goal.getRequiredZenar(), "Goal creation payment.");
+                            playerAdd.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TOWN_MONEY_WITHDRAWN));
+                        } catch (EconomyException e) {
+                            e.printStackTrace();
+                        }
 
                         return true;
                     } else {
@@ -208,8 +248,7 @@ public class GoalsCommandExecutor implements TabExecutor {
                         // Disable success
                         playerDisable.sendMessage(ChatFormatter.formatSuccessMessage(Messages.DISABLE_GOAL) + " " + ChatFormatter.formatWarningMessageNoPrefix(townGoalsDisable.getGoal().getName() + " - " + townGoalsDisable.getTown().getName()));
                         townGoalsDisable.setActive(false);
-                        // Removing chunk from chunk control system
-                        GoalAreaManager.removeChunk(townGoalsDisable.getLocation());
+                        
                         return true;
                     } else {
                         playerDisable.sendMessage(ChatFormatter.formatErrorMessage(Messages.MISSING_INFO));
@@ -244,8 +283,7 @@ public class GoalsCommandExecutor implements TabExecutor {
                         // Enable success
                         playerEnable.sendMessage(ChatFormatter.formatSuccessMessage(Messages.ENABLE_GOAL) + " " + ChatFormatter.formatWarningMessageNoPrefix(townGoalsEnable.getGoal().getName() + " - " + townGoalsEnable.getTown().getName()));
                         townGoalsEnable.setActive(true);
-                        // Adding chunk to the chunk control system
-                        GoalAreaManager.addChunk(townGoalsEnable.getLocation(), townGoalsEnable);
+
                         return true;
                     } else {
                         playerEnable.sendMessage(ChatFormatter.formatErrorMessage(Messages.MISSING_INFO));
@@ -365,13 +403,26 @@ public class GoalsCommandExecutor implements TabExecutor {
                     Town townRemove = null;
 
                     // Check if a goal exist in that town
-                    if (args.length == 1) {
+                    if (args.length <= 1) {
+                        playerRemove.sendMessage(ChatFormatter.formatErrorMessage(Messages.MISSING_INFO));
+                        return true;
+                    } else if (args.length == 2) {
                         // Check if the Goal exist in this plot
                         if (TownyUtil.isInTown(playerRemove.getLocation())) {
-                            if (GoalAreaManager.isOnTownGoal(playerRemove.getLocation())) {
-                                TownGoal tg = GoalAreaManager.getTownGoalCurrentlyAre(playerRemove.getLocation());
-                                playerRemove.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_REMOVED) + " " + ChatFormatter.formatWarningMessageNoPrefix(tg.getGoal().getName()));
-                                TownGoals.removeTownGoal(tg);
+                            if (GoalAreaManager.isOnTownGoal(playerRemove.getLocation().getChunk())) {
+                                List<TownGoal> townGoals = GoalAreaManager.getListTownGoalFromChunk(playerRemove.getLocation().getChunk());
+                                TownGoal tgRemove = null;
+                                for (TownGoal tg:townGoals) {
+                                    if (tg.getGoal().getName().equals(args[1])) {
+                                        tgRemove = tg;
+                                    }
+                                }
+
+                                if (tgRemove != null) {
+                                    playerRemove.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_REMOVED) + " " + ChatFormatter.formatWarningMessageNoPrefix(tgRemove.getGoal().getName()));
+                                    TownGoals.removeTownGoal(tgRemove);
+                                }
+
                                 return true;
                             } else {
                                 // Not in a goal plot
@@ -383,9 +434,6 @@ public class GoalsCommandExecutor implements TabExecutor {
                             playerRemove.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_LOC));
                             return true;
                         }
-                    } else if (args.length == 2) {
-                        playerRemove.sendMessage(ChatFormatter.formatErrorMessage(Messages.MISSING_INFO));
-                        return true;
                     } else if (args.length == 3) {
                         if (!TownGoals.containsTownGoal(Goals.getGoalFromString(args[1]), TownyUtil.getTownFromString(args[2]))) {
                             // Enable failed
@@ -425,6 +473,38 @@ public class GoalsCommandExecutor implements TabExecutor {
                     // Print the results: Goal or Town
 
                     break;
+
+                case CommandTypes.STATUS_COMMAND:
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(Messages.NO_CONSOLE);
+                        return true;
+                    }
+
+                    Player playerStatus = (Player) sender;
+
+                    // Do you have the permissions?
+                    if (!Permissions.playerHasPermission(sender, Permissions.PERM_STATUS))
+                        return true;
+
+                    if (TownGoals.getObbiettiviInTown().isEmpty()) {
+                        playerStatus.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_GOAL_LOC));
+                        return true;
+                    }
+
+                    // Check if the location is in a Town
+                    Town townStatus = null;
+
+                    // Check if a goal exist in that town
+                    // FIXME database.ylm
+                    playerStatus.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TOO_MANY_INFO));
+                    for (TownGoal tg : GoalAreaManager.getListTownGoalFromChunk(playerStatus.getLocation().getChunk())){
+                        if (tg.isActive()) {
+                            playerStatus.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("- " + tg.getGoal().getName()) + " - " + ChatFormatter.formatSuccessMessageNoPrefix("ENABLED"));
+                        } else {
+                            playerStatus.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("- " + tg.getGoal().getName()) + " - " + ChatFormatter.formatErrorMessageNoPrefix("DISABLED"));
+                        }
+                    }
+                    return true;
 
                 case CommandTypes.TP_COMMAND:
                     // Teleport a player to a goal
@@ -535,11 +615,11 @@ public class GoalsCommandExecutor implements TabExecutor {
                                     Treasury tes = new Treasury(ConfigUtil.getTreasuryName(), townTes, right.getLocation(), left.getLocation(), ConfigUtil.getTreasuryNumPlot());
                                     Treasuries.addTreasury(tes);
                                     // Adding chunk to the chunk control system
-                                    GoalAreaManager.addChunkTes(right.getLocation(), tes);
+                                    GoalAreaManager.addChunkTes(right.getLocation().getChunk(), tes);
                                     GoalAreaManager.getInstance().putTesAreaCreation(playerTesAdd.getUniqueId(), tes);
 
                                     // Rename plot to Treasury name
-                                    TownyUtil.renamePlot(playerTesAdd.getLocation(), tes.getName());
+                                    TownyUtil.renamePlot(playerTesAdd.getLocation(), tes.getName(), false);
 
                                     playerTesAdd.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TREASURY_ADDED) + " " + ChatFormatter.formatWarningMessageNoPrefix(townTes.getName()));
 
@@ -579,14 +659,12 @@ public class GoalsCommandExecutor implements TabExecutor {
                                 Treasury t = Treasuries.getFromTown(TownyAPI.getInstance().getDataSource().getTown(args[2]));
 
                                 if (t == null){
-                                    // todo
-                                    sender.sendMessage(ChatFormatter.formatErrorMessage("Tesoreria inesistente") + ChatFormatter.formatWarningMessageNoPrefix(args[2]));
+                                    sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TREASURY) + " " + ChatFormatter.formatWarningMessageNoPrefix(args[2]));
                                 } else {
                                     t.openChest((Player) sender);
                                 }
                             } catch (NotRegisteredException e) {
-                                // todo
-                                sender.sendMessage(ChatFormatter.formatErrorMessage("nessuna citta' con quel nome"));
+                                sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_FOUND));
                             }
                             break;
 
@@ -615,8 +693,8 @@ public class GoalsCommandExecutor implements TabExecutor {
                             if (args.length == 2){
                                 // Check if the Goal exist in this plot
                                 if (TownyUtil.isInTown(playerTesRemove.getLocation())) {
-                                    if (GoalAreaManager.isOnTreasury(playerTesRemove.getLocation())) {
-                                        Treasury tes = GoalAreaManager.getTreasuryCurrentlyAre(playerTesRemove.getLocation());
+                                    if (GoalAreaManager.isOnTreasury(playerTesRemove.getLocation().getChunk())) {
+                                        Treasury tes = GoalAreaManager.getTreasuryCurrentlyFromChunk(playerTesRemove.getLocation().getChunk());
                                         playerTesRemove.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TREASURY_REMOVED) + " " + ChatFormatter.formatWarningMessageNoPrefix(tes.getTown().getName()));
                                         Treasuries.removeTreasury(tes);
                                         return true;
@@ -655,7 +733,6 @@ public class GoalsCommandExecutor implements TabExecutor {
                             break;
 
                         case CommandTypes.TREASURY_TP_COMMAND:
-                            // TODO
                             // Teleport a player to a goal
                             if (!(sender instanceof Player)){
                                 sender.sendMessage(Messages.NO_CONSOLE);
@@ -742,6 +819,9 @@ public class GoalsCommandExecutor implements TabExecutor {
 
             if (sender.hasPermission(Permissions.PERM_SHOW))
                 suggestions.add(CommandTypes.SHOW_COMMAND);
+
+            if (sender.hasPermission(Permissions.PERM_STATUS))
+                suggestions.add(CommandTypes.STATUS_COMMAND);
 
             if (sender.hasPermission(Permissions.PERM_TP))
                 suggestions.add(CommandTypes.TP_COMMAND);

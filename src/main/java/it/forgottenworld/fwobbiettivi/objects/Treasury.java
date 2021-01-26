@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import it.forgottenworld.fwobbiettivi.utility.ChatFormatter;
 import it.forgottenworld.fwobbiettivi.utility.Messages;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
@@ -76,8 +75,7 @@ public class Treasury {
 
             player.openInventory(getTreasuryChestInventory());
         } else {
-            // TODO messages
-            player.sendMessage(ChatColor.RED + "Attenzione, la chest non è stata trovata.");
+            player.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_CHEST_FOUND));
         }
     }
 

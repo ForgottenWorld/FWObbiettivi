@@ -19,9 +19,11 @@ public class Messages {
     public static final String NO_PLACE_IN_GOAL = ConfigUtil.getConfigStringLang("no_place_in_goal");
     public static final String ABORT_ADD_GOAL = ConfigUtil.getConfigStringLang("abort_add_goal");
     public static final String NOT_SAME_LOC = ConfigUtil.getConfigStringLang("not_same_loc");
+    public static final String CHUNK_NOT_FOUND = ConfigUtil.getConfigStringLang("chunk_not_found");
 
     public static final String GOAL_UNCLAIM_REMOVED_ABORT = ConfigUtil.getConfigStringLang("goal_unclaim_removed");
     public static final String GOAL_ALREADY_PRESENT = ConfigUtil.getConfigStringLang("goal_already_present");
+    public static final String GOAL_ALREADY_PRESENT_HERE = ConfigUtil.getConfigStringLang("goal_already_present_here");
     public static final String GOAL_ADDED = ConfigUtil.getConfigStringLang("goal_added");
     public static final String GOAL_REMOVED = ConfigUtil.getConfigStringLang("goal_removed");
     public static final String TELEPORTED_TO = ConfigUtil.getConfigStringLang("teleported_to");
@@ -39,6 +41,8 @@ public class Messages {
     public static final String GOAL_PLOT_NEEDED = ConfigUtil.getConfigStringLang("goals_plot_needed");
     public static final String GOAL_PLOT_NOT_NEAR = ConfigUtil.getConfigStringLang("goals_plot_not_near");
     public static final String GOAL_PLOT_ALREADY_SET = ConfigUtil.getConfigStringLang("goals_plot_already_set");
+    public static final String GOALS_PRESENT = ConfigUtil.getConfigStringLang("goals_present");
+    public static final String MAX_GOAL_IN_CHUNK = ConfigUtil.getConfigStringLang("max_goal_in_chunk");
 
     public static final String TREASURY_LIST = ConfigUtil.getConfigStringLang("treasury_list");
     public static final String TREASURY_ALREADY_PRESENT = ConfigUtil.getConfigStringLang("treasury_already_present");
@@ -47,4 +51,17 @@ public class Messages {
     public static final String TREASURY_PLOT_NEEDED = ConfigUtil.getConfigStringLang("treasury_plot_needed");
     public static final String TREASURY_UNCLAIM_REMOVED_ABORT = ConfigUtil.getConfigStringLang("treasury_unclaim_removed");
     public static final String TREASURY_PLOT_ALREADY_SET = ConfigUtil.getConfigStringLang("treasury_plot_already_set");
+    public static final String NO_CHEST_FOUND = ConfigUtil.getConfigStringLang("no_chest_found");
+    public static final String NO_FATHER_GOAL = ConfigUtil.getConfigStringLang("no_father_goal");
+    public static final String NO_TREASURY = ConfigUtil.getConfigStringLang("no_treasury");
+    public static final String NO_REQUEST_OBJECT = ConfigUtil.getConfigStringLang("no_request_object");
+    public static final String NO_TOWN_FOUND = ConfigUtil.getConfigStringLang("no_town_found");
+    public static final String NOT_ENOUGH_MONEY = ConfigUtil.getConfigStringLang("not_enough_money");
+    public static final String TOWN_MONEY_WITHDRAWN = ConfigUtil.getConfigStringLang("town_money_withdrawn");
+
+    public static final String FILE_NOT_CREATED = ConfigUtil.getConfigStringLang("file_not_created");
+    public static final String FILE_CREATED = ConfigUtil.getConfigStringLang("file_created");
+    public static final String FILE_NOT_SAVED = ConfigUtil.getConfigStringLang("file_not_saved");
+    public static final String FILE_SAVED = ConfigUtil.getConfigStringLang("file_saved");
+    public static final String FILE_RELOADED = ConfigUtil.getConfigStringLang("file_reloaded");
 }

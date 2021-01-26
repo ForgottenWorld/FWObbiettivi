@@ -1,12 +1,13 @@
 package it.forgottenworld.fwobbiettivi;
 
 import it.forgottenworld.fwobbiettivi.command.GoalsCommandExecutor;
+import it.forgottenworld.fwobbiettivi.config.ConfigManager;
 import it.forgottenworld.fwobbiettivi.gui.GoalsGUI;
 import it.forgottenworld.fwobbiettivi.listeners.*;
 import it.forgottenworld.fwobbiettivi.listeners.GoalAreaCreationListener;
-import it.forgottenworld.fwobbiettivi.objects.*;
-import it.forgottenworld.fwobbiettivi.objects.managers.GoalAreaManager;
+import it.forgottenworld.fwobbiettivi.objects.managers.*;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,6 +20,7 @@ public final class FWObbiettivi extends JavaPlugin {
     private static FWObbiettivi instance;
 
     static FileConfiguration defaultConfig;
+    private static ConfigManager database;
     public GoalsGUI gui = new GoalsGUI();
     public HashMap<Player, GoalsGUI> map = new HashMap<>();
 
@@ -34,6 +36,12 @@ public final class FWObbiettivi extends JavaPlugin {
         info("Loading configuration...");
         loadConfiguration();
 
+        // Caricamento da file
+        info("Loading infos...");
+        loadConfigManager();
+        loadData();
+        info("Data loaded");
+
         // Registrazione CommandExecutor
         info("Registering commands...");
         this.getCommand("obbiettivo").setExecutor(new GoalsCommandExecutor());
@@ -48,11 +56,6 @@ public final class FWObbiettivi extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new GoalsChunkListener(), this);
         this.getServer().getPluginManager().registerEvents(new GoalAreaCreationListener(), this);
         this.getServer().getPluginManager().registerEvents(new MantenimentoBonusListener(), this);
-
-        // Caricamento da file
-        info("Loading infos...");
-        loadData();
-        info("Data loaded");
     }
 
     @Override
@@ -68,15 +71,34 @@ public final class FWObbiettivi extends JavaPlugin {
     // Metodi statici per semplificare il logging
     public static void info(String msg)
     {
-        Bukkit.getLogger().log(Level.INFO,"[FWObbiettivi] " + msg);
+        Bukkit.getLogger().log(Level.INFO,"[FWObbiettivi] " + ChatColor.GREEN + msg);
+    }
+
+    public static void warning(String msg)
+    {
+        Bukkit.getLogger().log(Level.WARNING,"[FWObbiettivi] " + ChatColor.GOLD + msg);
+    }
+
+    public static void error(String msg)
+    {
+        Bukkit.getLogger().log(Level.SEVERE,"[FWObbiettivi] " + ChatColor.RED + msg);
     }
 
     public static void debug(String msg)
     {
-        Bukkit.getLogger().log(Level.INFO,"[FWObbiettivi] [Debug]" + msg);
+        Bukkit.getLogger().log(Level.INFO,"[FWObbiettivi] [Debug]" + ChatColor.AQUA + msg);
     }
 
     // Metodi per il salvataggio dei dati su file e per il loro caricamento
+    public static void loadConfigManager(){
+        database = new ConfigManager();
+        database.setup("database.yml");
+    }
+
+    public ConfigManager getDatabase(){
+        return database;
+    }
+
     public static void loadData() {
         info("Loading Configurations...");
         instance.reloadConfig();
@@ -95,13 +117,12 @@ public final class FWObbiettivi extends JavaPlugin {
 
         info("Loading Data...");
         GoalAreaManager.load();
-        GoalAreaManager.loadTes();
         info("Finish loading saves");
     }
 
     public static void saveData() {
         info("Saving Configurations...");
-        instance.saveConfig();
+        //instance.saveConfig();
 
         info("Saving Branches...");
         Branches.save();
@@ -117,7 +138,6 @@ public final class FWObbiettivi extends JavaPlugin {
 
         info("Saving Data...");
         GoalAreaManager.save();
-        GoalAreaManager.saveTes();
         info("Finish saving saves");
     }
 

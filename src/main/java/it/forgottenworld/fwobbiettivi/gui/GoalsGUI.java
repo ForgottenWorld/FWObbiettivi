@@ -1,9 +1,9 @@
 package it.forgottenworld.fwobbiettivi.gui;
 
 import it.forgottenworld.fwobbiettivi.objects.Branch;
-import it.forgottenworld.fwobbiettivi.objects.Branches;
+import it.forgottenworld.fwobbiettivi.objects.managers.Branches;
 import it.forgottenworld.fwobbiettivi.objects.Goal;
-import it.forgottenworld.fwobbiettivi.objects.Goals;
+import it.forgottenworld.fwobbiettivi.objects.managers.Goals;
 import it.forgottenworld.fwobbiettivi.utility.GUIUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

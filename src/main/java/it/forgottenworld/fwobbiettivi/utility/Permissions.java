@@ -16,7 +16,9 @@ public class Permissions {
     public static final String PERM_RELOAD = "forgotten.obbiettivi.reload";
     public static final String PERM_REMOVE = "forgotten.obbiettivi.remove";
     public static final String PERM_SHOW = "forgotten.obbiettivi.show";
+    public static final String PERM_STATUS = "forgotten.obbiettivi.status";
     public static final String PERM_TP = "forgotten.obbiettivi.teleport";
+
     public static final String PERM_TREASURY = "forgotten.obbiettivi.treasury";
     public static final String PERM_TREASURY_ADD = "forgotten.obbiettivi.treasury.add";
     public static final String PERM_TREASURY_OPEN = "forgotten.obbiettivi.treasury.open";

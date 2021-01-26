@@ -4,17 +4,19 @@ import com.palmergames.bukkit.towny.event.PreDeleteTownEvent;
 import com.palmergames.bukkit.towny.event.TownPreUnclaimEvent;
 import it.forgottenworld.fwobbiettivi.FWObbiettivi;
 import it.forgottenworld.fwobbiettivi.objects.TownGoal;
-import it.forgottenworld.fwobbiettivi.objects.TownGoals;
-import it.forgottenworld.fwobbiettivi.objects.Treasuries;
+import it.forgottenworld.fwobbiettivi.objects.managers.TownGoals;
+import it.forgottenworld.fwobbiettivi.objects.managers.Treasuries;
 import it.forgottenworld.fwobbiettivi.objects.Treasury;
 import it.forgottenworld.fwobbiettivi.objects.managers.GoalAreaManager;
+import it.forgottenworld.fwobbiettivi.utility.ConfigUtil;
 import it.forgottenworld.fwobbiettivi.utility.Messages;
-import javafx.util.Pair;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TownListener implements Listener {
 
@@ -48,23 +50,15 @@ public class TownListener implements Listener {
 
     @EventHandler
     public void onUnclaimTownEvent(TownPreUnclaimEvent e){
-        TownGoal tg = GoalAreaManager.getChunks().get(new Pair<>(e.getTownBlock().getX(), e.getTownBlock().getZ()));
-        Treasury tes = GoalAreaManager.getChunksTes().get(new Pair<>(e.getTownBlock().getX(), e.getTownBlock().getZ()));
+        List<TownGoal> tg = GoalAreaManager.getChunks().get(new Location(Bukkit.getServer().getWorld(ConfigUtil.getWorldName()), e.getTownBlock().getX() * 16, 64, e.getTownBlock().getZ() * 16).getChunk());
+        Treasury tes = GoalAreaManager.getChunksTes().get(new Location(Bukkit.getServer().getWorld(ConfigUtil.getWorldName()), e.getTownBlock().getX() * 16, 64, e.getTownBlock().getZ() * 16).getChunk());
 
         if (tg != null) {
-            // search if coord is in a goal
-            if (!GoalAreaManager.isOnTownGoal(new Location(tg.getLocation().getWorld(), (e.getTownBlock().getX() * 16), 64, (e.getTownBlock().getZ() * 16))))
-                return;
-
             e.setCancelled(true);
             FWObbiettivi.info(Messages.GOAL_UNCLAIM_REMOVED_ABORT + " " + e.getTown().getName());
         }
 
         if (tes != null) {
-            // search if coord is in a goal
-            if (!GoalAreaManager.isOnTreasury(new Location(tg.getLocation().getWorld(), (e.getTownBlock().getX() * 16), 64, (e.getTownBlock().getZ() * 16))))
-                return;
-
             e.setCancelled(true);
             FWObbiettivi.info(Messages.TREASURY_UNCLAIM_REMOVED_ABORT + " " + e.getTown().getName());
         }

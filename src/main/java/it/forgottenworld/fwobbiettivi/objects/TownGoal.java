@@ -2,6 +2,8 @@ package it.forgottenworld.fwobbiettivi.objects;
 
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.object.Town;
+import it.forgottenworld.fwobbiettivi.objects.managers.Goals;
+import it.forgottenworld.fwobbiettivi.objects.managers.TownGoals;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
@@ -87,7 +89,13 @@ public class TownGoal {
     }
 
     public boolean isActive() {
-        return active;
+        boolean response = this.active;
+        for (String s : this.goal.getRequiredGoals()){
+            if(Goals.getGoalFromString(s) != null)
+                response &= TownGoals.getTownGoalFromGoalAndTown(Goals.getGoalFromString(s), this.town).isActive();
+        }
+
+        return response;
     }
 
     public void setActive(boolean active) {

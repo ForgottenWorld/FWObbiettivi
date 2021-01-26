@@ -15,95 +15,16 @@
 # DEBUG MODE
 debug: false
 
-# Chunk property
-chunk:
-  protection: false # Enable a protection against building and breaking blocks.
-  multiGoal: true   # Enable the ability to have multiple goals on the same chunk.
+# Enter the name of the world on which the plugin should work.
+world: world
 
-# Select your language
-languages:
-  default: "it_IT"
-  it_IT:
-    goals_inventory_title: "Obbiettivi Cittadini"
-    goals_new_item_name: "Aggiungi"
-    goals_new_item_list:
-      - test
-    goals_edit_item_name: "Modifica"
-    goals_edit_item_list:
-      - a
-    goals_delete_item_name: "Elimina"
-    goals_delete_item_list:
-      - a
-    goals_branch_item_name: "Menu Rami"
-    goals_branch_item_list:
-      - a
-    goals_close_item_name: "Chiudi"
-    goals_close_item_list:
-      - a
-    branch_inventory_title: "Rami Obbiettivi"
-    branch_new_item_name: "Aggiungi"
-    branch_new_item_list:
-      - test
-    branch_edit_item_name: "Modifica"
-    branch_edit_item_list:
-      - a
-    branch_delete_item_name: "Elimina"
-    branch_delete_item_list:
-      - a
-    branch_back_item_name: "Torna indietro"
-    branch_back_item_list:
-      - a
-    branch_list_inventory_title: "Lista Rami"
-    branch_list_back_item_name: "Torna indietro"
-    branch_list_back_item_list:
-      - a
-    goals_list_inventory_title: "Lista Obbiettivi in Ramo"
-    goals_list_back_item_name: "Torna indietro"
-    goals_list_back_item_list:
-      - a
-    no_console: "Questo comando puo' essere eseguito solo da un player!"
-    no_perm: "Non hai abbastanza permessi."
-    config_reload: "Ricaricato file di configurazione."
-    no_town_loc: "Non sei sul suolo di una citta'."
-    no_goal: "Non hai specificato nessun obbiettivo."
-    no_goal_in_list: "L'obbiettivo non esiste:"
-    no_chest: "Devi guardare una CHEST."
-    no_single_chest: "La CHEST deve essere doppia."
-    no_double_chest: "La CHEST deve essere singola."
-    no_goal_loc: "Non sei sul plot di un obbiettivo."
-    no_place_near_goal: "Non puoi piazzare una CHEST vicino una FWChest."
-    no_break_goal: "Non puoi rompere una FWChest."
-    no_existing_file_data: "Il file di salvataggio non esiste."
-    no_place_in_goal: "Non puoi piazzare blocchi in un obbiettivo attivo."
-    no_break_in_goal: "Non puoi rompere blocchi in un obbiettivo attivo."
-    abort_add_goal: "Player disconnesso, aggiunta obbiettivo rimossa."
-    goal_unclaim_removed_abort: "Obbiettivo non rimosso per unclaim azione negata:"
-    goal_already_present: "L'obbiettivo e' gia' presente in questa citta'."
-    goal_added: "Obbiettivo aggiunto con successo:"
-    goal_removed: "Obbiettivo rimosso con successo:"
-    teleported_to: "Sei stato teletrasportato all'obbiettivo:"
-    missing_info: "Non hai inserito tutti i dati richiesti."
-    too_many_info: "Hai inserito troppi parametri."
-    teleported_failed: "Teletrasporto non riuscito, assicurati che esista l'obbiettivo e/o la citta'."
-    disable_failed: "Disattivazione non riuscita, assicurati che esista l'obbiettivo e/o la citta'."
-    enable_failed: "Abilitazione non riuscita, assicurati che esista l'obbiettivo e/o la citta'."
-    enable_goal: "Obbiettivo abilitato:"
-    disable_goal: "Obbiettivo disattivato:"
-    goal_not_paid: "Obbiettivo non pagato:"
-    goal_paid: "Obbiettivo pagato:"
-    goal_is_disable: "Questo oobbiettivo e' disattivato:"
-    goals_list: "Lista degli obbiettivi presenti:"
-    goals_plot_needed: "Chunk claimati per l'obbiettivo:"
-    goals_plot_not_near: "Il plot selezionato non e' vicino all'obbiettivo."
-    goals_plot_already_set: "In questo chunk e' presente un obbiettivo:"
-    treasury_list: "Lista delle tesorerie presenti:"
-    treasury_already_present: "La tesoreria e' gia' presente in questa citta'."
-    treasury_added: "Tesoreria aggiunta con successo citta':"
-    treasury_removed: "Tesoreria rimossa con successo citta':"
-    treasury_plot_needed: "Chunk claimati per la tesoreria:"
-    not_same_loc: "La CHEST e' tra due plot differenti."
-    treasury_unclaim_removed_abort: "Tesoreria non rimossa per unclaim azione negata:"
-    treasury_plot_already_set: "In questo chunk e' presente una tesoreria."
+# Chunk property
+# Enable a protection against building and breaking blocks.
+# Enable the ability to have multiple goals on the same chunk.
+chunk:
+  protection: false
+  multiGoal: true
+  max: 3
 
 ### Treasury
 treasury:
@@ -160,3 +81,109 @@ mantenimentoBonus:
 # there must be a town already present
 exemprionBonus:
   - Spes
+
+### Blocks allowed
+# List of blocks allowed to be placed or removed in a goal chunk
+allowedBlocks:
+  - OAK_SIGN
+
+# Select your language
+languages:
+  default: "it_IT"
+  it_IT:
+    goals_inventory_title: "Obbiettivi Cittadini"
+    goals_new_item_name: "Aggiungi"
+    goals_new_item_list:
+      - test
+    goals_edit_item_name: "Modifica"
+    goals_edit_item_list:
+      - a
+    goals_delete_item_name: "Elimina"
+    goals_delete_item_list:
+      - a
+    goals_branch_item_name: "Menu Rami"
+    goals_branch_item_list:
+      - a
+    goals_close_item_name: "Chiudi"
+    goals_close_item_list:
+      - a
+    branch_inventory_title: "Rami Obbiettivi"
+    branch_new_item_name: "Aggiungi"
+    branch_new_item_list:
+      - test
+    branch_edit_item_name: "Modifica"
+    branch_edit_item_list:
+      - a
+    branch_delete_item_name: "Elimina"
+    branch_delete_item_list:
+      - a
+    branch_back_item_name: "Torna indietro"
+    branch_back_item_list:
+      - a
+    branch_list_inventory_title: "Lista Rami"
+    branch_list_back_item_name: "Torna indietro"
+    branch_list_back_item_list:
+      - a
+    goals_list_inventory_title: "Lista Obbiettivi in Ramo"
+    goals_list_back_item_name: "Torna indietro"
+    goals_list_back_item_list:
+      - a
+    no_console: "Questo comando puo' essere eseguito solo da un player!"
+    no_perm: "Non hai abbastanza permessi."
+    config_reload: "Ricaricato file di configurazione."
+    no_town_loc: "Non sei sul suolo di una citta'."
+    no_goal: "Non hai specificato nessun obbiettivo."
+    no_goal_in_list: "L'obbiettivo non esiste:"
+    no_chest: "Devi guardare una CHEST."
+    no_chest_found: "Non e' stato possibile trovare nessuna CHEST."
+    no_single_chest: "La CHEST deve essere doppia."
+    no_double_chest: "La CHEST deve essere singola."
+    no_goal_loc: "Non sei sul plot di un obbiettivo."
+    no_place_near_goal: "Non puoi piazzare una CHEST vicino una FWChest."
+    no_break_goal: "Non puoi rompere una FWChest."
+    no_existing_file_data: "Il file di salvataggio non esiste."
+    no_place_in_goal: "Non puoi piazzare blocchi in un obbiettivo attivo."
+    no_break_in_goal: "Non puoi rompere blocchi in un obbiettivo attivo."
+    chunk_not_found: "Impossibile trovare il chunk"
+    abort_add_goal: "Player disconnesso, aggiunta obbiettivo rimossa."
+    goal_unclaim_removed_abort: "Obbiettivo non rimosso per unclaim azione negata:"
+    goal_already_present: "L'obbiettivo e' gia' presente in questa citta'."
+    goal_already_present_here: "L'obbiettivo e' gia' presente in questa FWChest."
+    goal_added: "Obbiettivo aggiunto con successo:"
+    goal_removed: "Obbiettivo rimosso con successo:"
+    teleported_to: "Sei stato teletrasportato all'obbiettivo:"
+    missing_info: "Non hai inserito tutti i dati richiesti."
+    too_many_info: "Hai inserito troppi parametri."
+    teleported_failed: "Teletrasporto non riuscito, assicurati che esista l'obbiettivo e/o la citta'."
+    disable_failed: "Disattivazione non riuscita, assicurati che esista l'obbiettivo e/o la citta'."
+    enable_failed: "Abilitazione non riuscita, assicurati che esista l'obbiettivo e/o la citta'."
+    enable_goal: "Obbiettivo abilitato:"
+    disable_goal: "Obbiettivo disattivato:"
+    goal_not_paid: "Obbiettivo non pagato:"
+    goal_paid: "Obbiettivo pagato:"
+    goal_is_disable: "Questo oobbiettivo e' disattivato:"
+    goals_list: "Lista degli obbiettivi presenti:"
+    goals_plot_needed: "Chunk claimati per l'obbiettivo:"
+    goals_plot_not_near: "Il plot selezionato non e' vicino all'obbiettivo."
+    goals_plot_already_set: "In questo chunk e' presente un obbiettivo:"
+    goals_present: "Obbiettivi presenti in questo chunk:"
+    treasury_list: "Lista delle tesorerie presenti:"
+    treasury_already_present: "La tesoreria e' gia' presente in questa citta'."
+    treasury_added: "Tesoreria aggiunta con successo citta':"
+    treasury_removed: "Tesoreria rimossa con successo citta':"
+    treasury_plot_needed: "Chunk claimati per la tesoreria:"
+    not_same_loc: "La CHEST e' tra due plot differenti."
+    treasury_unclaim_removed_abort: "Tesoreria non rimossa per unclaim azione negata:"
+    treasury_plot_already_set: "In questo chunk e' presente una tesoreria."
+    no_father_goal: "Obbiettivo padre non trovato:"
+    no_treasury: "Tesoreria non trovata."
+    no_request_object: "Non sono presenti gli oggetti necessari in tesoreria."
+    no_town_found: "Assicurati di aver inserito la citta' corretta."
+    file_not_created: "File di salvataggio non creato:"
+    file_created: "File di salvataggio creato con successo:"
+    file_not_saved: "Impossibile salvare file di salvataggio:"
+    file_saved: "File di salvataggio salvato:"
+    file_reloaded: "File di salvataggio ricaricato:"
+    max_goal_in_chunk: "Numero massimo di obbietivi raggiunto per questo plot."
+    not_enough_money: "Denaro non sufficiente nella banca cittadina di:"
+    town_money_withdrawn: "Denaro prelevato con successo."

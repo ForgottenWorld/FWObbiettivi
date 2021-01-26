@@ -1,6 +1,7 @@
-package it.forgottenworld.fwobbiettivi.objects;
+package it.forgottenworld.fwobbiettivi.objects.managers;
 
 import it.forgottenworld.fwobbiettivi.FWObbiettivi;
+import it.forgottenworld.fwobbiettivi.objects.Branch;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -33,6 +34,7 @@ public class Branches {
     }
 
     public static void load() {
+        rami.clear();
         Set<String> nameBranch = FWObbiettivi.getInstance().getConfig().getConfigurationSection("branch").getKeys(false);
 
         for (String branch: nameBranch) {

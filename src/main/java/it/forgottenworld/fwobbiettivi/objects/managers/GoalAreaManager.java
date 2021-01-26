@@ -1,23 +1,14 @@
 package it.forgottenworld.fwobbiettivi.objects.managers;
 
-import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.db.TownyDataSource;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.Town;
 import it.forgottenworld.fwobbiettivi.FWObbiettivi;
-import it.forgottenworld.fwobbiettivi.objects.Goal;
-import it.forgottenworld.fwobbiettivi.objects.Goals;
-import it.forgottenworld.fwobbiettivi.objects.TownGoal;
-import it.forgottenworld.fwobbiettivi.objects.Treasury;
-import it.forgottenworld.fwobbiettivi.utility.FWLocation;
-import it.forgottenworld.fwobbiettivi.utility.Messages;
+import it.forgottenworld.fwobbiettivi.config.ConfigManager;
+import it.forgottenworld.fwobbiettivi.objects.*;
+import it.forgottenworld.fwobbiettivi.utility.ConfigUtil;
+import it.forgottenworld.fwobbiettivi.utility.TownyUtil;
 import javafx.util.Pair;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 
-import java.io.*;
 import java.util.*;
 
 public class GoalAreaManager {
@@ -26,8 +17,8 @@ public class GoalAreaManager {
 
     private HashMap<UUID, TownGoal> playerGoalAreaCreation;
     private HashMap<UUID, Treasury> playerTesAreaCreation;
-    static HashMap<Pair<Integer, Integer>, TownGoal> chunks = new HashMap<Pair<Integer, Integer>, TownGoal>();
-    static HashMap<Pair<Integer, Integer>, Treasury> chunksTes = new HashMap<Pair<Integer, Integer>, Treasury>();
+    static HashMap<Chunk, List<TownGoal>> chunks = new HashMap<>();
+    static HashMap<Chunk, Treasury> chunksTes = new HashMap<>();
 
     private GoalAreaManager() {
         this.playerGoalAreaCreation = new HashMap<>();
@@ -73,122 +64,101 @@ public class GoalAreaManager {
         return playerTesAreaCreation;
     }
 
-    public static void addChunk(Location location, TownGoal townGoal){
-        Pair<Integer, Integer> chunk = new Pair<>(location.getChunk().getX(), location.getChunk().getZ());
-        if (!containsChunk(location)) {
-            chunks.put(chunk, townGoal);
+    public static void addChunk(Chunk chunk, TownGoal townGoal){
+        if (getChunks().get(chunk) == null) {
+            chunks.put(chunk, new ArrayList<>());
         }
+        chunks.get(chunk).add(townGoal);
 
         save();
     }
 
-    public static void addChunkTes(Location location, Treasury tes){
-        Pair<Integer, Integer> chunk = new Pair<>(location.getChunk().getX(), location.getChunk().getZ());
-        if (!containsChunk(location)) {
+    public static void addChunkTes(Chunk chunk, Treasury tes){
+        if (!containsChunkTes(chunk, tes)) {
             chunksTes.put(chunk, tes);
         }
 
-        saveTes();
+        save();
     }
 
-    public static void removeChunk(Location location) {
-        Pair<Integer, Integer> chunk = new Pair<>(location.getChunk().getX(), location.getChunk().getZ());
-        chunks.remove(chunk);
+    public static void removeChunk(Chunk chunk, TownGoal townGoal) {
+        for (Map.Entry<Chunk, List<TownGoal>> c : getChunks().entrySet()){
+            if (c.getKey().equals(chunk) && c.getValue().contains(townGoal)){
+                chunks.get(c.getKey()).remove(townGoal);
+            }
+        }
 
         save();
     }
 
-    public static void removeChunkTes(Location location) {
-        Pair<Integer, Integer> chunk = new Pair<>(location.getChunk().getX(), location.getChunk().getZ());
-        chunksTes.remove(chunk);
+    public static void removeChunkTes(Chunk chunk, Treasury tes) {
+        for (Map.Entry<Chunk, Treasury> c : getChunksTes().entrySet()){
+            if (c.getKey().equals(chunk) && c.getValue().equals(tes)) {
+                chunksTes.remove(chunk);
+            }
+        }
 
-        saveTes();
+        save();
     }
 
-    public static boolean containsChunk(Location location){
-        Pair<Integer, Integer> chunk = new Pair<>(location.getChunk().getX(), location.getChunk().getZ());
-        for (Map.Entry<Pair<Integer, Integer>, TownGoal> entry : chunks.entrySet()) {
-            if (chunk.equals(entry.getKey()))
+    public static boolean containsChunk(Chunk chunk, TownGoal townGoal){
+        for (Map.Entry<Chunk, List<TownGoal>> c : getChunks().entrySet()) {
+            if (c.getKey().equals(chunk) && c.getValue().contains(townGoal))
                 return true;
         }
         return false;
     }
 
-    public static boolean containsChunkTes(Location location){
-        Pair<Integer, Integer> chunk = new Pair<>(location.getChunk().getX(), location.getChunk().getZ());
-        for (Map.Entry<Pair<Integer, Integer>, Treasury> entry : chunksTes.entrySet()) {
-            if (chunk.equals(entry.getKey()))
+    public static boolean containsChunkTes(Chunk chunk, Treasury tes){
+        for (Map.Entry<Chunk, Treasury> c : getChunksTes().entrySet()) {
+            if (c.getKey().equals(chunk) && c.getValue().equals(tes))
                 return true;
         }
         return false;
     }
 
-    public static HashMap<Pair<Integer, Integer>, TownGoal> getChunks(){
+    public static HashMap<Chunk, List<TownGoal>> getChunks(){
         return chunks;
     }
 
-    public static HashMap<Pair<Integer, Integer>, Treasury> getChunksTes(){
+    public static HashMap<Chunk, Treasury> getChunksTes(){
         return chunksTes;
     }
 
-    public static HashMap<Pair<Integer, Integer>, TownGoal> getChunksFromTownGoal(TownGoal tg){
-        HashMap<Pair<Integer, Integer>, TownGoal> app = new HashMap<>();
-        for (Map.Entry<Pair<Integer, Integer>, TownGoal> entry : getChunks().entrySet()) {
-            if (tg.equals(entry.getValue())) {
-                app.put(entry.getKey(), entry.getValue());
+    public static List<Chunk> getChunksFromTownGoal(TownGoal tg){
+        List<Chunk> app = new ArrayList<>();
+        for (Map.Entry<Chunk, List<TownGoal>> entry : getChunks().entrySet()) {
+            if (entry.getValue().contains(tg)) {
+                app.add(entry.getKey());
             }
         }
         return app;
     }
 
-    public static HashMap<Pair<Integer, Integer>, Treasury> getChunksFromTownTes(Treasury tes){
-        HashMap<Pair<Integer, Integer>, Treasury> app = new HashMap<>();
-        for (Map.Entry<Pair<Integer, Integer>, Treasury> entry : getChunksTes().entrySet()) {
-            if (tes.getTown().getUuid().equals(entry.getValue().getTown().getUuid())) {
-                app.put(entry.getKey(), entry.getValue());
+    public static List<Chunk> getChunksFromTownTes(Treasury tes){
+        List<Chunk> app = new ArrayList<>();
+        for (Map.Entry<Chunk, Treasury> entry : getChunksTes().entrySet()) {
+            if (tes.equals(entry.getValue())) {
+                app.add(entry.getKey());
             }
         }
         return app;
     }
 
-    public static TownGoal getTownGoalCurrentlyAre(Location location){
-        Pair<Integer, Integer> chunk = new Pair<>(location.getChunk().getX(), location.getChunk().getZ());
-        for (Map.Entry<Pair<Integer, Integer>, TownGoal> entry : getChunks().entrySet()) {
-            if (chunk.equals(entry.getKey())) {
-                return entry.getValue();
-            }
-        }
-        return null;
+    public static List<TownGoal> getListTownGoalFromChunk(Chunk chunk){
+        return getChunks().get(chunk) == null ? new ArrayList<>() : getChunks().get(chunk);
     }
 
-    public static Treasury getTreasuryCurrentlyAre(Location location){
-        Pair<Integer, Integer> chunk = new Pair<>(location.getChunk().getX(), location.getChunk().getZ());
-        for (Map.Entry<Pair<Integer, Integer>, Treasury> entry : getChunksTes().entrySet()) {
-            if (chunk.equals(entry.getKey())) {
-                return entry.getValue();
-            }
-        }
-        return null;
+    public static Treasury getTreasuryCurrentlyFromChunk(Chunk chunk){
+        return getChunksTes().get(chunk);
     }
 
-    public static boolean isOnTownGoal(Location location){
-        Pair<Integer, Integer> chunk = new Pair<>(location.getChunk().getX(), location.getChunk().getZ());
-        for (Map.Entry<Pair<Integer, Integer>, TownGoal> entry : getChunks().entrySet()) {
-            if (chunk.equals(entry.getKey())) {
-                return true;
-            }
-        }
-        return false;
+    public static boolean isOnTownGoal(Chunk chunk){
+        return getChunks().containsKey(chunk);
     }
 
-    public static boolean isOnTreasury(Location location){
-        Pair<Integer, Integer> chunk = new Pair<>(location.getChunk().getX(), location.getChunk().getZ());
-        for (Map.Entry<Pair<Integer, Integer>, Treasury> entry : getChunksTes().entrySet()) {
-            if (chunk.equals(entry.getKey())) {
-                return true;
-            }
-        }
-        return false;
+    public static boolean isOnTreasury(Chunk chunk){
+        return getChunksTes().containsKey(chunk);
     }
 
     /*
@@ -198,159 +168,90 @@ public class GoalAreaManager {
      */
 
     public static void save(){
-        StringBuilder sb = new StringBuilder();
+        ConfigManager database = FWObbiettivi.getInstance().getDatabase();
+        database.getFile().set("chunks", null);
 
-        for (Pair<Integer, Integer> pair: chunks.keySet()){
-            TownGoal tg = chunks.get(pair);
-            sb.append(pair.getKey()).append("*");
-            sb.append(pair.getValue()).append("*");
-            sb.append(tg.getTown().getUuid().toString()).append("*");
-            sb.append(tg.getGoal().getName()).append("*");
-            sb.append(FWLocation.getStringFromLocation(tg.getLocation())).append("*");
-            sb.append(tg.isActive());
-            sb.append("|");
-        }
-
-        if (sb.length() > 0)
-            sb.setLength(sb.length() - 1);
-
-        try {
-            FileWriter writer = new FileWriter("plugins/FWObbiettivi/chunks.markus");
-            if(sb.length() == 0){
-                writer.write("");
-            }else {
-                writer.write(sb.toString());
-            }
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        saveTes();
+        saveGoal();
     }
 
-    public static void saveTes(){
-        StringBuilder sb = new StringBuilder();
+    private static void saveGoal(){
+        ConfigManager database = FWObbiettivi.getInstance().getDatabase();
 
-        for (Pair<Integer, Integer> pair: chunksTes.keySet()){
-            Treasury tes = chunksTes.get(pair);
-            sb.append(pair.getKey()).append("*");
-            sb.append(pair.getValue()).append("*");
-            sb.append(tes.getName()).append("*");
-            sb.append(tes.getTown().getUuid().toString()).append("*");
-            sb.append(FWLocation.getStringFromLocation(tes.getLocationChestRight())).append("*");
-            sb.append(FWLocation.getStringFromLocation(tes.getLocationChestLeft())).append("*");
-            sb.append(tes.getNumPlot());
-            sb.append("|");
-        }
+        for(Map.Entry<Chunk, List<TownGoal>> c: getChunks().entrySet()) {
+            for (TownGoal tg : c.getValue()) {
+                String path = "chunks." + tg.getTown().getName() + "." + tg.getGoal().getName();
+                List<String> coord = new ArrayList<>();
+                List<String> app = database.getFile().getStringList(path);
 
-        if (sb.length() > 0)
-            sb.setLength(sb.length() - 1);
+                if (!app.isEmpty()) {
+                    coord.addAll(app);
+                }
 
-        try {
-            FileWriter writer = new FileWriter("plugins/FWObbiettivi/chunksTreasury.markus");
-            if(sb.length() == 0){
-                writer.write("");
-            }else {
-                writer.write(sb.toString());
+                if (!coord.contains(c.getKey().getX() + ";" + c.getKey().getZ()))
+                    coord.add(c.getKey().getX() + ";" + c.getKey().getZ());
+
+                database.getFile().set(path, coord);
             }
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+        database.saveFile();
+    }
+
+    private static void saveTes(){
+        ConfigManager database = FWObbiettivi.getInstance().getDatabase();
+
+        for(Map.Entry<Chunk, Treasury> c: getChunksTes().entrySet()) {
+            Treasury tes = c.getValue();
+            String path = "chunks." + tes.getTown().getName() + "." + tes.getName();
+            List<String> coord = new ArrayList<>();
+            List<String> app = database.getFile().getStringList(path);
+
+            if (!app.isEmpty()) {
+                coord.addAll(app);
+            }
+
+            if (!coord.contains(c.getKey().getX() + ";" + c.getKey().getZ()))
+                coord.add(c.getKey().getX() + ";" + c.getKey().getZ());
+
+            database.getFile().set(path, coord);
+        }
+        database.saveFile();
     }
 
     public static void load(){
-        InputStream inputStream = null;
-        try {
-            inputStream = new FileInputStream("plugins/FWObbiettivi/chunks.markus");
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            String line;
-            StringBuilder sb = new StringBuilder();
-            while((line = bufferedReader.readLine()) != null){
-                sb.append(line);
-            }
+        ConfigManager database = FWObbiettivi.getInstance().getDatabase();
+        chunks.clear();
+        chunksTes.clear();
 
-            inputStream.close();
+        if (database.getFile().getConfigurationSection("chunks") != null) {
+            for (String town : database.getFile().getConfigurationSection("chunks").getKeys(false)) {
+                for (String goal : database.getFile().getConfigurationSection("chunks." + town).getKeys(false)) {
+                    String path = "chunks." + town + "." + goal;
+                    List<Pair<Integer, Integer>> coord = new ArrayList<>();
+                    List<String> app = database.getFile().getStringList(path);
 
-            if(sb.length() != 0){
-                List<String> file = Arrays.asList(sb.toString().split("\\|"));
-
-                for (String s: file){
-                    String[] valueString = s.split("\\*");
-                    TownGoal tg = new TownGoal();
-                    TownyDataSource tds = TownyUniverse.getInstance().getDataSource();
-                    tg.setTown(tds.getTown(UUID.fromString(valueString[2])));
-
-                    for(Goal g : Goals.getObbiettivi()){
-                        if(g.getName().equals(valueString[3])){
-                            tg.setGoal(g);
-                            break;
-                        }
+                    for (String s : app) {
+                        String[] valueCoord = s.split("\\;");
+                        coord.add(new Pair<>(Integer.parseInt(valueCoord[0]), Integer.parseInt(valueCoord[1])));
                     }
 
-                    tg.setLocation(FWLocation.getLocationFromString(valueString[4]));
-
-                    tg.setActive(Boolean.valueOf(valueString[5]));
-
-                    chunks.put(new Pair<>(Integer.valueOf(valueString[0]), Integer.valueOf(valueString[1])), tg);
-                }
-            }
-
-        } catch (FileNotFoundException e) {
-            FWObbiettivi.info(Messages.NO_EXISTING_FILE_DATA);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NotRegisteredException e) {
-            e.printStackTrace();
-        } finally {
-            if (inputStream != null){
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    public static void loadTes(){
-        InputStream inputStream = null;
-        try {
-            inputStream = new FileInputStream("plugins/FWObbiettivi/chunksTreasury.markus");
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            String line;
-            StringBuilder sb = new StringBuilder();
-            while((line = bufferedReader.readLine()) != null){
-                sb.append(line);
-            }
-
-            inputStream.close();
-
-            if(sb.length() != 0){
-                List<String> file = Arrays.asList(sb.toString().split("\\|"));
-
-                for (String s: file){
-                    String[] valueString = s.split("\\*");
-                    TownyDataSource tds = TownyUniverse.getInstance().getDataSource();
-                    Treasury tes = new Treasury(valueString[2], tds.getTown(UUID.fromString(valueString[3])), FWLocation.getLocationFromString(valueString[4]), FWLocation.getLocationFromString(valueString[5]), Integer.parseInt(valueString[6]));
-
-                    chunksTes.put(new Pair<>(Integer.valueOf(valueString[0]), Integer.valueOf(valueString[1])), tes);
-                }
-            }
-
-        } catch (FileNotFoundException e) {
-            FWObbiettivi.info(Messages.NO_EXISTING_FILE_DATA);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NotRegisteredException e) {
-            e.printStackTrace();
-        } finally {
-            if (inputStream != null){
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    if (goal.equals(ConfigUtil.getTreasuryName())) {
+                        // Treasury
+                        for (Pair<Integer, Integer> c : coord) {
+                            Location loc = new Location(Bukkit.getServer().getWorld(ConfigUtil.getWorldName()), c.getKey() * 16, 64, c.getValue() * 16);
+                            chunksTes.put(loc.getChunk(), Treasuries.getFromTown(TownyUtil.getTownFromString(town)));
+                        }
+                    } else {
+                        // TownGoal
+                        for (Pair<Integer, Integer> c : coord) {
+                            Location loc = new Location(Bukkit.getServer().getWorld(ConfigUtil.getWorldName()), c.getKey() * 16, 64, c.getValue() * 16);
+                            TownGoal tg = TownGoals.getTownGoalFromGoalAndTown(Goals.getGoalFromString(goal), TownyUtil.getTownFromString(town));
+                            if (chunks.get(loc.getChunk()) == null) {
+                                chunks.put(loc.getChunk(), new ArrayList<>());
+                            }
+                            chunks.get(loc.getChunk()).add(tg);
+                        }
+                    }
                 }
             }
         }
