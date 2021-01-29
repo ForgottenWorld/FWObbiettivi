@@ -11,6 +11,8 @@ public class Permissions {
     public static final String PERM_EDIT = "forgotten.obbiettivi.edit";
     public static final String PERM_ENABLE = "forgotten.obbiettivi.enable";
     public static final String PERM_GUI = "forgotten.obbiettivi.gui";
+    public static final String PERM_HELP = "forgotten.obbiettivi.help";
+    public static final String PERM_INFO = "forgotten.obbiettivi.info";
     public static final String PERM_LIST = "forgotten.obbiettivi.list";
     public static final String PERM_PAY = "forgotten.obbiettivi.pay";
     public static final String PERM_RELOAD = "forgotten.obbiettivi.reload";
@@ -21,6 +23,7 @@ public class Permissions {
 
     public static final String PERM_TREASURY = "forgotten.obbiettivi.treasury";
     public static final String PERM_TREASURY_ADD = "forgotten.obbiettivi.treasury.add";
+    public static final String PERM_TREASURY_HELP = "forgotten.obbiettivi.treasury.help";
     public static final String PERM_TREASURY_OPEN = "forgotten.obbiettivi.treasury.open";
     public static final String PERM_TREASURY_REMOVE = "forgotten.obbiettivi.treasury.remove";
     public static final String PERM_TREASURY_SHOW = "forgotten.obbiettivi.treasury.show";

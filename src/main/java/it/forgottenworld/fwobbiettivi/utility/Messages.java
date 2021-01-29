@@ -27,8 +27,7 @@ public class Messages {
     public static final String GOAL_ADDED = ConfigUtil.getConfigStringLang("goal_added");
     public static final String GOAL_REMOVED = ConfigUtil.getConfigStringLang("goal_removed");
     public static final String TELEPORTED_TO = ConfigUtil.getConfigStringLang("teleported_to");
-    public static final String MISSING_INFO = ConfigUtil.getConfigStringLang("missing_info");
-    public static final String TOO_MANY_INFO = ConfigUtil.getConfigStringLang("too_many_info");
+    public static final String ERR_SYNTAX = ConfigUtil.getConfigStringLang("err_syntax");
     public static final String TELEPORTED_FAILED = ConfigUtil.getConfigStringLang("teleported_failed");
     public static final String DISABLE_FAILED = ConfigUtil.getConfigStringLang("disable_failed");
     public static final String ENABLE_FAILED = ConfigUtil.getConfigStringLang("enable_failed");
@@ -58,6 +57,7 @@ public class Messages {
     public static final String NO_TOWN_FOUND = ConfigUtil.getConfigStringLang("no_town_found");
     public static final String NOT_ENOUGH_MONEY = ConfigUtil.getConfigStringLang("not_enough_money");
     public static final String TOWN_MONEY_WITHDRAWN = ConfigUtil.getConfigStringLang("town_money_withdrawn");
+    public static final String TOWN_OBJECTS_WITHDRAWN = ConfigUtil.getConfigStringLang("town_objects_withdrawn");
 
     public static final String FILE_NOT_CREATED = ConfigUtil.getConfigStringLang("file_not_created");
     public static final String FILE_CREATED = ConfigUtil.getConfigStringLang("file_created");

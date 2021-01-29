@@ -2,19 +2,18 @@ package it.forgottenworld.fwobbiettivi.utility;
 
 import org.bukkit.ChatColor;
 
+import java.util.Collections;
+
 public class ChatFormatter {
 
+    /**
+     * PREFIX
+     */
     public static String pluginPrefix() {
         return  ChatColor.DARK_GRAY + "[" +
                 ChatColor.DARK_AQUA + "Obbiettivi" +
                 ChatColor.DARK_GRAY + "] " +
                 ChatColor.RESET;
-    }
-
-    public static String chatHeader() {
-        return  ChatColor.AQUA + "-------------------[ " +
-                ChatColor.DARK_AQUA + "Obbiettivi" +
-                ChatColor.AQUA + " ]-------------------";
     }
 
     public static String debugPrefix() {
@@ -23,6 +22,22 @@ public class ChatFormatter {
                 ChatColor.AQUA + " ]";
     }
 
+    /**
+     * HEADER & FOOTER
+     */
+    public static String chatHeader() {
+        return  ChatColor.AQUA + "---------------------[ " +
+                ChatColor.DARK_AQUA + "Obbiettivi" +
+                ChatColor.AQUA + " ]----------------------";
+    }
+
+    public static String chatFooter() {
+        return  ChatColor.AQUA + String.join("", Collections.nCopies(53, "-"));
+    }
+
+    /**
+     * MESSAGE
+     */
     public static String formatSuccessMessage(String message) {
         message = pluginPrefix() + ChatColor.GREEN + message;
         return message;
@@ -58,27 +73,11 @@ public class ChatFormatter {
         return message;
     }
 
-    public static String helpMessage() {
-        String message = chatHeader();
-        message = message.concat(
-                "\n" + ChatColor.GRAY + "Lista comandi:" +
-                "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.GRAY + ": ." +
-                "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "add " + "<Obbiettivo> <Town> " + ChatColor.GRAY + ": Aggiunge un obbiettivo a una Town." +
-                "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "delete " + "<Obbiettivo> " + ChatColor.GRAY + ": Cancella un obbiettivo." +
-                "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "disable " + "<Obbiettivo> <Town>" + ChatColor.GRAY + ": Disattiva un obbiettivo." +
-                "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "edit " + "<Obbiettivo> " + ChatColor.GRAY + ": Modifica un obbiettivo." +
-                "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "enable " + "<Obbiettivo> <Town>" + ChatColor.GRAY + ": Abilita un obbiettivo." +
-                "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "gui " + ChatColor.GRAY + ": Apre la GUI." +
-                "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "help " + ChatColor.GRAY + ": Mostra questa lista." +
-                "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "list " + ChatColor.GRAY + ": Mostra una lista di tutti gli obbiettivi presenti." +
-                "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "move " + "<Obbiettivo> <Town>" + ChatColor.GRAY + ": Sposta un obbiettivo di una Town sulla tua posizione." +
-                "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "new " + "<Obbiettivo> " + ChatColor.GRAY + ": Crea un nuovo obbiettivo." +
-                "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "pay " + ChatColor.GRAY + ": Paga tutti gli obbiettivi abilitati." +
-                "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "reload " + ChatColor.GRAY + ": Ricarica il config.yml." +
-                "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "remove " + "<Obbiettivo> <Town>" + ChatColor.GRAY + ": Rimuove un obbiettivi a una Town." +
-                "\n" + ChatColor.GOLD + "> " + ChatColor.DARK_AQUA + "/ob " + ChatColor.AQUA + "tp " + "<Obbiettivo> <Town>" + ChatColor.GRAY + ": Teletrasporta il player ad un determinato obbiettivo in una Town."
-        );
+    public static String formatListMessage(String command, String subcommand, String args, String description) {
+        String message = ChatColor.GOLD + "> " +
+                ChatColor.DARK_AQUA + "/" + command + " " +
+                ChatColor.AQUA + subcommand + " " + args +
+                ChatColor.GRAY + ": " + description;
         return message;
     }
-
 }

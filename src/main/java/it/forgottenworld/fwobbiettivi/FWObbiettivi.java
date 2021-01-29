@@ -1,6 +1,7 @@
 package it.forgottenworld.fwobbiettivi;
 
 import it.forgottenworld.fwobbiettivi.command.GoalsCommandExecutor;
+import it.forgottenworld.fwobbiettivi.command.TreasuryCommandExecutor;
 import it.forgottenworld.fwobbiettivi.config.ConfigManager;
 import it.forgottenworld.fwobbiettivi.gui.GoalsGUI;
 import it.forgottenworld.fwobbiettivi.listeners.*;
@@ -47,6 +48,9 @@ public final class FWObbiettivi extends JavaPlugin {
         this.getCommand("obbiettivo").setExecutor(new GoalsCommandExecutor());
         this.getCommand("ob").setExecutor(new GoalsCommandExecutor());
         this.getCommand("goals").setExecutor(new GoalsCommandExecutor());
+
+        this.getCommand("treasury").setExecutor(new TreasuryCommandExecutor());
+        this.getCommand("tes").setExecutor(new TreasuryCommandExecutor());
 
         // Registrazione event-listeners
         info("Registering listeners...");

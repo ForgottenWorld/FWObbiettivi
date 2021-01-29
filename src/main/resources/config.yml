@@ -91,45 +91,46 @@ allowedBlocks:
 languages:
   default: "it_IT"
   it_IT:
-    goals_inventory_title: "Obbiettivi Cittadini"
-    goals_new_item_name: "Aggiungi"
-    goals_new_item_list:
-      - test
-    goals_edit_item_name: "Modifica"
-    goals_edit_item_list:
-      - a
-    goals_delete_item_name: "Elimina"
-    goals_delete_item_list:
-      - a
-    goals_branch_item_name: "Menu Rami"
-    goals_branch_item_list:
-      - a
-    goals_close_item_name: "Chiudi"
-    goals_close_item_list:
-      - a
-    branch_inventory_title: "Rami Obbiettivi"
-    branch_new_item_name: "Aggiungi"
-    branch_new_item_list:
-      - test
-    branch_edit_item_name: "Modifica"
-    branch_edit_item_list:
-      - a
-    branch_delete_item_name: "Elimina"
-    branch_delete_item_list:
-      - a
-    branch_back_item_name: "Torna indietro"
-    branch_back_item_list:
-      - a
-    branch_list_inventory_title: "Lista Rami"
-    branch_list_back_item_name: "Torna indietro"
-    branch_list_back_item_list:
-      - a
-    goals_list_inventory_title: "Lista Obbiettivi in Ramo"
-    goals_list_back_item_name: "Torna indietro"
-    goals_list_back_item_list:
-      - a
+    gui:
+      goals_inventory_title: "Obbiettivi Cittadini"
+      goals_new_item_name: "Aggiungi"
+      goals_new_item_list:
+        - test
+      goals_edit_item_name: "Modifica"
+      goals_edit_item_list:
+        - a
+      goals_delete_item_name: "Elimina"
+      goals_delete_item_list:
+        - a
+      goals_branch_item_name: "Menu Rami"
+      goals_branch_item_list:
+        - a
+      goals_close_item_name: "Chiudi"
+      goals_close_item_list:
+        - a
+      branch_inventory_title: "Rami Obbiettivi"
+      branch_new_item_name: "Aggiungi"
+      branch_new_item_list:
+        - test
+      branch_edit_item_name: "Modifica"
+      branch_edit_item_list:
+        - a
+      branch_delete_item_name: "Elimina"
+      branch_delete_item_list:
+        - a
+      branch_back_item_name: "Torna indietro"
+      branch_back_item_list:
+        - a
+      branch_list_inventory_title: "Lista Rami"
+      branch_list_back_item_name: "Torna indietro"
+      branch_list_back_item_list:
+        - a
+      goals_list_inventory_title: "Lista Obbiettivi in Ramo"
+      goals_list_back_item_name: "Torna indietro"
+      goals_list_back_item_list:
+        - a
     no_console: "Questo comando puo' essere eseguito solo da un player!"
-    no_perm: "Non hai abbastanza permessi."
+    no_perm: "Non possiedi i permessi necessari per eseguire questo comando."
     config_reload: "Ricaricato file di configurazione."
     no_town_loc: "Non sei sul suolo di una citta'."
     no_goal: "Non hai specificato nessun obbiettivo."
@@ -152,8 +153,7 @@ languages:
     goal_added: "Obbiettivo aggiunto con successo:"
     goal_removed: "Obbiettivo rimosso con successo:"
     teleported_to: "Sei stato teletrasportato all'obbiettivo:"
-    missing_info: "Non hai inserito tutti i dati richiesti."
-    too_many_info: "Hai inserito troppi parametri."
+    err_syntax: "Non hai inserito correttamente il comando."
     teleported_failed: "Teletrasporto non riuscito, assicurati che esista l'obbiettivo e/o la citta'."
     disable_failed: "Disattivazione non riuscita, assicurati che esista l'obbiettivo e/o la citta'."
     enable_failed: "Abilitazione non riuscita, assicurati che esista l'obbiettivo e/o la citta'."
@@ -187,3 +187,29 @@ languages:
     max_goal_in_chunk: "Numero massimo di obbietivi raggiunto per questo plot."
     not_enough_money: "Denaro non sufficiente nella banca cittadina di:"
     town_money_withdrawn: "Denaro prelevato con successo."
+    town_objects_withdrawn: "Oggetti prelevati con successo."
+    cmds:
+      goal:
+        add_cmd_description: "Aggiunge un obbiettivo a una Town."
+        create_cmd_description: "Crea un nuovo obbiettivo."
+        delete_cmd_description: "Elimina un obbiettivo."
+        disable_cmd_description: "Disattiva un obbiettivo."
+        edit_cmd_description: "Modifica un obbiettivo."
+        enable_cmd_description: "Abilita un obbiettivo."
+        gui_cmd_description: "Apre la GUI di gestione."
+        help_cmd_description: "Mostra questa lista."
+        info_cmd_description: "Mostra le informazioni relative a un obbiettivo."
+        list_cmd_description: "Mostra una lista di tutti gli obbiettivi presenti."
+        pay_cmd_description: "Paga tutti gli obbiettivi abilitati."
+        reload_cmd_description: "Ricarica il config.yml."
+        remove_cmd_description: "Rimuove un obbiettivi a una Town."
+        show_cmd_description: "Mostra gli obbiettivi o le città in base al parametro inserito."
+        status_cmd_description: "Mostra lo status degli obbiettivi presenti nel chunk."
+        tp_cmd_description: "Teletrasporta il player ad un determinato obbiettivo in una Town."
+      treasury:
+        add_cmd_description: "Aggiunge una tesoreria a una Town."
+        help_cmd_description: "Mostra questa lista."
+        open_cmd_description: "Apre la tesoreria di una Town."
+        remove_cmd_description: "Rimuove un obbiettivi a una Town."
+        show_cmd_description: "Mostra le tesorerie attive."
+        tp_cmd_description: "Teletrasporta il player ad una determinata tesoreria in una Town."

@@ -1,6 +1,5 @@
 package it.forgottenworld.fwobbiettivi.utility;
 
-import it.forgottenworld.fwobbiettivi.FWObbiettivi;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -25,7 +24,7 @@ public class GUIUtil {
     public static final int GOALS_LIST_STEP = 10;
 
     // Menu Obbiettivi Cittadini
-    public static String GOALS_INVENTORY_TITLE = ConfigUtil.getConfigStringLang("goals_inventory_title");
+    public static String GOALS_INVENTORY_TITLE = ConfigUtil.getConfigStringLang("gui.goals_inventory_title");
     public static int GOALS_INVENTORY_SIZE = 9;
 
     public static final int GOALS_NEW_ITEM_SLOT = 0;
@@ -34,17 +33,17 @@ public class GUIUtil {
     public static final int GOALS_BRANCH_ITEM_SLOT = 3;
     public static final int GOALS_CLOSE_ITEM_SLOT = 8;
 
-    public static final String GOALS_NEW_ITEM_NAME = ConfigUtil.getConfigStringLang("goals_new_item_name");
-    public static final String GOALS_EDIT_ITEM_NAME = ConfigUtil.getConfigStringLang("goals_edit_item_name");
-    public static final String GOALS_DELETE_ITEM_NAME = ConfigUtil.getConfigStringLang("goals_delete_item_name");
-    public static final String GOALS_BRANCH_ITEM_NAME = ConfigUtil.getConfigStringLang("goals_branch_item_name");
-    public static final String GOALS_CLOSE_ITEM_NAME = ConfigUtil.getConfigStringLang("goals_close_item_name");
+    public static final String GOALS_NEW_ITEM_NAME = ConfigUtil.getConfigStringLang("gui.goals_new_item_name");
+    public static final String GOALS_EDIT_ITEM_NAME = ConfigUtil.getConfigStringLang("gui.goals_edit_item_name");
+    public static final String GOALS_DELETE_ITEM_NAME = ConfigUtil.getConfigStringLang("gui.goals_delete_item_name");
+    public static final String GOALS_BRANCH_ITEM_NAME = ConfigUtil.getConfigStringLang("gui.goals_branch_item_name");
+    public static final String GOALS_CLOSE_ITEM_NAME = ConfigUtil.getConfigStringLang("gui.goals_close_item_name");
 
-    public static final List<String> GOALS_NEW_ITEM_LORE = ConfigUtil.getConfigStringListLang("goals_new_item_list");
-    public static final List<String> GOALS_EDIT_ITEM_LORE = ConfigUtil.getConfigStringListLang("goals_edit_item_list");
-    public static final List<String> GOALS_DELETE_ITEM_LORE = ConfigUtil.getConfigStringListLang("goals_delete_item_list");
-    public static final List<String> GOALS_BRANCH_ITEM_LORE = ConfigUtil.getConfigStringListLang("goals_branch_item_list");
-    public static final List<String> GOALS_CLOSE_ITEM_LORE = ConfigUtil.getConfigStringListLang("goals_close_item_list");
+    public static final List<String> GOALS_NEW_ITEM_LORE = ConfigUtil.getConfigStringListLang("gui.goals_new_item_list");
+    public static final List<String> GOALS_EDIT_ITEM_LORE = ConfigUtil.getConfigStringListLang("gui.goals_edit_item_list");
+    public static final List<String> GOALS_DELETE_ITEM_LORE = ConfigUtil.getConfigStringListLang("gui.goals_delete_item_list");
+    public static final List<String> GOALS_BRANCH_ITEM_LORE = ConfigUtil.getConfigStringListLang("gui.goals_branch_item_list");
+    public static final List<String> GOALS_CLOSE_ITEM_LORE = ConfigUtil.getConfigStringListLang("gui.goals_close_item_list");
 
     public static final Material GOALS_NEW_ITEM_MATERIAL = Material.NETHER_STAR;
     public static final Material GOALS_EDIT_ITEM_MATERIAL = Material.WRITABLE_BOOK;
@@ -59,7 +58,7 @@ public class GUIUtil {
     // Menu Delete Obbiettivo
 
     // Menu Rami Obbiettivi
-    public static String BRANCH_INVENTORY_TITLE = ConfigUtil.getConfigStringLang("branch_inventory_title");
+    public static String BRANCH_INVENTORY_TITLE = ConfigUtil.getConfigStringLang("gui.branch_inventory_title");
     public static int BRANCH_INVENTORY_SIZE = 9;
 
     public static final int BRANCH_NEW_ITEM_SLOT = 0;
@@ -67,15 +66,15 @@ public class GUIUtil {
     public static final int BRANCH_DELETE_ITEM_SLOT = 2;
     public static final int BRANCH_BACK_ITEM_SLOT = 8;
 
-    public static final String BRANCH_NEW_ITEM_NAME = ConfigUtil.getConfigStringLang("branch_new_item_name");
-    public static final String BRANCH_EDIT_ITEM_NAME = ConfigUtil.getConfigStringLang("branch_edit_item_name");
-    public static final String BRANCH_DELETE_ITEM_NAME = ConfigUtil.getConfigStringLang("branch_delete_item_name");
-    public static final String BRANCH_BACK_ITEM_NAME = ConfigUtil.getConfigStringLang("branch_back_item_name");
+    public static final String BRANCH_NEW_ITEM_NAME = ConfigUtil.getConfigStringLang("gui.branch_new_item_name");
+    public static final String BRANCH_EDIT_ITEM_NAME = ConfigUtil.getConfigStringLang("gui.branch_edit_item_name");
+    public static final String BRANCH_DELETE_ITEM_NAME = ConfigUtil.getConfigStringLang("gui.branch_delete_item_name");
+    public static final String BRANCH_BACK_ITEM_NAME = ConfigUtil.getConfigStringLang("gui.branch_back_item_name");
 
-    public static final List<String> BRANCH_NEW_ITEM_LORE = ConfigUtil.getConfigStringListLang("branch_new_item_list");
-    public static final List<String> BRANCH_EDIT_ITEM_LORE = ConfigUtil.getConfigStringListLang("branch_edit_item_list");
-    public static final List<String> BRANCH_DELETE_ITEM_LORE = ConfigUtil.getConfigStringListLang("branch_delete_item_list");
-    public static final List<String> BRANCH_BACK_ITEM_LORE = ConfigUtil.getConfigStringListLang("branch_back_item_list");
+    public static final List<String> BRANCH_NEW_ITEM_LORE = ConfigUtil.getConfigStringListLang("gui.branch_new_item_list");
+    public static final List<String> BRANCH_EDIT_ITEM_LORE = ConfigUtil.getConfigStringListLang("gui.branch_edit_item_list");
+    public static final List<String> BRANCH_DELETE_ITEM_LORE = ConfigUtil.getConfigStringListLang("gui.branch_delete_item_list");
+    public static final List<String> BRANCH_BACK_ITEM_LORE = ConfigUtil.getConfigStringListLang("gui.branch_back_item_list");
 
     public static final Material BRANCH_NEW_ITEM_MATERIAL = Material.NETHER_STAR;
     public static final Material BRANCH_EDIT_ITEM_MATERIAL = Material.WRITABLE_BOOK;
@@ -89,26 +88,26 @@ public class GUIUtil {
     // Menu Delete Ramo
 
     // Menu Lista Rami
-    public static final String BRANCH_LIST_INVENTORY_TITLE = ConfigUtil.getConfigStringLang("branch_list_inventory_title");
+    public static final String BRANCH_LIST_INVENTORY_TITLE = ConfigUtil.getConfigStringLang("gui.branch_list_inventory_title");
     public static int BRANCH_LIST_INVENTORY_SIZE = 27;
 
     public static final int BRANCH_LIST_BACK_ITEM_SLOT = 26;
 
-    public static final String BRANCH_LIST_BACK_ITEM_NAME = ConfigUtil.getConfigStringLang("branch_list_back_item_name");
+    public static final String BRANCH_LIST_BACK_ITEM_NAME = ConfigUtil.getConfigStringLang("gui.branch_list_back_item_name");
 
-    public static final List<String> BRANCH_LIST_BACK_ITEM_LORE = ConfigUtil.getConfigStringListLang("branch_list_back_item_list");
+    public static final List<String> BRANCH_LIST_BACK_ITEM_LORE = ConfigUtil.getConfigStringListLang("gui.branch_list_back_item_list");
 
     public static final Material BRANCH_LIST_BACK_ITEM_MATERIAL = Material.BARRIER;
 
     //Menu Lista Obbiettivi in un Ramo
-    public static final String GOALS_LIST_INVENTORY_TITLE = ConfigUtil.getConfigStringLang("goals_list_inventory_title");
+    public static final String GOALS_LIST_INVENTORY_TITLE = ConfigUtil.getConfigStringLang("gui.goals_list_inventory_title");
     public static int GOALS_LIST_INVENTORY_SIZE = 54;
 
     public static final int GOALS_LIST_BACK_ITEM_SLOT = 53;
 
-    public static final String GOALS_LIST_BACK_ITEM_NAME = ConfigUtil.getConfigStringLang("goals_list_back_item_name");
+    public static final String GOALS_LIST_BACK_ITEM_NAME = ConfigUtil.getConfigStringLang("gui.goals_list_back_item_name");
 
-    public static final List<String> GOALS_LIST_BACK_ITEM_LORE = ConfigUtil.getConfigStringListLang("goals_list_back_item_list");
+    public static final List<String> GOALS_LIST_BACK_ITEM_LORE = ConfigUtil.getConfigStringListLang("gui.goals_list_back_item_list");
 
     public static final Material GOALS_LIST_BACK_ITEM_MATERIAL = Material.BARRIER;
 
