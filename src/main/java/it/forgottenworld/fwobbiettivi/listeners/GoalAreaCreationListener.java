@@ -1,9 +1,12 @@
 package it.forgottenworld.fwobbiettivi.listeners;
 
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import it.forgottenworld.fwobbiettivi.FWObbiettivi;
 import it.forgottenworld.fwobbiettivi.objects.TownGoal;
+import it.forgottenworld.fwobbiettivi.objects.Treasury;
 import it.forgottenworld.fwobbiettivi.objects.managers.TownGoals;
 import it.forgottenworld.fwobbiettivi.objects.managers.GoalAreaManager;
+import it.forgottenworld.fwobbiettivi.objects.managers.Treasuries;
 import it.forgottenworld.fwobbiettivi.utility.ChatFormatter;
 import it.forgottenworld.fwobbiettivi.utility.ConfigUtil;
 import it.forgottenworld.fwobbiettivi.utility.Messages;
@@ -18,6 +21,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,9 +81,10 @@ public class GoalAreaCreationListener implements Listener {
 
         for (Pair<Integer, Integer> chunk : chunksList){
             Location loc = new Location(Bukkit.getServer().getWorld(ConfigUtil.getWorldName()), chunk.getKey() * 16, 64, chunk.getValue() * 16);
-            if (!GoalAreaManager.getChunksFromTownGoal(GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId())).contains(loc.getChunk())){
-                int maxPlot = GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId()).getGoal().getNumPlot();
-                long chunkCount = GoalAreaManager.getChunksFromTownGoal(GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId())).size();
+            TownGoal tg = GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId());
+            if (!GoalAreaManager.getChunksFromTownGoal(tg).contains(loc.getChunk())){
+                int maxPlot = tg.getGoal().getNumPlot();
+                long chunkCount = GoalAreaManager.getChunksFromTownGoal(tg).size();
 
                 if (GoalAreaManager.getChunks().get(e.getClickedBlock().getLocation().getChunk()) != null) {
                     if (GoalAreaManager.getListTownGoalFromChunk(e.getClickedBlock().getLocation().getChunk()).size() + (GoalAreaManager.getTreasuryCurrentlyFromChunk(e.getClickedBlock().getLocation().getChunk()) == null ? 0 : 1) >= ConfigUtil.MAX_GOAL_IN_CHUNK) {
@@ -96,8 +101,8 @@ public class GoalAreaCreationListener implements Listener {
                         return;
                     }
 
-                    TownyUtil.renamePlot(e.getClickedBlock().getLocation(), GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId()).getGoal().getName(), false);
-                    GoalAreaManager.addChunk(e.getPlayer().getLocation().getChunk(), GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId()));
+                    TownyUtil.renamePlot(e.getClickedBlock().getLocation(), tg.getGoal().getName(), false);
+                    GoalAreaManager.addChunk(e.getPlayer().getLocation().getChunk(), tg);
 
                     e.getPlayer().sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_PLOT_NEEDED) + " " + ChatFormatter.formatWarningMessageNoPrefix((chunkCount + 1) + "/" + maxPlot));
 
@@ -108,8 +113,39 @@ public class GoalAreaCreationListener implements Listener {
 
                     GoalAreaManager.spawnEffectAtBlock(e.getPlayer().getTargetBlockExact(5).getLocation());
 
-                    if ((chunkCount + 1) == maxPlot)
+                    if ((chunkCount + 1) == maxPlot) {
+                        Treasury tes = Treasuries.getFromTown(tg.getTown());
+                        // Get objects
+                        if (!tg.getGoal().getRequiredObjects().isEmpty()) {
+                            for (ItemStack is : tg.getGoal().getRequiredObjects()) {
+                                int quantity = is.getAmount();
+                                for (int i = 0; i < tes.getTreasuryChestInventory().getSize(); i++) {
+                                    if (quantity > 0 && tes.getTreasuryChestInventory().getItem(i) != null && tes.getTreasuryChestInventory().getItem(i).getType() == is.getType())
+                                        if (quantity >= tes.getTreasuryChestInventory().getItem(i).getAmount()) {
+                                            quantity -= tes.getTreasuryChestInventory().getItem(i).getAmount();
+                                            tes.getTreasuryChestInventory().setItem(i, null);
+                                        } else {
+                                            int newAmount = tes.getTreasuryChestInventory().getItem(i).getAmount() - quantity;
+                                            quantity = 0;
+                                            tes.getTreasuryChestInventory().setItem(i, new ItemStack(is.getType(), newAmount));
+                                        }
+                                }
+                            }
+                            player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TOWN_OBJECTS_WITHDRAWN));
+                        }
+
+                        // Withdraw zenar
+                        if (tg.getGoal().getRequiredZenar() > 0) {
+                            try {
+                                tg.getTown().getAccount().withdraw(tg.getGoal().getRequiredZenar(), "Goal creation payment.");
+                                player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TOWN_MONEY_WITHDRAWN));
+                            } catch (EconomyException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+
                         GoalAreaManager.getInstance().getPlayerGoalAreaCreation().remove(e.getPlayer().getUniqueId());
+                    }
                 }
                 return;
             }
