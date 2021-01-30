@@ -77,9 +77,9 @@ public class GoalAreaCreationListener implements Listener {
 
         for (Pair<Integer, Integer> chunk : chunksList){
             Location loc = new Location(Bukkit.getServer().getWorld(ConfigUtil.getWorldName()), chunk.getKey() * 16, 64, chunk.getValue() * 16);
-            if (GoalAreaManager.getChunks().containsKey(loc.getChunk()) && GoalAreaManager.getChunks().get(loc.getChunk()).contains(GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId()))){
+            if (!GoalAreaManager.getChunksFromTownGoal(GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId())).contains(loc.getChunk())){
                 int maxPlot = GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId()).getGoal().getNumPlot();
-                long chunkCount = GoalAreaManager.getChunks().values().stream().filter(v -> v.equals(GoalAreaManager.getChunks().get(loc.getChunk()))).count();
+                long chunkCount = GoalAreaManager.getChunksFromTownGoal(GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId())).size();
 
                 if (GoalAreaManager.getChunks().get(e.getClickedBlock().getLocation().getChunk()) != null) {
                     if (GoalAreaManager.getListTownGoalFromChunk(e.getClickedBlock().getLocation().getChunk()).size() + (GoalAreaManager.getTreasuryCurrentlyFromChunk(e.getClickedBlock().getLocation().getChunk()) == null ? 0 : 1) >= ConfigUtil.MAX_GOAL_IN_CHUNK) {
@@ -90,10 +90,6 @@ public class GoalAreaCreationListener implements Listener {
 
                 if (chunkCount < maxPlot){
 
-                    if (GoalAreaManager.getChunks().get(new Pair<>(e.getClickedBlock().getChunk().getX(), e.getClickedBlock().getChunk().getZ())) != null) {
-                        return;
-                    }
-
                     if (!TownyUtil.isInTown(e.getClickedBlock().getLocation())) {
                         // Not in a town
                         e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_LOC));
@@ -102,7 +98,6 @@ public class GoalAreaCreationListener implements Listener {
 
                     TownyUtil.renamePlot(e.getClickedBlock().getLocation(), GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId()).getGoal().getName(), false);
                     GoalAreaManager.addChunk(e.getPlayer().getLocation().getChunk(), GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId()));
-                    GoalAreaManager.save();
 
                     e.getPlayer().sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_PLOT_NEEDED) + " " + ChatFormatter.formatWarningMessageNoPrefix((chunkCount + 1) + "/" + maxPlot));
 
