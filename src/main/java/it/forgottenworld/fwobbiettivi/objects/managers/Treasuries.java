@@ -139,33 +139,6 @@ public class Treasuries {
             database.getFile().set(path + ".l-chest", FWLocation.getStringFromLocation(tes.getLocationChestLeft()));
         }
         database.saveFile();
-
-//        StringBuilder sb = new StringBuilder();
-//
-//        for(Treasury tes: treasuries){
-//            sb.append(tes.getName()).append("*");
-//            sb.append(tes.getTown().getUuid().toString()).append("*");
-//            sb.append(FWLocation.getStringFromLocation(tes.getLocationChestRight())).append("*");
-//            sb.append(FWLocation.getStringFromLocation(tes.getLocationChestLeft())).append("*");
-//            sb.append(tes.getNumPlot());
-//            sb.append("|");
-//        }
-//
-//        if (sb.length() > 0)
-//            sb.setLength(sb.length() - 1);
-//
-//        try {
-//            FileWriter writer = new FileWriter("plugins/FWObbiettivi/treasuries.markus");
-//            if(sb.length() == 0){
-//                writer.write("");
-//            }else {
-//                writer.write(sb.toString());
-//            }
-//            writer.flush();
-//            writer.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     /**
@@ -193,53 +166,6 @@ public class Treasuries {
                 treasuries.add(tes);
             }
         }
-
-//        InputStream inputStream = null;
-//        try {
-//            inputStream = new FileInputStream("plugins/FWObbiettivi/treasuries.markus");
-//            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-//            String line;
-//            StringBuilder sb = new StringBuilder();
-//            while((line = bufferedReader.readLine()) != null){
-//                sb.append(line);
-//            }
-//
-//            inputStream.close();
-//
-//            if(sb.length() != 0){
-//                List<String> file = Arrays.asList(sb.toString().split("\\|"));
-//
-//                for (String s: file){
-//                    String[] valueString = s.split("\\*");
-//                    Treasury tes = new Treasury(valueString[0], TownyUtil.getTownFromUUID(UUID.fromString(valueString[1])), FWLocation.getLocationFromString(valueString[2]), FWLocation.getLocationFromString(valueString[3]), Integer.parseInt(valueString[4]));
-//
-//                    Block right = tes.getLocationChestRight().getBlock();
-//                    Chest chestStateRight = (Chest) right.getState();
-//                    chestStateRight.setCustomName("FWChest");
-//                    right.setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.getInstance(), Boolean.TRUE));
-//
-//                    Block left = tes.getLocationChestLeft().getBlock();
-//                    Chest chestStateLeft = (Chest) left.getState();
-//                    chestStateLeft.setCustomName("FWChest");
-//                    left.setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.getInstance(), Boolean.TRUE));
-//
-//                    treasuries.add(tes);
-//                }
-//            }
-//
-//        } catch (FileNotFoundException e) {
-//            FWObbiettivi.info(Messages.NO_EXISTING_FILE_DATA);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (inputStream != null){
-//                try {
-//                    inputStream.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
     }
 
 }

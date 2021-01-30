@@ -180,32 +180,6 @@ public class TownGoals {
             database.getFile().set(path + ".is-active", tg.isActive());
         }
         database.saveFile();
-
-//        StringBuilder sb = new StringBuilder();
-//
-//        for(TownGoal tg: obbiettiviInTown){
-//            sb.append(tg.getTown().getUuid().toString()).append("*");
-//            sb.append(tg.getGoal().getName()).append("*");
-//            sb.append(FWLocation.getStringFromLocation(tg.getLocation())).append("*");
-//            sb.append(tg.isActive());
-//            sb.append("|");
-//        }
-//
-//        if (sb.length() > 0)
-//            sb.setLength(sb.length() - 1);
-//
-//        try {
-//            FileWriter writer = new FileWriter("plugins/FWObbiettivi/townGoals.markus");
-//            if(sb.length() == 0){
-//                writer.write("");
-//            }else {
-//                writer.write(sb.toString());
-//            }
-//            writer.flush();
-//            writer.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     public static void load(){
