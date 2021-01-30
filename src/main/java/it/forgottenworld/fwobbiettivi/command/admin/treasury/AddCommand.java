@@ -118,18 +118,6 @@ public class AddCommand extends SubCommand {
 
     @Override
     public List<String> getSubcommandArguments(Player player, String[] args) {
-        ArrayList<String> result = new ArrayList<String>();
-
-        if (args.length == 2){
-            Town[] towns = new Town[TownyUniverse.getInstance().getDataSource().getTowns().size()];
-            TownyUniverse.getInstance().getDataSource().getTowns().toArray(towns);
-            for (int i = 0; i < towns.length; i++) {
-                if (towns[i].getName().toLowerCase().startsWith(args[1].toLowerCase()))
-                    if (!Treasuries.containsTreasury(towns[i]))
-                        result.add(towns[i].getName());
-            }
-        }
-
-        return result;
+        return null;
     }
 }

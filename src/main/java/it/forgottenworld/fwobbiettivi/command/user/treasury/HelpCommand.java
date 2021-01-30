@@ -43,12 +43,9 @@ public class HelpCommand extends SubCommand {
 
     @Override
     public void perform(CommandSender sender, String[] args) {
-        // FIXME help command
-        sender.sendMessage(ChatFormatter.chatHeader());
+        Player player = (Player) sender;
 
-
-
-        sender.sendMessage(ChatFormatter.chatFooter());
+        player.performCommand("treasury");
     }
 
     @Override

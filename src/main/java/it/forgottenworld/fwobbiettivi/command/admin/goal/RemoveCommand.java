@@ -54,22 +54,27 @@ public class RemoveCommand extends SubCommand {
     @Override
     public void perform(CommandSender sender, String[] args) {
         Player player = (Player) sender;
-        ArrayList<Goal> goals = TownGoals.getGoalFromTown(TownyUtil.getTownFromLocation(player.getLocation()));
 
         if (TownGoals.getObbiettiviInTown().isEmpty()) {
             player.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_GOAL_LOC));
             return;
         }
 
-        for (Goal g : goals) {
-            if (g.getRequiredGoals().contains(args[1])) {
-                player.sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_REMOVE_FAILED));
-                return;
-            }
-        }
-
         // Check if a goal exist in that town
         if (args.length == 2) {
+            ArrayList<Goal> goals = TownGoals.getGoalFromTown(TownyUtil.getTownFromLocation(player.getLocation()));
+
+            if (goals == null) {
+                player.sendMessage(ChatFormatter.formatErrorMessage(Messages.ENABLE_FAILED));
+                return;
+            }
+
+            for (Goal g : goals) {
+                if (g.getRequiredGoals().contains(args[1])) {
+                    player.sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_REMOVE_FAILED));
+                    return;
+                }
+            }
             // Check if the Goal exist in this plot
             if (TownyUtil.isInTown(player.getLocation())) {
                 if (GoalAreaManager.isOnTownGoal(player.getLocation().getChunk()) &&
@@ -96,6 +101,24 @@ public class RemoveCommand extends SubCommand {
                 player.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_LOC));
             }
         } else {
+            ArrayList<Goal> goals = TownGoals.getGoalFromTown(TownyUtil.getTownFromString(args[2]));
+
+            if (goals == null) {
+                player.sendMessage(ChatFormatter.formatErrorMessage(Messages.ENABLE_FAILED));
+                return;
+            }
+
+            for (Goal g : goals) {
+                if (g.getRequiredGoals().contains(args[1])) {
+                    player.sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_REMOVE_FAILED));
+                    return;
+                }
+            }
+
+            if (TownyUtil.getTownFromString(args[2]) == null) {
+                player.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_FOUND));
+                return;
+            }
             if (!TownGoals.containsTownGoal(Goals.getGoalFromString(args[1]), TownyUtil.getTownFromString(args[2]))) {
                 // Enable failed
                 player.sendMessage(ChatFormatter.formatErrorMessage(Messages.ENABLE_FAILED));

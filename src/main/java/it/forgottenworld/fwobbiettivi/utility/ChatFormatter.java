@@ -1,8 +1,10 @@
 package it.forgottenworld.fwobbiettivi.utility;
 
 import org.bukkit.ChatColor;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
+import java.util.List;
 
 public class ChatFormatter {
 
@@ -79,5 +81,22 @@ public class ChatFormatter {
                 ChatColor.AQUA + subcommand + " " + args +
                 ChatColor.GRAY + ": " + description;
         return message;
+    }
+
+    public static <T> String listFormatter(List<T> list){
+        StringBuilder sb = new StringBuilder();
+
+        for (Object o : list) {
+            if (o instanceof ItemStack) {
+                ItemStack is = (ItemStack) o;
+                sb.append(is.getType().toString()).append(" x ").append(is.getAmount());
+            } else {
+                sb.append(o.toString());
+            }
+            sb.append(", ");
+        }
+        sb.setLength(sb.length() - 2);
+
+        return sb.toString();
     }
 }

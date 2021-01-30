@@ -60,20 +60,20 @@ public class InfoCommand extends SubCommand {
 
         player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("NAME: ") + ChatColor.GRAY + goal.getName());
         player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("BRANCH: ") + ChatColor.GRAY + goal.getBranch().getName());
-        player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("DESCRIPTION: ") + ChatColor.GRAY + listFormatter(goal.getDescrizione()));
+        player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("DESCRIPTION: ") + ChatColor.GRAY + ChatFormatter.listFormatter(goal.getDescrizione()));
         player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("PLOT: ") + ChatColor.GRAY + goal.getNumPlot());
-        player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("REQUIRED GOALS: ") + ChatColor.GRAY + listFormatter(goal.getRequiredGoals()));
+        player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("REQUIRED GOALS: ") + ChatColor.GRAY + ChatFormatter.listFormatter(goal.getRequiredGoals()));
         if (goal.getRequiredZenar() > 0)
             player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("REQUIRED ZENAR: ") + ChatColor.GRAY + goal.getRequiredZenar());
         if (!goal.getRequiredObjects().isEmpty())
-            player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("REQUIRED OBJECT: ") + ChatColor.GRAY + listFormatter(goal.getRequiredObjects()));
-        player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("PAYMENT: ") + ChatColor.GRAY + listFormatter(goal.getPayment()));
+            player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("REQUIRED OBJECT: ") + ChatColor.GRAY + ChatFormatter.listFormatter(goal.getRequiredObjects()));
+        player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("PAYMENT: ") + ChatColor.GRAY + ChatFormatter.listFormatter(goal.getPayment()));
         if (goal.getRequiredZenar() > 0)
             player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("REWARD ZENAR: ") + ChatColor.GRAY + goal.getRewardZenar());
         if (!goal.getReward().isEmpty())
-            player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("REWARD OBJECT: ") + ChatColor.GRAY + listFormatter(goal.getReward()));
+            player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("REWARD OBJECT: ") + ChatColor.GRAY + ChatFormatter.listFormatter(goal.getReward()));
         if (!goal.getRewardPermissions().isEmpty())
-            player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("REWARD PERMS: ") + ChatColor.GRAY + listFormatter(goal.getRewardPermissions()));
+            player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("REWARD PERMS: ") + ChatColor.GRAY + ChatFormatter.listFormatter(goal.getRewardPermissions()));
 
         player.sendMessage(ChatFormatter.chatFooter());
     }
@@ -81,22 +81,5 @@ public class InfoCommand extends SubCommand {
     @Override
     public List<String> getSubcommandArguments(Player player, String[] args) {
         return null;
-    }
-
-    private <T> String listFormatter(List<T> list){
-        StringBuilder sb = new StringBuilder();
-
-        for (Object o : list) {
-            if (o instanceof ItemStack) {
-                ItemStack is = (ItemStack) o;
-                sb.append(is.getType().toString()).append(" x ").append(is.getAmount());
-            } else {
-                sb.append(o.toString());
-            }
-            sb.append(", ");
-        }
-        sb.setLength(sb.length() - 2);
-
-        return sb.toString();
     }
 }

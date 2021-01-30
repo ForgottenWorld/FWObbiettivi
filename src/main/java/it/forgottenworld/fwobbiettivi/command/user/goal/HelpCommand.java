@@ -43,20 +43,9 @@ public class HelpCommand extends SubCommand {
 
     @Override
     public void perform(CommandSender sender, String[] args) {
-        // FIXME help command
-        sender.sendMessage(ChatFormatter.chatHeader());
+        Player player = (Player) sender;
 
-//        for (int i = 0; i < GoalsCommandExecutor.getSubcommands().size(); i++) {
-//
-//            SubCommand subCommand = GoalsCommandExecutor.getSubcommands().get(i);
-//
-//            if (!sender.hasPermission(subCommand.getPermission()))
-//                continue;
-//
-//            sender.sendMessage(ChatFormatter.formatListMessage(command.toString(), subCommand.getName(), subCommand.getArgumentsName(), subCommand.getDescription()));
-//        }
-
-        sender.sendMessage(ChatFormatter.chatFooter());
+        player.performCommand("goals");
     }
 
     @Override

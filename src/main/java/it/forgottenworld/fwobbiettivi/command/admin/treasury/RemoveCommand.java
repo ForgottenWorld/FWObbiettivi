@@ -48,7 +48,7 @@ public class RemoveCommand extends SubCommand {
 
     @Override
     public int getArgsRequired() {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class RemoveCommand extends SubCommand {
         Player player = (Player) sender;
 
         // Check if a treasury exist in that town
-        if (args.length == 2){
+        if (args.length == 1){
             // Check if the treasury exist in this plot
             if (TownyUtil.isInTown(player.getLocation())) {
                 if (GoalAreaManager.isOnTreasury(player.getLocation().getChunk())) {
@@ -72,13 +72,11 @@ public class RemoveCommand extends SubCommand {
                 player.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_LOC));
             }
         } else {
-            if (!TownGoals.containsTownGoal(Goals.getGoalFromString(args[1]), TownyUtil.getTownFromString(args[2]))) {
-                // Enable failed
-                // FIXME message
-                player.sendMessage(ChatFormatter.formatErrorMessage(Messages.ENABLE_FAILED));
+            if (TownyUtil.getTownFromString(args[1]) == null || Treasuries.getFromTown(TownyUtil.getTownFromString(args[1])) == null) {
+                player.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_FOUND));
                 return;
             }
-            Treasury tes = Treasuries.getFromTown(TownyUtil.getTownFromString(args[2]));
+            Treasury tes = Treasuries.getFromTown(TownyUtil.getTownFromString(args[1]));
             player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TREASURY_REMOVED) + " " + ChatFormatter.formatWarningMessageNoPrefix(tes.getTown().getName()));
             Treasuries.removeTreasury(tes);
         }

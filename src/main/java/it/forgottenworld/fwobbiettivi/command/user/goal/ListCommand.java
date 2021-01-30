@@ -47,10 +47,13 @@ public class ListCommand extends SubCommand {
     @Override
     public void perform(CommandSender sender, String[] args) {
         // TODO List Goals Pagination
+
+        sender.sendMessage(ChatFormatter.chatHeader());
         sender.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOALS_LIST));
         for (Goal g : Goals.getObbiettivi()) {
             sender.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("- " + g.getName()));
         }
+        sender.sendMessage(ChatFormatter.chatFooter());
     }
 
     @Override
