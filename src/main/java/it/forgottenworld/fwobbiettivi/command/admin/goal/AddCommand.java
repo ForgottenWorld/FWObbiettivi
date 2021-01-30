@@ -198,32 +198,34 @@ public class AddCommand extends SubCommand {
             player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_PLOT_NEEDED) + " " + ChatFormatter.formatWarningMessageNoPrefix("1/" + goal.getNumPlot()));
 
         // At the end
-        // Get objects
-        if (!goal.getRequiredObjects().isEmpty()) {
-            for (ItemStack is : goal.getRequiredObjects()) {
-                int quantity = is.getAmount();
-                for (int i = 0; i < tes.getTreasuryChestInventory().getSize(); i++) {
-                    if (quantity > 0 && tes.getTreasuryChestInventory().getItem(i) != null && tes.getTreasuryChestInventory().getItem(i).getType() == is.getType())
-                        if (quantity >= tes.getTreasuryChestInventory().getItem(i).getAmount()) {
-                            quantity -= tes.getTreasuryChestInventory().getItem(i).getAmount();
-                            tes.getTreasuryChestInventory().setItem(i, null);
-                        } else {
-                            int newAmount = tes.getTreasuryChestInventory().getItem(i).getAmount() - quantity;
-                            quantity = 0;
-                            tes.getTreasuryChestInventory().setItem(i, new ItemStack(is.getType(), newAmount));
-                        }
+        if (goal.getNumPlot() == 1) {
+            // Get objects
+            if (!goal.getRequiredObjects().isEmpty()) {
+                for (ItemStack is : goal.getRequiredObjects()) {
+                    int quantity = is.getAmount();
+                    for (int i = 0; i < tes.getTreasuryChestInventory().getSize(); i++) {
+                        if (quantity > 0 && tes.getTreasuryChestInventory().getItem(i) != null && tes.getTreasuryChestInventory().getItem(i).getType() == is.getType())
+                            if (quantity >= tes.getTreasuryChestInventory().getItem(i).getAmount()) {
+                                quantity -= tes.getTreasuryChestInventory().getItem(i).getAmount();
+                                tes.getTreasuryChestInventory().setItem(i, null);
+                            } else {
+                                int newAmount = tes.getTreasuryChestInventory().getItem(i).getAmount() - quantity;
+                                quantity = 0;
+                                tes.getTreasuryChestInventory().setItem(i, new ItemStack(is.getType(), newAmount));
+                            }
+                    }
                 }
+                player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TOWN_OBJECTS_WITHDRAWN));
             }
-            player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TOWN_OBJECTS_WITHDRAWN));
-        }
 
-        // Withdraw zenar
-        if (goal.getRequiredZenar() > 0) {
-            try {
-                town.getAccount().withdraw(goal.getRequiredZenar(), "Goal creation payment.");
-                player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TOWN_MONEY_WITHDRAWN));
-            } catch (EconomyException e) {
-                e.printStackTrace();
+            // Withdraw zenar
+            if (goal.getRequiredZenar() > 0) {
+                try {
+                    town.getAccount().withdraw(goal.getRequiredZenar(), "Goal creation payment.");
+                    player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TOWN_MONEY_WITHDRAWN));
+                } catch (EconomyException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

@@ -42,6 +42,7 @@ public class Messages {
     public static final String GOAL_PLOT_ALREADY_SET = ConfigUtil.getConfigStringLang("goals_plot_already_set");
     public static final String GOALS_PRESENT = ConfigUtil.getConfigStringLang("goals_present");
     public static final String MAX_GOAL_IN_CHUNK = ConfigUtil.getConfigStringLang("max_goal_in_chunk");
+    public static final String GOAL_REMOVE_FAILED = ConfigUtil.getConfigStringLang("goal_remove_failed");
 
     public static final String TREASURY_LIST = ConfigUtil.getConfigStringLang("treasury_list");
     public static final String TREASURY_ALREADY_PRESENT = ConfigUtil.getConfigStringLang("treasury_already_present");

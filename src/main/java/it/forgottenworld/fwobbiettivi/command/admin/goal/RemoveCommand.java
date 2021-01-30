@@ -63,8 +63,7 @@ public class RemoveCommand extends SubCommand {
 
         for (Goal g : goals) {
             if (g.getRequiredGoals().contains(args[1])) {
-                // TODO
-                player.sendMessage(ChatFormatter.formatErrorMessage("Non puoi elimianre perche' ha un figlio."));
+                player.sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_REMOVE_FAILED));
                 return;
             }
         }

@@ -188,6 +188,7 @@ languages:
     not_enough_money: "Denaro non sufficiente nella banca cittadina di:"
     town_money_withdrawn: "Denaro prelevato con successo."
     town_objects_withdrawn: "Oggetti prelevati con successo."
+    goal_remove_failed: "Non puoi rimuovere questo obbiettivo."
     cmds:
       goal:
         add_cmd_description: "Aggiunge un obbiettivo a una Town."
@@ -200,7 +201,7 @@ languages:
         help_cmd_description: "Mostra questa lista."
         info_cmd_description: "Mostra le informazioni relative a un obbiettivo."
         list_cmd_description: "Mostra una lista di tutti gli obbiettivi presenti."
-        pay_cmd_description: "Paga tutti gli obbiettivi abilitati."
+        pay_cmd_description: "Paga tutti gli obbiettivi abilitati, con limitazioni in base alle specifiche facoltative."
         reload_cmd_description: "Ricarica il config.yml."
         remove_cmd_description: "Rimuove un obbiettivi a una Town."
         show_cmd_description: "Mostra gli obbiettivi o le città in base al parametro inserito."
