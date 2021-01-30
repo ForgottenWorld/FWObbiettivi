@@ -54,17 +54,27 @@ public class RemoveCommand extends SubCommand {
     @Override
     public void perform(CommandSender sender, String[] args) {
         Player player = (Player) sender;
+        ArrayList<Goal> goals = TownGoals.getGoalFromTown(TownyUtil.getTownFromLocation(player.getLocation()));
 
         if (TownGoals.getObbiettiviInTown().isEmpty()) {
             player.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_GOAL_LOC));
             return;
         }
 
+        for (Goal g : goals) {
+            if (g.getRequiredGoals().contains(args[1])) {
+                // TODO
+                player.sendMessage(ChatFormatter.formatErrorMessage("Non puoi elimianre perche' ha un figlio."));
+                return;
+            }
+        }
+
         // Check if a goal exist in that town
         if (args.length == 2) {
             // Check if the Goal exist in this plot
             if (TownyUtil.isInTown(player.getLocation())) {
-                if (GoalAreaManager.isOnTownGoal(player.getLocation().getChunk())) {
+                if (GoalAreaManager.isOnTownGoal(player.getLocation().getChunk()) &&
+                        GoalAreaManager.getListTownGoalFromChunk(player.getLocation().getChunk()).contains(TownGoals.getTownGoalFromGoalAndTown(Goals.getGoalFromString(args[1]), TownyUtil.getTownFromLocation(player.getLocation())))) {
                     List<TownGoal> townGoals = GoalAreaManager.getListTownGoalFromChunk(player.getLocation().getChunk());
                     TownGoal tgRemove = null;
                     for (TownGoal tg:townGoals) {

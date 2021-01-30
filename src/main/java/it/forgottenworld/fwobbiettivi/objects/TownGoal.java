@@ -91,7 +91,8 @@ public class TownGoal {
     public boolean isActive() {
         boolean response = this.active;
         for (String s : this.goal.getRequiredGoals()){
-            if(Goals.getGoalFromString(s) != null)
+            if(Goals.getGoalFromString(s) != null &&
+                    TownGoals.getTownGoalFromGoalAndTown(Goals.getGoalFromString(s), this.town) != null)
                 response &= TownGoals.getTownGoalFromGoalAndTown(Goals.getGoalFromString(s), this.town).isActive();
         }
 
