@@ -6,6 +6,7 @@ import it.forgottenworld.fwobbiettivi.objects.TownGoal;
 import it.forgottenworld.fwobbiettivi.objects.managers.TownGoals;
 import it.forgottenworld.fwobbiettivi.objects.managers.Treasuries;
 import it.forgottenworld.fwobbiettivi.objects.Treasury;
+import me.architetto.fwfortress.fortress.FortressService;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -29,8 +30,19 @@ public class MantenimentoBonusListener implements Listener {
         }
 
         for (TownGoal tg: TownGoals.getObbiettiviInTown()){
-            if (e.getTown().getUuid().equals(tg.getTown().getUuid()) && !exemprion.contains(e.getTown().getName()) && plotMantenimento.get(tg.getGoal().getName()) != null) {
-                e.setUpkeep(e.getUpkeep() - ((e.getUpkeep() / 100) * plotMantenimento.get(tg.getGoal().getName())));
+            if (tg.getGoal().getRewardMultiplierPlugin().equals("")) {
+                if (e.getTown().getUuid().equals(tg.getTown().getUuid()) && !exemprion.contains(e.getTown().getName()) && plotMantenimento.get(tg.getGoal().getName()) != null) {
+                    e.setUpkeep(e.getUpkeep() - ((e.getUpkeep() / 100) * plotMantenimento.get(tg.getGoal().getName())));
+                }
+            } else {
+                String multiplierPluginName = tg.getGoal().getRewardMultiplierPlugin();
+                switch (multiplierPluginName) {
+                    case "FWFortress":
+                        if (e.getTown().getUuid().equals(tg.getTown().getUuid()) && !exemprion.contains(e.getTown().getName()) && plotMantenimento.get(tg.getGoal().getName()) != null) {
+                            e.setUpkeep(e.getUpkeep() - (((e.getUpkeep() / 100) * plotMantenimento.get(tg.getGoal().getName())) * FortressService.getInstance().getAmountOfFortressOwnedByTown(tg.getTown().getName())));
+                        }
+                        break;
+                }
             }
         }
     }

@@ -2,7 +2,6 @@ package it.forgottenworld.fwobbiettivi.objects;
 
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,9 +23,11 @@ public class Goal {
     private List<ItemStack>  payment;
     private List<ItemStack>  reward;
     private double rewardZenar;
+    private List<String> rewardPermissions;
+    private String rewardMultiplierPlugin;
     private List<String> descrizione;
 
-    public Goal(String name, Branch branch, int numPlot, List<String> requiredGoals, double requiredZenar, List<ItemStack> requiredObjects, List<ItemStack> payment, List<ItemStack> reward, double rewardZenar, List<String> descrizione){
+    public Goal(String name, Branch branch, int numPlot, List<String> requiredGoals, double requiredZenar, List<ItemStack> requiredObjects, List<ItemStack> payment, List<ItemStack> reward, double rewardZenar, List<String> rewardPermissions, String rewardMultiplierPlugin, List<String> descrizione){
         this.name = name;
         this.branch = branch;
         this.numPlot = numPlot;
@@ -36,6 +37,8 @@ public class Goal {
         this.payment = payment;
         this.reward = reward;
         this.rewardZenar = rewardZenar;
+        this.rewardPermissions = rewardPermissions;
+        this.rewardMultiplierPlugin = rewardMultiplierPlugin;
         this.descrizione = descrizione;
     }
 
@@ -111,6 +114,22 @@ public class Goal {
         this.rewardZenar = rewardZenar;
     }
 
+    public List<String> getRewardPermissions() {
+        return rewardPermissions;
+    }
+
+    public void setRewardPermissions(List<String> rewardPermissions) {
+        this.rewardPermissions = rewardPermissions;
+    }
+
+    public String getRewardMultiplierPlugin() {
+        return rewardMultiplierPlugin;
+    }
+
+    public void setRewardMultiplierPlugin(String rewardMultiplierPlugin) {
+        this.rewardMultiplierPlugin = rewardMultiplierPlugin;
+    }
+
     public List<String> getDescrizione() {
         return descrizione;
     }
@@ -133,12 +152,14 @@ public class Goal {
                 Objects.equals(getRequiredObjects(), goal.getRequiredObjects()) &&
                 Objects.equals(getPayment(), goal.getPayment()) &&
                 Objects.equals(getReward(), goal.getReward()) &&
+                Objects.equals(getRewardPermissions(), goal.getRewardPermissions()) &&
+                Objects.equals(getRewardMultiplierPlugin(), goal.getRewardMultiplierPlugin()) &&
                 Objects.equals(getDescrizione(), goal.getDescrizione());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getBranch(), getNumPlot(), getRequiredGoals(), getRequiredZenar(), getRequiredObjects(), getPayment(), getReward(), getRewardZenar(), getDescrizione());
+        return Objects.hash(getName(), getBranch(), getNumPlot(), getRequiredGoals(), getRequiredZenar(), getRequiredObjects(), getPayment(), getReward(), getRewardZenar(), getRewardPermissions(), getRewardMultiplierPlugin(), getDescrizione());
     }
 
     @Override
@@ -153,6 +174,8 @@ public class Goal {
                 ", payment=" + payment +
                 ", reward=" + reward +
                 ", rewardZenar=" + rewardZenar +
+                ", rewardPermissions=" + rewardPermissions +
+                ", rewardMultiplierPlugin=" + rewardMultiplierPlugin +
                 ", descrizione=" + descrizione +
                 '}';
     }

@@ -4,18 +4,23 @@ main: it.forgottenworld.fwobbiettivi.FWObbiettivi
 api-version: 1.13
 prefix: FWObbiettivi
 load: POSTWORLD
-depend: [Towny]
+depend: [Towny, FWFortress]
 authors: [Markus__27]
 description: SpigotMC plugin for creating and managing town goals using the Towny plugin.
 website: https://forgottenworld.it/
 commands:
+  branch:
+    aliases: [ramo]
+    description: Comando degli obiettivi
+    permission: forgotten.obbiettivi.mod
+    permission-message: Non puoi eseguire questo comando.
   goals:
     aliases: [ob, obbiettivo]
     description: Comando degli obiettivi
     permission: forgotten.obbiettivi.mod
     permission-message: Non puoi eseguire questo comando.
   treasury:
-    aliases: [ tes ]
+    aliases: [tes, tesoreria]
     description: Comando degli obiettivi
     permission: forgotten.obbiettivi.mod
     permission-message: Non puoi eseguire questo comando.

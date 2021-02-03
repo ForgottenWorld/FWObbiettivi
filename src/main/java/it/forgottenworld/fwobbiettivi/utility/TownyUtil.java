@@ -56,6 +56,12 @@ public class TownyUtil {
         return null;
     }
 
+    public static boolean isTown(String name){
+        if (getTownFromString(name) == null)
+            return false;
+        return TownyUniverse.getInstance().getDataSource().getTowns().contains(getTownFromString(name));
+    }
+
     /**
      * Method for renaming the plot of a goal
      * @param location A Location

@@ -7,6 +7,7 @@ import it.forgottenworld.fwobbiettivi.objects.Goal;
 import it.forgottenworld.fwobbiettivi.objects.TownGoal;
 import it.forgottenworld.fwobbiettivi.objects.managers.GoalAreaManager;
 import it.forgottenworld.fwobbiettivi.objects.managers.Goals;
+import it.forgottenworld.fwobbiettivi.objects.managers.RewardPermissions;
 import it.forgottenworld.fwobbiettivi.objects.managers.TownGoals;
 import it.forgottenworld.fwobbiettivi.utility.ChatFormatter;
 import it.forgottenworld.fwobbiettivi.utility.Messages;
@@ -90,6 +91,13 @@ public class RemoveCommand extends SubCommand {
                     if (tgRemove != null) {
                         player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_REMOVED) + " " + ChatFormatter.formatWarningMessageNoPrefix(tgRemove.getGoal().getName()));
                         TownGoals.removeTownGoal(tgRemove);
+
+                        // Remove perms if it has them
+                        if (!tgRemove.getGoal().getRewardPermissions().isEmpty()) {
+                            for (String s : tgRemove.getGoal().getRewardPermissions()) {
+                                RewardPermissions.removePermission(player, s);
+                            }
+                        }
                     }
 
                 } else {
@@ -127,6 +135,13 @@ public class RemoveCommand extends SubCommand {
             TownGoal tg = TownGoals.getTownGoalFromGoalAndTown(Goals.getGoalFromString(args[1]), TownyUtil.getTownFromString(args[2]));
             player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_REMOVED) + " " + ChatFormatter.formatWarningMessageNoPrefix(tg.getGoal().getName()));
             TownGoals.removeTownGoal(tg);
+
+            // Remove perms if it has them
+            if (!tg.getGoal().getRewardPermissions().isEmpty()) {
+                for (String s : tg.getGoal().getRewardPermissions()) {
+                    RewardPermissions.removePermission(player, s);
+                }
+            }
         }
     }
 

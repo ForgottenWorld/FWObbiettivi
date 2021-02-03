@@ -24,6 +24,13 @@ public class Goals {
         return null;
     }
 
+    public static boolean isGoal(String name){
+        if (getGoalFromString(name) == null)
+            return false;
+
+        return getObbiettivi().contains(getGoalFromString(name));
+    }
+
     public static ArrayList<Goal> getObbiettivi() {
         return obbiettivi;
     }
@@ -123,11 +130,16 @@ public class Goals {
                 if (FWObbiettivi.getInstance().getConfig().getConfigurationSection("goal." + goal).getKeys(false).contains("rewardPermissions"))
                     rewardPermissions.addAll(FWObbiettivi.getInstance().getConfig().getStringList("goal." + goal + ".rewardPermissions"));
 
+                // Reward Multiplier Plugin Name
+                String rewardMultiplierPlugin = "";
+                if (FWObbiettivi.getInstance().getConfig().getConfigurationSection("goal." + goal).getKeys(false).contains("rewardMultiplierPlugin"))
+                    rewardMultiplierPlugin = FWObbiettivi.getInstance().getConfig().getString("goal." + goal + ".rewardMultiplierPlugin");
+
                 // Description
                 ArrayList<String> description = new ArrayList<String>();
                 description.addAll(FWObbiettivi.getInstance().getConfig().getStringList("goal." + goal + ".description"));
 
-                obbiettivi.add(new Goal(goal, ramo, numPlot, requiredGoal, requiredZenar, requiredObjects, payment, reward, rewardZenar, rewardPermissions, description));
+                obbiettivi.add(new Goal(goal, ramo, numPlot, requiredGoal, requiredZenar, requiredObjects, payment, reward, rewardZenar, rewardPermissions, rewardMultiplierPlugin, description));
             }
         }
     }

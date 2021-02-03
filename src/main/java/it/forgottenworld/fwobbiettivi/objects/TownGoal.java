@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.object.Town;
 import it.forgottenworld.fwobbiettivi.objects.managers.Goals;
 import it.forgottenworld.fwobbiettivi.objects.managers.TownGoals;
+import me.architetto.fwfortress.fortress.FortressService;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
@@ -109,11 +110,28 @@ public class TownGoal {
      */
 
     public boolean pay(){
-        convert(((Chest) this.getLocation().getBlock().getState()).getBlockInventory());
-        try {
-            town.collect(goal.getRewardZenar());
-        } catch (EconomyException e) {
-            e.printStackTrace();
+        // Objects
+        if (!goal.getReward().isEmpty()) {
+            convert(((Chest) this.getLocation().getBlock().getState()).getBlockInventory());
+        }
+
+        // Zenar
+        if (goal.getRewardZenar() > 0) {
+            try {
+                if (goal.getRewardMultiplierPlugin().equals("")) {
+                    town.collect(goal.getRewardZenar());
+                } else {
+                    String multiplierPluginName = goal.getRewardMultiplierPlugin();
+                    switch (multiplierPluginName) {
+                        case "FWFortress":
+                            int multiplier = FortressService.getInstance().getAmountOfFortressOwnedByTown(town.getName());
+                            town.collect(goal.getRewardZenar() * multiplier);
+                            break;
+                    }
+                }
+            } catch (EconomyException e) {
+                e.printStackTrace();
+            }
         }
         return true;
     }

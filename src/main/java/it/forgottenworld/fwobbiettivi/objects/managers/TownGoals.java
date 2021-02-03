@@ -1,5 +1,8 @@
 package it.forgottenworld.fwobbiettivi.objects.managers;
 
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import it.forgottenworld.fwobbiettivi.FWObbiettivi;
 import it.forgottenworld.fwobbiettivi.config.ConfigManager;
@@ -32,6 +35,20 @@ public class TownGoals {
             tg.getLocation().getBlock().setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.getInstance(), Boolean.TRUE));
         }
 
+        if (!tg.getGoal().getRewardPermissions().isEmpty()) {
+            // Add Permissions to Residents
+            try {
+                List<Resident> residents = TownyUniverse.getInstance().getDataSource().getTown(tg.getTown().getName()).getResidents();
+                for (Resident r : residents) {
+                    for (String perm : tg.getGoal().getRewardPermissions()) {
+                        RewardPermissions.addPermission(r.getPlayer(), perm);
+                    }
+                }
+            } catch (NotRegisteredException e) {
+                e.printStackTrace();
+            }
+        }
+
         save();
     }
 
@@ -51,6 +68,20 @@ public class TownGoals {
             TownyUtil.renamePlot(new Location(tg.getLocation().getWorld(), (c.getX() * 16), 64, (c.getZ() * 16)), tg.getGoal().getName(), true);
             // Remove chunk
             GoalAreaManager.removeChunk(c, tg);
+        }
+
+        if (!tg.getGoal().getRewardPermissions().isEmpty()) {
+            // Remove Permissions to Residents
+            try {
+                List<Resident> residents = TownyUniverse.getInstance().getDataSource().getTown(tg.getTown().getName()).getResidents();
+                for (Resident r : residents) {
+                    for (String perm : tg.getGoal().getRewardPermissions()) {
+                        RewardPermissions.removePermission(r.getPlayer(), perm);
+                    }
+                }
+            } catch (NotRegisteredException e) {
+                e.printStackTrace();
+            }
         }
 
         obbiettiviInTown.remove(tg);
@@ -206,55 +237,6 @@ public class TownGoals {
                 }
             }
         }
-
-//        InputStream inputStream = null;
-//        try {
-//            inputStream = new FileInputStream("plugins/FWObbiettivi/townGoals.markus");
-//            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-//            String line;
-//            StringBuilder sb = new StringBuilder();
-//            while((line = bufferedReader.readLine()) != null){
-//                sb.append(line);
-//            }
-//
-//            inputStream.close();
-//
-//            if(sb.length() != 0){
-//                List<String> file = Arrays.asList(sb.toString().split("\\|"));
-//
-//                for (String s: file){
-//                    String[] valueString = s.split("\\*");
-//                    TownGoal tg = new TownGoal();
-//                    tg.setTown(TownyUtil.getTownFromUUID(UUID.fromString(valueString[0])));
-//
-//                    tg.setGoal(Goals.getGoalFromString(valueString[1]));
-//
-//                    tg.setLocation(FWLocation.getLocationFromString(valueString[2]));
-//
-//                    tg.setActive(Boolean.valueOf(valueString[3]));
-//
-//                    Block b = tg.getLocation().getBlock();
-//                    Chest chestState = (Chest) b.getState();
-//                    chestState.setCustomName("FWChest");
-//                    b.setMetadata("goalchest", new FixedMetadataValue(FWObbiettivi.getInstance(), Boolean.TRUE));
-//
-//                    obbiettiviInTown.add(tg);
-//                }
-//            }
-//
-//        } catch (FileNotFoundException e) {
-//            FWObbiettivi.info(Messages.NO_EXISTING_FILE_DATA);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (inputStream != null){
-//                try {
-//                    inputStream.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
     }
 
 }

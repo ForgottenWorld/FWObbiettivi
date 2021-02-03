@@ -8,17 +8,22 @@ import it.forgottenworld.fwobbiettivi.objects.Goal;
 import it.forgottenworld.fwobbiettivi.objects.TownGoal;
 import it.forgottenworld.fwobbiettivi.objects.managers.Goals;
 import it.forgottenworld.fwobbiettivi.objects.managers.TownGoals;
+import it.forgottenworld.fwobbiettivi.utility.ChatFormatter;
 import it.forgottenworld.fwobbiettivi.utility.Messages;
 import it.forgottenworld.fwobbiettivi.utility.Permissions;
+import it.forgottenworld.fwobbiettivi.utility.TownyUtil;
 import it.forgottenworld.fwobbiettivi.utility.cmd.GoalCommandDescriptions;
 import it.forgottenworld.fwobbiettivi.utility.cmd.GoalCommandNames;
+import me.architetto.fwfortress.fortress.FortressService;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PayCommand extends SubCommand {
@@ -34,8 +39,7 @@ public class PayCommand extends SubCommand {
 
     @Override
     public String getArgumentsName() {
-        // TODO
-        return "";
+        return "[obName] [town]";
     }
 
     @Override
@@ -50,36 +54,194 @@ public class PayCommand extends SubCommand {
 
     @Override
     public int getArgsRequired() {
-        // TODO
         return 1;
     }
 
     @Override
     public void perform(CommandSender sender, String[] args) {
-        for (TownGoal townGoals : TownGoals.getObbiettiviInTown()) {
-            // Get the block chest at the coords
-            Block block = townGoals.getLocation().getBlock();
+        if (args.length == 1) {
+            // Pay all type of goal in all town
+            for (TownGoal townGoals : TownGoals.getObbiettiviInTown()) {
+                // Get the block chest at the coords
+                Block block = townGoals.getLocation().getBlock();
 
-            // Chest not found, I disable the goal
-            if (block.getType() != Material.CHEST) {
-                FWObbiettivi.info(Messages.DISABLE_GOAL + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
-                townGoals.setActive(false);
-                TownGoals.save();
-            }
+                // Chest not found, I disable the goal
+                if (block.getType() != Material.CHEST) {
+                    FWObbiettivi.info(Messages.DISABLE_GOAL + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                    townGoals.setActive(false);
+                    TownGoals.save();
+                }
 
-            Chest fwchest = (Chest) block.getState();
+                Chest fwchest = (Chest) block.getState();
 
-            if (townGoals.isActive()) {
-                // Check if the inventory contains items
-                if (fwchest.getBlockInventory().isEmpty()) {
-                    // Inventory empty
-                    FWObbiettivi.info(Messages.GOAL_NOT_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                if (townGoals.isActive()) {
+                    // Check if the inventory contains items
+                    if (fwchest.getBlockInventory().isEmpty()) {
+                        // Inventory empty
+                        FWObbiettivi.info(Messages.GOAL_NOT_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                    } else {
+                        HashMap<Material, Integer> oldOutputAmount = new HashMap<>();
+
+                        if (!townGoals.getGoal().getRewardMultiplierPlugin().equals("")) {
+                            String multiplierPluginName = townGoals.getGoal().getRewardMultiplierPlugin();
+                            switch (multiplierPluginName) {
+                                case "FWFortress":
+                                    int multiplier = FortressService.getInstance().getAmountOfFortressOwnedByTown(townGoals.getTown().getName());
+                                    if (multiplier > 0) {
+                                        for (ItemStack outIs : townGoals.getGoal().getReward()) {
+                                            oldOutputAmount.put(outIs.getType(), outIs.getAmount());
+                                            int amount = outIs.getAmount() * multiplier;
+                                            outIs.setAmount(amount);
+                                        }
+                                    } else {
+                                        FWObbiettivi.info(Messages.GOAL_NOT_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                                        return;
+                                    }
+                                    break;
+                            }
+                        }
+
+                        townGoals.pay();
+
+                        if (!townGoals.getGoal().getRewardMultiplierPlugin().equals("")) {
+                            for (ItemStack outIs : townGoals.getGoal().getReward()) {
+                                outIs.setAmount(oldOutputAmount.get(outIs.getType()));
+                            }
+
+                        }
+
+                        FWObbiettivi.info(Messages.GOAL_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                    }
                 } else {
-                    townGoals.pay();
-                    FWObbiettivi.info(Messages.GOAL_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                    FWObbiettivi.info(Messages.GOAL_IS_DISABLE + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                }
+            }
+        } else if (args.length == 2) {
+            // Pay that goal in all town
+            if (Goals.isGoal(args[1])){
+                // List of Towns
+                for (Town t : TownGoals.getTownFromGoal(Goals.getGoalFromString(args[1]))){
+                    TownGoal townGoals = TownGoals.getTownGoalFromGoalAndTown(Goals.getGoalFromString(args[1]), t);
+
+                    // Get the block chest at the coords
+                    Block block = townGoals.getLocation().getBlock();
+
+                    // Chest not found, I disable the goal
+                    if (block.getType() != Material.CHEST) {
+                        FWObbiettivi.info(Messages.DISABLE_GOAL + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                        townGoals.setActive(false);
+                        TownGoals.save();
+                    }
+
+                    Chest fwchest = (Chest) block.getState();
+
+                    if (townGoals.isActive()) {
+                        // Check if the inventory contains items
+                        if (fwchest.getBlockInventory().isEmpty()) {
+                            // Inventory empty
+                            FWObbiettivi.info(Messages.GOAL_NOT_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                        } else {
+                            HashMap<Material, Integer> oldOutputAmount = new HashMap<>();
+
+                            if (!townGoals.getGoal().getRewardMultiplierPlugin().equals("")) {
+                                String multiplierPluginName = townGoals.getGoal().getRewardMultiplierPlugin();
+                                switch (multiplierPluginName) {
+                                    case "FWFortress":
+                                        int multiplier = FortressService.getInstance().getAmountOfFortressOwnedByTown(townGoals.getTown().getName());
+                                        if (multiplier > 0) {
+                                            for (ItemStack outIs : townGoals.getGoal().getReward()) {
+                                                oldOutputAmount.put(outIs.getType(), outIs.getAmount());
+                                                int amount = outIs.getAmount() * multiplier;
+                                                outIs.setAmount(amount);
+                                            }
+                                        } else {
+                                            FWObbiettivi.info(Messages.GOAL_NOT_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                                            return;
+                                        }
+                                        break;
+                                }
+                            }
+
+                            townGoals.pay();
+
+                            if (!townGoals.getGoal().getRewardMultiplierPlugin().equals("")) {
+                                for (ItemStack outIs : townGoals.getGoal().getReward()) {
+                                    outIs.setAmount(oldOutputAmount.get(outIs.getType()));
+                                }
+
+                            }
+
+                            FWObbiettivi.info(Messages.GOAL_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                        }
+                    } else {
+                        FWObbiettivi.info(Messages.GOAL_IS_DISABLE + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                    }
+
                 }
             } else {
-                FWObbiettivi.info(Messages.GOAL_IS_DISABLE + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_GOAL_IN_LIST) + " " + args[1]);
+            }
+
+        } else if (args.length == 3) {
+            // Pay that goal in that town
+            if (Goals.isGoal(args[1]) && TownyUtil.isTown(args[2])){
+                TownGoal townGoals = TownGoals.getTownGoalFromGoalAndTown(Goals.getGoalFromString(args[1]), TownyUtil.getTownFromString(args[2]));
+
+                // Get the block chest at the coords
+                Block block = townGoals.getLocation().getBlock();
+
+                // Chest not found, I disable the goal
+                if (block.getType() != Material.CHEST) {
+                    FWObbiettivi.info(Messages.DISABLE_GOAL + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                    townGoals.setActive(false);
+                    TownGoals.save();
+                }
+
+                Chest fwchest = (Chest) block.getState();
+
+                if (townGoals.isActive()) {
+                    // Check if the inventory contains items
+                    if (fwchest.getBlockInventory().isEmpty()) {
+                        // Inventory empty
+                        FWObbiettivi.info(Messages.GOAL_NOT_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                    } else {
+                        HashMap<Material, Integer> oldOutputAmount = new HashMap<>();
+
+                        if (!townGoals.getGoal().getRewardMultiplierPlugin().equals("")) {
+                            String multiplierPluginName = townGoals.getGoal().getRewardMultiplierPlugin();
+                            switch (multiplierPluginName) {
+                                case "FWFortress":
+                                    int multiplier = FortressService.getInstance().getAmountOfFortressOwnedByTown(townGoals.getTown().getName());
+                                    if (multiplier > 0) {
+                                        for (ItemStack outIs : townGoals.getGoal().getReward()) {
+                                            oldOutputAmount.put(outIs.getType(), outIs.getAmount());
+                                            int amount = outIs.getAmount() * multiplier;
+                                            outIs.setAmount(amount);
+                                        }
+                                    } else {
+                                        FWObbiettivi.info(Messages.GOAL_NOT_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                                        return;
+                                    }
+                                    break;
+                            }
+                        }
+
+                        townGoals.pay();
+
+                        if (!townGoals.getGoal().getRewardMultiplierPlugin().equals("")) {
+                            for (ItemStack outIs : townGoals.getGoal().getReward()) {
+                                outIs.setAmount(oldOutputAmount.get(outIs.getType()));
+                            }
+
+                        }
+
+                        FWObbiettivi.info(Messages.GOAL_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                    }
+                } else {
+                    FWObbiettivi.info(Messages.GOAL_IS_DISABLE + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
+                }
+            } else {
+                sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_GOAL_IN_LIST) + " " + args[1]);
             }
         }
     }
