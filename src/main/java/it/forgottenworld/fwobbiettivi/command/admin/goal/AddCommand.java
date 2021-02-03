@@ -1,16 +1,12 @@
 package it.forgottenworld.fwobbiettivi.command.admin.goal;
 
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.object.Town;
 import it.forgottenworld.fwobbiettivi.command.SubCommand;
 import it.forgottenworld.fwobbiettivi.objects.Goal;
 import it.forgottenworld.fwobbiettivi.objects.TownGoal;
 import it.forgottenworld.fwobbiettivi.objects.Treasury;
-import it.forgottenworld.fwobbiettivi.objects.managers.GoalAreaManager;
-import it.forgottenworld.fwobbiettivi.objects.managers.Goals;
-import it.forgottenworld.fwobbiettivi.objects.managers.TownGoals;
-import it.forgottenworld.fwobbiettivi.objects.managers.Treasuries;
+import it.forgottenworld.fwobbiettivi.objects.managers.*;
 import it.forgottenworld.fwobbiettivi.utility.*;
 import it.forgottenworld.fwobbiettivi.utility.cmd.GoalCommandDescriptions;
 import it.forgottenworld.fwobbiettivi.utility.cmd.GoalCommandNames;
@@ -238,15 +234,6 @@ public class AddCommand extends SubCommand {
             for (Goal goal : Goals.getObbiettivi()) {
                 if (goal.getName().toLowerCase().startsWith(args[1].toLowerCase()))
                     result.add(goal.getName());
-            }
-        }
-
-        if (args.length == 3){
-            Town[] towns = new Town[TownyUniverse.getInstance().getDataSource().getTowns().size()];
-            TownyUniverse.getInstance().getDataSource().getTowns().toArray(towns);
-            for (int i = 0; i < towns.length; i++) {
-                if (towns[i].getName().toLowerCase().startsWith(args[2].toLowerCase()))
-                    result.add(towns[i].getName());
             }
         }
 
