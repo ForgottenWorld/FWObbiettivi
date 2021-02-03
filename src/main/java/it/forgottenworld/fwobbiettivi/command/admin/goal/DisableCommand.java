@@ -6,6 +6,7 @@ import it.forgottenworld.fwobbiettivi.command.SubCommand;
 import it.forgottenworld.fwobbiettivi.objects.Goal;
 import it.forgottenworld.fwobbiettivi.objects.TownGoal;
 import it.forgottenworld.fwobbiettivi.objects.managers.Goals;
+import it.forgottenworld.fwobbiettivi.objects.managers.RewardPermissions;
 import it.forgottenworld.fwobbiettivi.objects.managers.TownGoals;
 import it.forgottenworld.fwobbiettivi.utility.ChatFormatter;
 import it.forgottenworld.fwobbiettivi.utility.Messages;
@@ -60,10 +61,17 @@ public class DisableCommand extends SubCommand {
             return;
         }
 
-        TownGoal townGoalsDisable = TownGoals.getTownGoalFromGoalAndTown(Goals.getGoalFromString(args[1]), TownyUtil.getTownFromString(args[2]));
+        TownGoal townGoal = TownGoals.getTownGoalFromGoalAndTown(Goals.getGoalFromString(args[1]), TownyUtil.getTownFromString(args[2]));
         // Disable success
-        player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.DISABLE_GOAL) + " " + ChatFormatter.formatWarningMessageNoPrefix(townGoalsDisable.getGoal().getName() + " - " + townGoalsDisable.getTown().getName()));
-        townGoalsDisable.setActive(false);
+        player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.DISABLE_GOAL) + " " + ChatFormatter.formatWarningMessageNoPrefix(townGoal.getGoal().getName() + " - " + townGoal.getTown().getName()));
+        townGoal.setActive(false);
+
+        // Remove perms if it has them
+        if (!townGoal.getGoal().getRewardPermissions().isEmpty()) {
+            for (String s : townGoal.getGoal().getRewardPermissions()) {
+                RewardPermissions.removePermission(player, s);
+            }
+        }
     }
 
     @Override

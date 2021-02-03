@@ -6,6 +6,7 @@ import it.forgottenworld.fwobbiettivi.command.SubCommand;
 import it.forgottenworld.fwobbiettivi.objects.Goal;
 import it.forgottenworld.fwobbiettivi.objects.TownGoal;
 import it.forgottenworld.fwobbiettivi.objects.managers.Goals;
+import it.forgottenworld.fwobbiettivi.objects.managers.RewardPermissions;
 import it.forgottenworld.fwobbiettivi.objects.managers.TownGoals;
 import it.forgottenworld.fwobbiettivi.utility.ChatFormatter;
 import it.forgottenworld.fwobbiettivi.utility.Messages;
@@ -59,10 +60,17 @@ public class EnableCommand extends SubCommand {
             player.sendMessage(ChatFormatter.formatErrorMessage(Messages.ENABLE_FAILED));
             return;
         }
-        TownGoal townGoalsEnable = TownGoals.getTownGoalFromGoalAndTown(Goals.getGoalFromString(args[1]), TownyUtil.getTownFromString(args[2]));
+        TownGoal townGoal = TownGoals.getTownGoalFromGoalAndTown(Goals.getGoalFromString(args[1]), TownyUtil.getTownFromString(args[2]));
         // Enable success
-        player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.ENABLE_GOAL) + " " + ChatFormatter.formatWarningMessageNoPrefix(townGoalsEnable.getGoal().getName() + " - " + townGoalsEnable.getTown().getName()));
-        townGoalsEnable.setActive(true);
+        player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.ENABLE_GOAL) + " " + ChatFormatter.formatWarningMessageNoPrefix(townGoal.getGoal().getName() + " - " + townGoal.getTown().getName()));
+        townGoal.setActive(true);
+
+        // Give perms if it has them
+        if (!townGoal.getGoal().getRewardPermissions().isEmpty()) {
+            for (String s : townGoal.getGoal().getRewardPermissions()) {
+                RewardPermissions.addPermission(player, s);
+            }
+        }
     }
 
     @Override
