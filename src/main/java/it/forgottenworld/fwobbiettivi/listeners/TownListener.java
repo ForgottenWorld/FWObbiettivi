@@ -2,8 +2,8 @@ package it.forgottenworld.fwobbiettivi.listeners;
 
 import com.palmergames.bukkit.towny.event.PreDeleteTownEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
-import com.palmergames.bukkit.towny.event.TownPreUnclaimEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
+import com.palmergames.bukkit.towny.event.town.TownPreUnclaimEvent;
 import it.forgottenworld.fwobbiettivi.FWObbiettivi;
 import it.forgottenworld.fwobbiettivi.objects.Goal;
 import it.forgottenworld.fwobbiettivi.objects.TownGoal;
