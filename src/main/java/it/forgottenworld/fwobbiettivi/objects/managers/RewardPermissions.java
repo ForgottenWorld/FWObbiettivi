@@ -31,7 +31,8 @@ public class RewardPermissions {
         if (player == null)
             return;
 
-        perms.get(player.getUniqueId()).unsetPermission(perm);
+        if (perms.containsKey(player.getUniqueId()))
+            perms.get(player.getUniqueId()).unsetPermission(perm);
 
         save();
     }
@@ -61,17 +62,6 @@ public class RewardPermissions {
                 } else {
                     perms.add("- " + m.getKey());
                 }
-//                List<String> coord = new ArrayList<>();
-//                List<String> app = database.getFile().getStringList(path);
-//
-//                if (!app.isEmpty()) {
-//                    coord.addAll(app);
-//                }
-//
-//                if (!coord.contains(c.getKey().getX() + ";" + c.getKey().getZ()))
-//                    coord.add(c.getKey().getX() + ";" + c.getKey().getZ());
-//
-//                database.getFile().set(path, coord);
             }
             database.getFile().set(path, perms);
         }

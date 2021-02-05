@@ -111,8 +111,16 @@ public class TownGoal {
 
     public boolean pay(){
         // Objects
-        if (!goal.getReward().isEmpty()) {
+        if (!goal.getReward().isEmpty() && goal.getRewardMultiplierPlugin().equals("")) {
             convert(((Chest) this.getLocation().getBlock().getState()).getBlockInventory());
+        } else {
+            String multiplierPluginName = goal.getRewardMultiplierPlugin();
+            switch (multiplierPluginName) {
+                case "FWFortress":
+                    if (FortressService.getInstance().getAmountOfFortressOwnedByTown(town.getName()) > 0)
+                        convert(((Chest) this.getLocation().getBlock().getState()).getBlockInventory());
+                    break;
+            }
         }
 
         // Zenar
