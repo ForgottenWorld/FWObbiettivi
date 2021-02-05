@@ -81,13 +81,16 @@ public class PayCommand extends SubCommand {
                         FWObbiettivi.info(Messages.GOAL_NOT_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
                     } else {
                         HashMap<Material, Integer> oldOutputAmount = new HashMap<>();
+                        boolean fwfort = false;
 
                         if (!townGoals.getGoal().getRewardMultiplierPlugin().equals("")) {
                             String multiplierPluginName = townGoals.getGoal().getRewardMultiplierPlugin();
+
                             switch (multiplierPluginName) {
                                 case "FWFortress":
                                     int multiplier = FortressService.getInstance().getAmountOfFortressOwnedByTown(townGoals.getTown().getName());
                                     if (multiplier > 0) {
+                                        fwfort = true;
                                         for (ItemStack outIs : townGoals.getGoal().getReward()) {
                                             oldOutputAmount.put(outIs.getType(), outIs.getAmount());
                                             int amount = outIs.getAmount() * multiplier;
@@ -95,7 +98,6 @@ public class PayCommand extends SubCommand {
                                         }
                                     } else {
                                         FWObbiettivi.info(Messages.GOAL_NOT_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
-                                        return;
                                     }
                                     break;
                             }
@@ -104,10 +106,13 @@ public class PayCommand extends SubCommand {
                         townGoals.pay();
 
                         if (!townGoals.getGoal().getRewardMultiplierPlugin().equals("")) {
-                            for (ItemStack outIs : townGoals.getGoal().getReward()) {
-                                outIs.setAmount(oldOutputAmount.get(outIs.getType()));
+                            if (fwfort) {
+                                for (ItemStack outIs : townGoals.getGoal().getReward()) {
+                                    outIs.setAmount(oldOutputAmount.get(outIs.getType()));
+                                }
+                            } else {
+                                continue;
                             }
-
                         }
 
                         FWObbiettivi.info(Messages.GOAL_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
@@ -142,6 +147,7 @@ public class PayCommand extends SubCommand {
                             FWObbiettivi.info(Messages.GOAL_NOT_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
                         } else {
                             HashMap<Material, Integer> oldOutputAmount = new HashMap<>();
+                            boolean fwfort = false;
 
                             if (!townGoals.getGoal().getRewardMultiplierPlugin().equals("")) {
                                 String multiplierPluginName = townGoals.getGoal().getRewardMultiplierPlugin();
@@ -149,6 +155,7 @@ public class PayCommand extends SubCommand {
                                     case "FWFortress":
                                         int multiplier = FortressService.getInstance().getAmountOfFortressOwnedByTown(townGoals.getTown().getName());
                                         if (multiplier > 0) {
+                                            fwfort = true;
                                             for (ItemStack outIs : townGoals.getGoal().getReward()) {
                                                 oldOutputAmount.put(outIs.getType(), outIs.getAmount());
                                                 int amount = outIs.getAmount() * multiplier;
@@ -156,7 +163,6 @@ public class PayCommand extends SubCommand {
                                             }
                                         } else {
                                             FWObbiettivi.info(Messages.GOAL_NOT_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
-                                            return;
                                         }
                                         break;
                                 }
@@ -165,10 +171,13 @@ public class PayCommand extends SubCommand {
                             townGoals.pay();
 
                             if (!townGoals.getGoal().getRewardMultiplierPlugin().equals("")) {
-                                for (ItemStack outIs : townGoals.getGoal().getReward()) {
-                                    outIs.setAmount(oldOutputAmount.get(outIs.getType()));
+                                if (fwfort) {
+                                    for (ItemStack outIs : townGoals.getGoal().getReward()) {
+                                        outIs.setAmount(oldOutputAmount.get(outIs.getType()));
+                                    }
+                                } else {
+                                    continue;
                                 }
-
                             }
 
                             FWObbiettivi.info(Messages.GOAL_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
@@ -206,6 +215,7 @@ public class PayCommand extends SubCommand {
                         FWObbiettivi.info(Messages.GOAL_NOT_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
                     } else {
                         HashMap<Material, Integer> oldOutputAmount = new HashMap<>();
+                        boolean fwfort = false;
 
                         if (!townGoals.getGoal().getRewardMultiplierPlugin().equals("")) {
                             String multiplierPluginName = townGoals.getGoal().getRewardMultiplierPlugin();
@@ -213,6 +223,7 @@ public class PayCommand extends SubCommand {
                                 case "FWFortress":
                                     int multiplier = FortressService.getInstance().getAmountOfFortressOwnedByTown(townGoals.getTown().getName());
                                     if (multiplier > 0) {
+                                        fwfort = true;
                                         for (ItemStack outIs : townGoals.getGoal().getReward()) {
                                             oldOutputAmount.put(outIs.getType(), outIs.getAmount());
                                             int amount = outIs.getAmount() * multiplier;
@@ -220,7 +231,6 @@ public class PayCommand extends SubCommand {
                                         }
                                     } else {
                                         FWObbiettivi.info(Messages.GOAL_NOT_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
-                                        return;
                                     }
                                     break;
                             }
@@ -229,10 +239,13 @@ public class PayCommand extends SubCommand {
                         townGoals.pay();
 
                         if (!townGoals.getGoal().getRewardMultiplierPlugin().equals("")) {
-                            for (ItemStack outIs : townGoals.getGoal().getReward()) {
-                                outIs.setAmount(oldOutputAmount.get(outIs.getType()));
+                            if (fwfort) {
+                                for (ItemStack outIs : townGoals.getGoal().getReward()) {
+                                    outIs.setAmount(oldOutputAmount.get(outIs.getType()));
+                                }
+                            } else {
+                                return;
                             }
-
                         }
 
                         FWObbiettivi.info(Messages.GOAL_PAID + " " + townGoals.getGoal().getName() + " - " + townGoals.getTown().getName());
