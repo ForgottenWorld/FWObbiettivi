@@ -58,15 +58,11 @@ goal:
     rewardQuantity:
       - 1
     rewardZenar: 500.0
+    rewardPermissions:
+      - forgotten.obbiettivi.help
+    rewardMultiplierPlugin: "FWFortress"
     description:
       - Obbiettivo di test
-
-### Branches
-branch:
-  test:
-    material: "COBBLESTONE"
-    description:
-      - Ramo di test
 
 ### Bonus maintenance
 # Enter the name of the relative objective as the plot name
@@ -189,7 +185,16 @@ languages:
     town_money_withdrawn: "Denaro prelevato con successo."
     town_objects_withdrawn: "Oggetti prelevati con successo."
     goal_remove_failed: "Non puoi rimuovere questo obbiettivo."
+    branch_already_exist: "Esiste gia' un ramo con questo nome."
+    branch_not_exist: "Non esiste un ramo con questo nome."
+    branch_removed: "Ramo rimosso con successo:"
+    branch_added: "Ramo creato con successo:"
+    branch_not_empty: "Questo ramo ha degli obbiettivi."
     cmds:
+      branch:
+        create_cmd_description: "Crea un nuovo ramo."
+        delete_cmd_description: "Elimina un ramo."
+        help_cmd_description: "Mostra questa lista."
       goal:
         add_cmd_description: "Aggiunge un obbiettivo a una Town."
         create_cmd_description: "Crea un nuovo obbiettivo."
@@ -214,3 +219,14 @@ languages:
         remove_cmd_description: "Rimuove un obbiettivi a una Town."
         show_cmd_description: "Mostra le tesorerie attive."
         tp_cmd_description: "Teletrasporta il player ad una determinata tesoreria in una Town."
+    prompt:
+      branch:
+        create:
+          init: "Creazione di un nuovo Ramo iniziata. Segui le istruzioni per continuare oppure digita: cancel, in qualsiasi momento per abbandonare la configurazione."
+          id: "Scegli un nome univoco per il Ramo (non deve contenere spazi bianchi). Esempio: test, Test, obTest."
+          fail_id: "Assicurati che non esista gia' un Ramo con questo nome o di non ave inserito spazi bianchi."
+          material: "Scegli un materiale che rappresenterà il Ramo all'interno della GUI."
+          fail_material: "Assicurati che esista un item con questo nome o di non aver inserito spazi bianchi."
+          description: "Scegli una descrizione dettagliata per il Ramo. Esempio: Questo ramo racchiude tuggi gli obbiettivi del settore economico."
+        delete:
+      goal:

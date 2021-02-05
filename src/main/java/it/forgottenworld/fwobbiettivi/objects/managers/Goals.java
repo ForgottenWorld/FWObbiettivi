@@ -31,6 +31,18 @@ public class Goals {
         return getObbiettivi().contains(getGoalFromString(name));
     }
 
+    public static ArrayList<Goal> getGoalsFromBranch(Branch branch){
+        ArrayList<Goal> goals = new ArrayList<>();
+
+        for (Goal g : getObbiettivi()) {
+            if (g.getBranch().equals(branch)) {
+                goals.add(g);
+            }
+        }
+
+        return goals;
+    }
+
     public static ArrayList<Goal> getObbiettivi() {
         return obbiettivi;
     }

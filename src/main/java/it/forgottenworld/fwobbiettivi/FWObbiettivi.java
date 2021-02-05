@@ -1,5 +1,6 @@
 package it.forgottenworld.fwobbiettivi;
 
+import it.forgottenworld.fwobbiettivi.command.BranchCommandExecutor;
 import it.forgottenworld.fwobbiettivi.command.GoalsCommandExecutor;
 import it.forgottenworld.fwobbiettivi.command.TreasuryCommandExecutor;
 import it.forgottenworld.fwobbiettivi.config.ConfigManager;
@@ -22,6 +23,8 @@ public final class FWObbiettivi extends JavaPlugin {
 
     static FileConfiguration defaultConfig;
     private static ConfigManager database;
+    private static ConfigManager branches;
+    private static ConfigManager goals;
     public GoalsGUI gui = new GoalsGUI();
     public HashMap<Player, GoalsGUI> map = new HashMap<>();
 
@@ -45,11 +48,16 @@ public final class FWObbiettivi extends JavaPlugin {
 
         // Registrazione CommandExecutor
         info("Registering commands...");
+
+        this.getCommand("branch").setExecutor(new BranchCommandExecutor());
+        this.getCommand("ramo").setExecutor(new BranchCommandExecutor());
+
+        this.getCommand("goals").setExecutor(new GoalsCommandExecutor());
         this.getCommand("obbiettivo").setExecutor(new GoalsCommandExecutor());
         this.getCommand("ob").setExecutor(new GoalsCommandExecutor());
-        this.getCommand("goals").setExecutor(new GoalsCommandExecutor());
 
         this.getCommand("treasury").setExecutor(new TreasuryCommandExecutor());
+        this.getCommand("tesoreria").setExecutor(new TreasuryCommandExecutor());
         this.getCommand("tes").setExecutor(new TreasuryCommandExecutor());
 
         // Registrazione event-listeners
@@ -97,10 +105,22 @@ public final class FWObbiettivi extends JavaPlugin {
     public static void loadConfigManager(){
         database = new ConfigManager();
         database.setup("database.yml");
+        branches = new ConfigManager();
+        branches.setup("branches.yml");
+        goals = new ConfigManager();
+        goals.setup("goals.yml");
     }
 
     public ConfigManager getDatabase(){
         return database;
+    }
+
+    public ConfigManager getBranches(){
+        return branches;
+    }
+
+    public ConfigManager getGoals(){
+        return goals;
     }
 
     public static void loadData() {

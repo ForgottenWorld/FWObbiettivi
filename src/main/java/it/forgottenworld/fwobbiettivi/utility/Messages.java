@@ -44,6 +44,12 @@ public class Messages {
     public static final String MAX_GOAL_IN_CHUNK = ConfigUtil.getConfigStringLang("max_goal_in_chunk");
     public static final String GOAL_REMOVE_FAILED = ConfigUtil.getConfigStringLang("goal_remove_failed");
 
+    public static final String BRANCH_ALREADY_EXIST = ConfigUtil.getConfigStringLang("branch_already_exist");
+    public static final String BRANCH_NOT_EXIST = ConfigUtil.getConfigStringLang("branch_not_exist");
+    public static final String BRANCH_REMOVED = ConfigUtil.getConfigStringLang("branch_removed");
+    public static final String BRANCH_ADDED = ConfigUtil.getConfigStringLang("branch_added");
+    public static final String BRANCH_NOT_EMPTY = ConfigUtil.getConfigStringLang("branch_not_empty");
+
     public static final String TREASURY_LIST = ConfigUtil.getConfigStringLang("treasury_list");
     public static final String TREASURY_ALREADY_PRESENT = ConfigUtil.getConfigStringLang("treasury_already_present");
     public static final String TREASURY_ADDED = ConfigUtil.getConfigStringLang("treasury_added");
@@ -60,6 +66,19 @@ public class Messages {
     public static final String TOWN_MONEY_WITHDRAWN = ConfigUtil.getConfigStringLang("town_money_withdrawn");
     public static final String TOWN_OBJECTS_WITHDRAWN = ConfigUtil.getConfigStringLang("town_objects_withdrawn");
 
+    /**
+     * PROMPT
+     */
+    public static final String PROMPT_BRANCH_CREATE_INIT = ConfigUtil.getConfigStringLang("prompt.branch.create.init");
+    public static final String PROMPT_BRANCH_CREATE_ID = ConfigUtil.getConfigStringLang("prompt.branch.create.id");
+    public static final String PROMPT_BRANCH_CREATE_ID_FAIL = ConfigUtil.getConfigStringLang("prompt.branch.create.fail_id");
+    public static final String PROMPT_BRANCH_CREATE_MATERIAL = ConfigUtil.getConfigStringLang("prompt.branch.create.material");
+    public static final String PROMPT_BRANCH_CREATE_MATERIAL_FAIL = ConfigUtil.getConfigStringLang("prompt.branch.create.fail_material");
+    public static final String PROMPT_BRANCH_CREATE_DESCRIPTION = ConfigUtil.getConfigStringLang("prompt.branch.create.description");
+
+    /**
+     * FILES
+     */
     public static final String FILE_NOT_CREATED = ConfigUtil.getConfigStringLang("file_not_created");
     public static final String FILE_CREATED = ConfigUtil.getConfigStringLang("file_created");
     public static final String FILE_NOT_SAVED = ConfigUtil.getConfigStringLang("file_not_saved");
