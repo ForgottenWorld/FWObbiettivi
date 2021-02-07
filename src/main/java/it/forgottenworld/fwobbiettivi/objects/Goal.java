@@ -2,6 +2,7 @@ package it.forgottenworld.fwobbiettivi.objects;
 
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,6 +27,21 @@ public class Goal {
     private List<String> rewardPermissions;
     private String rewardMultiplierPlugin;
     private List<String> descrizione;
+
+    public Goal(String name, Branch branch, int numPlot, List<String> requiredGoals, double requiredZenar, double rewardZenar, List<String> rewardPermissions, String rewardMultiplierPlugin, List<String> descrizione) {
+        this.name = name;
+        this.branch = branch;
+        this.numPlot = numPlot;
+        this.requiredGoals = requiredGoals;
+        this.requiredZenar = requiredZenar;
+        this.requiredObjects = new ArrayList<>();
+        this.payment = new ArrayList<>();
+        this.reward = new ArrayList<>();
+        this.rewardZenar = rewardZenar;
+        this.rewardPermissions = rewardPermissions;
+        this.rewardMultiplierPlugin = rewardMultiplierPlugin;
+        this.descrizione = descrizione;
+    }
 
     public Goal(String name, Branch branch, int numPlot, List<String> requiredGoals, double requiredZenar, List<ItemStack> requiredObjects, List<ItemStack> payment, List<ItemStack> reward, double rewardZenar, List<String> rewardPermissions, String rewardMultiplierPlugin, List<String> descrizione){
         this.name = name;

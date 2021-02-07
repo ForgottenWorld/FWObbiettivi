@@ -2,9 +2,7 @@ package it.forgottenworld.fwobbiettivi.command.admin.goal;
 
 import it.forgottenworld.fwobbiettivi.FWObbiettivi;
 import it.forgottenworld.fwobbiettivi.command.SubCommand;
-import it.forgottenworld.fwobbiettivi.gui.GoalsGUI;
-import it.forgottenworld.fwobbiettivi.utility.GUIUtil;
-import it.forgottenworld.fwobbiettivi.utility.Messages;
+import it.forgottenworld.fwobbiettivi.prompt.GoalCreationPrompt;
 import it.forgottenworld.fwobbiettivi.utility.Permissions;
 import it.forgottenworld.fwobbiettivi.utility.cmd.GoalCommandDescriptions;
 import it.forgottenworld.fwobbiettivi.utility.cmd.GoalCommandNames;
@@ -26,7 +24,7 @@ public class CreateCommand extends SubCommand {
 
     @Override
     public String getArgumentsName() {
-        return "<obName>";
+        return "";
     }
 
     @Override
@@ -41,17 +39,16 @@ public class CreateCommand extends SubCommand {
 
     @Override
     public int getArgsRequired() {
-        return 2;
+        return 1;
     }
 
     @Override
     public void perform(CommandSender sender, String[] args) {
-        // TODO Create a new Goal
         Player player = (Player) sender;
 
-        FWObbiettivi.getInstance().map.put(player, new GoalsGUI());
-        FWObbiettivi.getInstance().map.get(player).setPlayer(player);
-        FWObbiettivi.getInstance().map.get(player).openGUI(GUIUtil.GOALS_NEW_STEP, args[1]);
+        // Aggiungo obbiettivo
+        GoalCreationPrompt creationPrompt = new GoalCreationPrompt(FWObbiettivi.getPlugin(FWObbiettivi.class));
+        creationPrompt.startConversationForPlayer(player);
     }
 
     @Override

@@ -75,6 +75,16 @@ public class ChatFormatter {
         return message;
     }
 
+    public static String formatPromptMessage(String message) {
+        message = pluginPrefix() + ChatColor.GRAY + message;
+        return message;
+    }
+
+    public static String formatPromptMessageNoPrefix(String message) {
+        message = ChatColor.GRAY + message;
+        return message;
+    }
+
     public static String formatListMessage(String command, String subcommand, String args, String description) {
         String message = ChatColor.GOLD + "> " +
                 ChatColor.DARK_AQUA + "/" + command + " " +

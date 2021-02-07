@@ -57,7 +57,7 @@ public class DeleteCommand extends SubCommand {
         }
 
         // Check if exist goal with this branch
-        if (!Goals.getGoalsFromBranch(Branches.getBranchFromString(args[1])).isEmpty()){
+        if (!Goals.getGoalsFromBranch(branch).isEmpty()){
             player.sendMessage(ChatFormatter.formatErrorMessage(Messages.BRANCH_NOT_EMPTY));
             return;
         }

@@ -1,6 +1,5 @@
 package it.forgottenworld.fwobbiettivi.command.admin.treasury;
 
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Town;
 import it.forgottenworld.fwobbiettivi.command.SubCommand;
 import it.forgottenworld.fwobbiettivi.objects.Treasury;
@@ -18,7 +17,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.DoubleChestInventory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AddCommand extends SubCommand {

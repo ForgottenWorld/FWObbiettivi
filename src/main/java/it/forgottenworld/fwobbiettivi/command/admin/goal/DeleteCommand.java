@@ -1,10 +1,11 @@
 package it.forgottenworld.fwobbiettivi.command.admin.goal;
 
-import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.object.Town;
 import it.forgottenworld.fwobbiettivi.command.SubCommand;
 import it.forgottenworld.fwobbiettivi.objects.Goal;
 import it.forgottenworld.fwobbiettivi.objects.managers.Goals;
+import it.forgottenworld.fwobbiettivi.objects.managers.TownGoals;
+import it.forgottenworld.fwobbiettivi.utility.ChatFormatter;
+import it.forgottenworld.fwobbiettivi.utility.Messages;
 import it.forgottenworld.fwobbiettivi.utility.Permissions;
 import it.forgottenworld.fwobbiettivi.utility.cmd.GoalCommandDescriptions;
 import it.forgottenworld.fwobbiettivi.utility.cmd.GoalCommandNames;
@@ -48,6 +49,26 @@ public class DeleteCommand extends SubCommand {
     @Override
     public void perform(CommandSender sender, String[] args) {
         // TODO Delete a Goal
+        Player player = (Player) sender;
+        Goal goal = Goals.getGoalFromString(args[1]);
+
+        if (!Goals.containsGoal(goal)) {
+            // TODO
+            player.sendMessage(ChatFormatter.formatErrorMessage(Messages.BRANCH_NOT_EXIST));
+            return;
+        }
+
+        // Check if exist town with this goal
+        if (!TownGoals.getTownFromGoal(goal).isEmpty()) {
+            // TODO
+            player.sendMessage(ChatFormatter.formatErrorMessage(Messages.BRANCH_NOT_EMPTY));
+            return;
+        }
+
+        // Delete Goal
+        Goals.removeGoal(goal);
+        // TODO
+        player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.BRANCH_REMOVED) + " " + ChatFormatter.formatWarningMessageNoPrefix(args[1]));
     }
 
     @Override

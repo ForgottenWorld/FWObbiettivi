@@ -2,19 +2,14 @@ package it.forgottenworld.fwobbiettivi.prompt;
 
 import it.forgottenworld.fwobbiettivi.FWObbiettivi;
 import it.forgottenworld.fwobbiettivi.objects.Branch;
-import it.forgottenworld.fwobbiettivi.objects.Goal;
 import it.forgottenworld.fwobbiettivi.objects.managers.Branches;
-import it.forgottenworld.fwobbiettivi.objects.managers.Goals;
 import it.forgottenworld.fwobbiettivi.utility.ChatFormatter;
 import it.forgottenworld.fwobbiettivi.utility.Messages;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.conversations.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -63,7 +58,7 @@ public class BranchCreationPrompt implements ConversationAbandonedListener {
         @Override
         protected Prompt acceptValidatedInput(ConversationContext context, String input) {
             context.setSessionData("branchId", input);
-            return new BranchCreationPrompt.BranchMaterialPrompt();
+            return new BranchMaterialPrompt();
         }
 
         @Override
@@ -88,7 +83,7 @@ public class BranchCreationPrompt implements ConversationAbandonedListener {
         @Override
         protected Prompt acceptValidatedInput(ConversationContext context, String input) {
             context.setSessionData("branchMaterial", input);
-            return new BranchCreationPrompt.BranchDescriptionPrompt();
+            return new BranchDescriptionPrompt();
         }
 
         @Override

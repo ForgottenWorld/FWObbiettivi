@@ -43,6 +43,7 @@ public class Messages {
     public static final String GOALS_PRESENT = ConfigUtil.getConfigStringLang("goals_present");
     public static final String MAX_GOAL_IN_CHUNK = ConfigUtil.getConfigStringLang("max_goal_in_chunk");
     public static final String GOAL_REMOVE_FAILED = ConfigUtil.getConfigStringLang("goal_remove_failed");
+    public static final String GOAL_ALREADY_EXIST = ConfigUtil.getConfigStringLang("goal_already_exist");
 
     public static final String BRANCH_ALREADY_EXIST = ConfigUtil.getConfigStringLang("branch_already_exist");
     public static final String BRANCH_NOT_EXIST = ConfigUtil.getConfigStringLang("branch_not_exist");
@@ -75,6 +76,22 @@ public class Messages {
     public static final String PROMPT_BRANCH_CREATE_MATERIAL = ConfigUtil.getConfigStringLang("prompt.branch.create.material");
     public static final String PROMPT_BRANCH_CREATE_MATERIAL_FAIL = ConfigUtil.getConfigStringLang("prompt.branch.create.fail_material");
     public static final String PROMPT_BRANCH_CREATE_DESCRIPTION = ConfigUtil.getConfigStringLang("prompt.branch.create.description");
+
+    public static final String PROMPT_GOAL_CREATE_INIT = ConfigUtil.getConfigStringLang("prompt.goal.create.init");
+    public static final String PROMPT_GOAL_CREATE_ID = ConfigUtil.getConfigStringLang("prompt.goal.create.id");
+    public static final String PROMPT_GOAL_CREATE_ID_FAIL = ConfigUtil.getConfigStringLang("prompt.goal.create.fail_id");
+    public static final String PROMPT_GOAL_CREATE_BRANCH = ConfigUtil.getConfigStringLang("prompt.goal.create.branch");
+    public static final String PROMPT_GOAL_CREATE_BRANCH_FAIL = ConfigUtil.getConfigStringLang("prompt.goal.create.fail_branch");
+    public static final String PROMPT_GOAL_CREATE_PLOT = ConfigUtil.getConfigStringLang("prompt.goal.create.plot");
+    public static final String PROMPT_GOAL_CREATE_PLOT_FAIL = ConfigUtil.getConfigStringLang("prompt.goal.create.fail_plot");
+    public static final String PROMPT_GOAL_CREATE_REQGOALS = ConfigUtil.getConfigStringLang("prompt.goal.create.reqgoals");
+    public static final String PROMPT_GOAL_CREATE_REQZENAR = ConfigUtil.getConfigStringLang("prompt.goal.create.reqzenar");
+    public static final String PROMPT_GOAL_CREATE_REQZENAR_FAIL = ConfigUtil.getConfigStringLang("prompt.goal.create.fail_reqzenar");
+    public static final String PROMPT_GOAL_CREATE_REWZENAR = ConfigUtil.getConfigStringLang("prompt.goal.create.rewzenar");
+    public static final String PROMPT_GOAL_CREATE_REWZENAR_FAIL = ConfigUtil.getConfigStringLang("prompt.goal.create.fail_rewzenar");
+    public static final String PROMPT_GOAL_CREATE_REWPERMS = ConfigUtil.getConfigStringLang("prompt.goal.create.rewperms");
+    public static final String PROMPT_GOAL_CREATE_REWMULTI = ConfigUtil.getConfigStringLang("prompt.goal.create.rewmulti");
+    public static final String PROMPT_GOAL_CREATE_DESCRIPTION = ConfigUtil.getConfigStringLang("prompt.goal.create.description");
 
     /**
      * FILES

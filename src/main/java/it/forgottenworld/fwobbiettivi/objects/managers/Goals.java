@@ -1,6 +1,7 @@
 package it.forgottenworld.fwobbiettivi.objects.managers;
 
 import it.forgottenworld.fwobbiettivi.FWObbiettivi;
+import it.forgottenworld.fwobbiettivi.config.ConfigManager;
 import it.forgottenworld.fwobbiettivi.objects.Branch;
 import it.forgottenworld.fwobbiettivi.objects.Goal;
 import it.forgottenworld.fwobbiettivi.utility.ChatFormatter;
@@ -11,10 +12,26 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.stream.Collectors;
 
 public class Goals {
 
     static ArrayList<Goal> obbiettivi = new ArrayList<Goal>();
+
+    public static void addGoal(Goal goal){
+        if (containsGoal(goal))
+            return;
+
+        obbiettivi.add(goal);
+
+        save();
+    }
+
+    public static void removeGoal(Goal goal){
+        obbiettivi.remove(goal);
+
+        save();
+    }
 
     public static Goal getGoalFromString(String name){
         for (Goal g: obbiettivi){
@@ -47,6 +64,10 @@ public class Goals {
         return obbiettivi;
     }
 
+    public static boolean containsGoal(Goal goal) {
+        return getObbiettivi().contains(goal);
+    }
+
     /*
      * ==================================================================================
      * 										Save & Load
@@ -54,6 +75,38 @@ public class Goals {
      */
 
     public static void save() {
+        ConfigManager goals = FWObbiettivi.getInstance().getGoals();
+        goals.getFile().set("goals", null);
+
+        for (Goal goal: getObbiettivi()) {
+            String path = "goals." + goal.getName();
+            goals.getFile().set(path + ".branch", goal.getBranch().getName());
+            goals.getFile().set(path + ".plot", goal.getNumPlot());
+            goals.getFile().set(path + ".requiredGoals", goal.getRequiredGoals());
+            if (goal.getRequiredZenar() > 0.0)
+                goals.getFile().set(path + ".requiredZenar", goal.getRequiredZenar());
+            if (!goal.getRequiredObjects().isEmpty()) {
+                goals.getFile().set(path + ".requiredObject", goal.getRequiredObjects().stream().map(p -> p.getType().toString()).collect(Collectors.toList()));
+                goals.getFile().set(path + ".requiredQuantity", goal.getRequiredObjects().stream().map(ItemStack::getAmount).collect(Collectors.toList()));
+            }
+            if (!goal.getPayment().isEmpty()) {
+                goals.getFile().set(path + ".payment", goal.getPayment().stream().map(p -> p.getType().toString()).collect(Collectors.toList()));
+                goals.getFile().set(path + ".paymentQuantity", goal.getPayment().stream().map(ItemStack::getAmount).collect(Collectors.toList()));
+            }
+            if (!goal.getReward().isEmpty()) {
+                goals.getFile().set(path + ".reward", goal.getReward().stream().map(p -> p.getType().toString()).collect(Collectors.toList()));
+                goals.getFile().set(path + ".rewardQuantity", goal.getReward().stream().map(ItemStack::getAmount).collect(Collectors.toList()));
+            }
+            if (goal.getRewardZenar() > 0.0)
+                goals.getFile().set(path + ".rewardZenar", goal.getRewardZenar());
+            if (!goal.getRewardPermissions().isEmpty())
+                goals.getFile().set(path + ".rewardPermissions", goal.getRewardPermissions());
+            if (!goal.getRewardMultiplierPlugin().equals(""))
+                goals.getFile().set(path + ".rewardMultiplierPlugin", goal.getRewardMultiplierPlugin());
+            goals.getFile().set(path + ".description", goal.getDescrizione());
+        }
+
+        goals.saveFile();
     }
 
     public static void load() {
