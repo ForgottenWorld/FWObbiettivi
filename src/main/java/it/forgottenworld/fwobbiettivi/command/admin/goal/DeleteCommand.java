@@ -53,22 +53,21 @@ public class DeleteCommand extends SubCommand {
         Goal goal = Goals.getGoalFromString(args[1]);
 
         if (!Goals.containsGoal(goal)) {
-            // TODO
-            player.sendMessage(ChatFormatter.formatErrorMessage(Messages.BRANCH_NOT_EXIST));
+            player.sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_NOT_EXIST));
             return;
         }
 
         // Check if exist town with this goal
         if (!TownGoals.getTownFromGoal(goal).isEmpty()) {
             // TODO
-            player.sendMessage(ChatFormatter.formatErrorMessage(Messages.BRANCH_NOT_EMPTY));
+            player.sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_IN_USE));
             return;
         }
 
         // Delete Goal
         Goals.removeGoal(goal);
         // TODO
-        player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.BRANCH_REMOVED) + " " + ChatFormatter.formatWarningMessageNoPrefix(args[1]));
+        player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_DELETED) + " " + ChatFormatter.formatWarningMessageNoPrefix(args[1]));
     }
 
     @Override

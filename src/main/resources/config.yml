@@ -143,7 +143,7 @@ languages:
     disable_goal: "Obbiettivo disattivato:"
     goal_not_paid: "Obbiettivo non pagato:"
     goal_paid: "Obbiettivo pagato:"
-    goal_is_disable: "Questo oobbiettivo e' disattivato:"
+    goal_is_disable: "Questo obbiettivo e' disattivato:"
     goals_list: "Lista degli obbiettivi presenti:"
     goals_plot_needed: "Chunk claimati per l'obbiettivo:"
     goals_plot_not_near: "Il plot selezionato non e' vicino all'obbiettivo."
@@ -179,6 +179,9 @@ languages:
     branch_added: "Ramo creato con successo:"
     branch_not_empty: "Questo ramo ha degli obbiettivi."
     no_town_or_goal_found: "Assicurati di aver inserito la citta' o l'obbiettivo correttamente."
+    goal_not_exist: "Non esiste un obbiettivo con questo nome."
+    goal_in_use: "L'obbiettivo è utilizzato in qualche citta'."
+    goal_deleted: "Obbiettivo eliminato:"
     cmds:
       gui_cmd_description: "Apre la GUI di gestione."
       help_cmd_description: "Mostra questa lista."

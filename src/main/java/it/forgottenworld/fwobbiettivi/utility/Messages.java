@@ -44,6 +44,9 @@ public class Messages {
     public static final String MAX_GOAL_IN_CHUNK = ConfigUtil.getConfigStringLang("max_goal_in_chunk");
     public static final String GOAL_REMOVE_FAILED = ConfigUtil.getConfigStringLang("goal_remove_failed");
     public static final String GOAL_ALREADY_EXIST = ConfigUtil.getConfigStringLang("goal_already_exist");
+    public static final String GOAL_NOT_EXIST = ConfigUtil.getConfigStringLang("goal_not_exist");
+    public static final String GOAL_IN_USE = ConfigUtil.getConfigStringLang("goal_in_use");
+    public static final String GOAL_DELETED = ConfigUtil.getConfigStringLang("goal_deleted");
 
     public static final String BRANCH_ALREADY_EXIST = ConfigUtil.getConfigStringLang("branch_already_exist");
     public static final String BRANCH_NOT_EXIST = ConfigUtil.getConfigStringLang("branch_not_exist");
