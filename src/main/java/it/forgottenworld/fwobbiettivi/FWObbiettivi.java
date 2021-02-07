@@ -1,6 +1,7 @@
 package it.forgottenworld.fwobbiettivi;
 
 import it.forgottenworld.fwobbiettivi.command.BranchCommandExecutor;
+import it.forgottenworld.fwobbiettivi.command.CommandExecutor;
 import it.forgottenworld.fwobbiettivi.command.GoalsCommandExecutor;
 import it.forgottenworld.fwobbiettivi.command.TreasuryCommandExecutor;
 import it.forgottenworld.fwobbiettivi.config.ConfigManager;
@@ -48,6 +49,7 @@ public final class FWObbiettivi extends JavaPlugin {
 
         // Registrazione CommandExecutor
         info("Registering commands...");
+        this.getCommand("fwobbiettivi").setExecutor(new CommandExecutor());
 
         this.getCommand("branch").setExecutor(new BranchCommandExecutor());
         this.getCommand("ramo").setExecutor(new BranchCommandExecutor());

@@ -1,9 +1,6 @@
-package it.forgottenworld.fwobbiettivi.command.admin;
+package it.forgottenworld.fwobbiettivi.command.user;
 
-import it.forgottenworld.fwobbiettivi.FWObbiettivi;
 import it.forgottenworld.fwobbiettivi.command.SubCommand;
-import it.forgottenworld.fwobbiettivi.utility.ChatFormatter;
-import it.forgottenworld.fwobbiettivi.utility.Messages;
 import it.forgottenworld.fwobbiettivi.utility.Permissions;
 import it.forgottenworld.fwobbiettivi.utility.cmd.CommandDescriptions;
 import it.forgottenworld.fwobbiettivi.utility.cmd.CommandNames;
@@ -12,15 +9,15 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class ReloadCommand extends SubCommand {
+public class HelpCommand extends SubCommand {
     @Override
     public String getName() {
-        return CommandNames.RELOAD_CMD;
+        return CommandNames.HELP_CMD;
     }
 
     @Override
     public String getDescription() {
-        return CommandDescriptions.RELOAD_CMD_DESCRIPTION;
+        return CommandDescriptions.HELP_CMD_DESCRIPTION;
     }
 
     @Override
@@ -30,12 +27,12 @@ public class ReloadCommand extends SubCommand {
 
     @Override
     public String getPermission() {
-        return Permissions.PERM_RELOAD;
+        return Permissions.PERM_HELP;
     }
 
     @Override
     public boolean getCanConsoleRunCmd() {
-        return true;
+        return false;
     }
 
     @Override
@@ -45,19 +42,9 @@ public class ReloadCommand extends SubCommand {
 
     @Override
     public void perform(CommandSender sender, String[] args) {
-        FWObbiettivi.info("Saving infos...");
-        FWObbiettivi.saveData();
-        FWObbiettivi.info("Data saved");
+        Player player = (Player) sender;
 
-        FWObbiettivi.info("Loading infos...");
-        FWObbiettivi.loadData();
-        FWObbiettivi.info("Data loades");
-
-        FWObbiettivi.getInstance().reloadConfig();
-        FWObbiettivi.info(Messages.CONFIG_RELOAD);
-        if (sender instanceof Player) {
-            sender.sendMessage(ChatFormatter.formatSuccessMessage(Messages.CONFIG_RELOAD));
-        }
+        player.performCommand("fwobbiettivi");
     }
 
     @Override

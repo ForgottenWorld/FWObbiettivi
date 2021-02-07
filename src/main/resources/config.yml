@@ -91,7 +91,7 @@ languages:
       goals_inventory_title: "Obbiettivi Cittadini"
       goals_new_item_name: "Aggiungi"
       goals_new_item_list:
-        - test
+        - Crea un nuovo obbiettivo.
       goals_edit_item_name: "Modifica"
       goals_edit_item_list:
         - a
@@ -103,11 +103,11 @@ languages:
         - a
       goals_close_item_name: "Chiudi"
       goals_close_item_list:
-        - a
+        - Chiude questo menu.
       branch_inventory_title: "Rami Obbiettivi"
       branch_new_item_name: "Aggiungi"
       branch_new_item_list:
-        - test
+        - Crea un nuovo ramo di obbiettivi.
       branch_edit_item_name: "Modifica"
       branch_edit_item_list:
         - a
@@ -116,7 +116,7 @@ languages:
         - a
       branch_back_item_name: "Torna indietro"
       branch_back_item_list:
-        - a
+        - Va alla pagina precedente.
       branch_list_inventory_title: "Lista Rami"
       branch_list_back_item_name: "Torna indietro"
       branch_list_back_item_list:
@@ -124,7 +124,7 @@ languages:
       goals_list_inventory_title: "Lista Obbiettivi in Ramo"
       goals_list_back_item_name: "Torna indietro"
       goals_list_back_item_list:
-        - a
+        - Va alla pagina precedente.
     no_console: "Questo comando puo' essere eseguito solo da un player!"
     no_perm: "Non possiedi i permessi necessari per eseguire questo comando."
     config_reload: "Ricaricato file di configurazione."
@@ -185,12 +185,16 @@ languages:
     town_money_withdrawn: "Denaro prelevato con successo."
     town_objects_withdrawn: "Oggetti prelevati con successo."
     goal_remove_failed: "Non puoi rimuovere questo obbiettivo."
+    goal_already_exist: "Esiste gia' un obbiettivo con questo nome."
     branch_already_exist: "Esiste gia' un ramo con questo nome."
     branch_not_exist: "Non esiste un ramo con questo nome."
     branch_removed: "Ramo rimosso con successo:"
     branch_added: "Ramo creato con successo:"
     branch_not_empty: "Questo ramo ha degli obbiettivi."
     cmds:
+      gui_cmd_description: "Apre la GUI di gestione."
+      help_cmd_description: "Mostra questa lista."
+      reload_cmd_description: "Ricarica il config.yml."
       branch:
         create_cmd_description: "Crea un nuovo ramo."
         delete_cmd_description: "Elimina un ramo."
@@ -202,12 +206,10 @@ languages:
         disable_cmd_description: "Disattiva un obbiettivo."
         edit_cmd_description: "Modifica un obbiettivo."
         enable_cmd_description: "Abilita un obbiettivo."
-        gui_cmd_description: "Apre la GUI di gestione."
         help_cmd_description: "Mostra questa lista."
         info_cmd_description: "Mostra le informazioni relative a un obbiettivo."
         list_cmd_description: "Mostra una lista di tutti gli obbiettivi presenti."
         pay_cmd_description: "Paga tutti gli obbiettivi abilitati, con limitazioni in base alle specifiche facoltative."
-        reload_cmd_description: "Ricarica il config.yml."
         remove_cmd_description: "Rimuove un obbiettivi a una Town."
         show_cmd_description: "Mostra gli obbiettivi o le città in base al parametro inserito."
         status_cmd_description: "Mostra lo status degli obbiettivi presenti nel chunk."
@@ -223,10 +225,25 @@ languages:
       branch:
         create:
           init: "Creazione di un nuovo Ramo iniziata. Segui le istruzioni per continuare oppure digita: cancel, in qualsiasi momento per abbandonare la configurazione."
-          id: "Scegli un nome univoco per il Ramo (non deve contenere spazi bianchi). Esempio: test, Test, obTest."
-          fail_id: "Assicurati che non esista gia' un Ramo con questo nome o di non ave inserito spazi bianchi."
+          id: "Scegli un nome univoco per il Ramo (non deve contenere spazi bianchi). Esempio: test, Test, ramoTest."
+          fail_id: "Assicurati che non esista gia' un Ramo con questo nome o di non aver inserito spazi bianchi."
           material: "Scegli un materiale che rappresenterà il Ramo all'interno della GUI."
           fail_material: "Assicurati che esista un item con questo nome o di non aver inserito spazi bianchi."
           description: "Scegli una descrizione dettagliata per il Ramo. Esempio: Questo ramo racchiude tuggi gli obbiettivi del settore economico."
-        delete:
       goal:
+        create:
+          init: "Creazione di un nuovo Obbiettivo iniziata. Segui le istruzioni per continuare oppure digita: cancel, in qualsiasi momento per abbandonare la configurazione."
+          id: "Scegli un nome univoco per l'Obbiettivo (non deve contenere spazi bianchi). Esempio: test, Test, obTest."
+          fail_id: "Assicurati che non esista gia' un Obbiettivo con questo nome o di non aver inserito spazi bianchi."
+          branch: "Scegli l'ID di un Ramo esistente per inserire in una categoria l'obbiettivo che stai creando. Esempio: Politico, Economico, ..."
+          fail_branch: "Assicurati che esista gia' un Ramo con questo nome o di non aver inserito spazi bianchi."
+          plot: "Scegli il numero di chunk necessari per l'attivazione di questo obbiettivo. Il numero deve essere maggiore o uguale a 1."
+          fail_plot: "Assicurati che il numero di chunk sia maggiore o uguale a 1."
+          reqgoals: "Scegli gli obbiettivi necessari per poter attivare questo Obbiettivo."
+          reqzenar: "Scegli il numero di Zenar necessari per poter attivare questo Obbiettivo, se non ne necessita inserisci 0.0."
+          fail_reqzenar: "Assicurati di aver inserito correttamente la quantita' di Zenar necessari maggiore o uguale a 0.0."
+          rewzenar: "Scegli il numero di Zenar da consegnare come ricompensa, se non ne necessita inserisci 0.0."
+          fail_rewzenar: "Assicurati di aver inserito correttamente la quantita' di Zenar necessari maggiore o uguale a 0.0."
+          rewperms: "Scegli le permissions da assegnare una volta attivato l'Obbiettivo. Se non ne necessita digitare: skip. Esempio: forgotten.obbiettivi.help"
+          rewmulti: "Scegli il nome di un plugin abilitato da FWObbiettivi come moltiplicatore di guadagno. Se non ne necessita digitare: skip. Esempio: FWFortress."
+          description: "Scegli una descrizione dettagliata per l'Obbiettivo. Esempio: Consente di convertire della cobblestone in pietra."

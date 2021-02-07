@@ -81,6 +81,7 @@ public class ShowCommand extends SubCommand {
     public List<String> getSubcommandArguments(Player player, String[] args) {
         ArrayList<String> result = new ArrayList<String>();
 
+        // FIXME
         if (args.length == 2) {
             for (Goal goal : Goals.getObbiettivi()) {
                 if (goal.getName().toLowerCase().startsWith(args[1].toLowerCase()))

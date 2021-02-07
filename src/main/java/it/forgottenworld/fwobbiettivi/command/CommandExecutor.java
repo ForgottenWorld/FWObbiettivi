@@ -1,37 +1,28 @@
 package it.forgottenworld.fwobbiettivi.command;
 
-import it.forgottenworld.fwobbiettivi.command.admin.*;
-import it.forgottenworld.fwobbiettivi.command.admin.goal.*;
-import it.forgottenworld.fwobbiettivi.command.user.goal.HelpCommand;
-import it.forgottenworld.fwobbiettivi.command.user.goal.InfoCommand;
-import it.forgottenworld.fwobbiettivi.command.user.goal.ListCommand;
-import it.forgottenworld.fwobbiettivi.utility.*;
+import it.forgottenworld.fwobbiettivi.command.admin.GuiCommand;
+import it.forgottenworld.fwobbiettivi.command.admin.ReloadCommand;
+import it.forgottenworld.fwobbiettivi.command.user.HelpCommand;
+import it.forgottenworld.fwobbiettivi.utility.ChatFormatter;
+import it.forgottenworld.fwobbiettivi.utility.Messages;
+import it.forgottenworld.fwobbiettivi.utility.Permissions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class GoalsCommandExecutor implements TabExecutor {
+public class CommandExecutor implements TabExecutor {
 
     private final ArrayList<SubCommand> subcommands = new ArrayList<>();
 
-    public GoalsCommandExecutor(){
-        subcommands.add(new AddCommand());
-        subcommands.add(new CreateCommand());
-        subcommands.add(new DeleteCommand());
-        subcommands.add(new DisableCommand());
-        subcommands.add(new EnableCommand());
+    public CommandExecutor(){
+        subcommands.add(new GuiCommand());
         subcommands.add(new HelpCommand());
-        subcommands.add(new InfoCommand());
-        subcommands.add(new ListCommand());
-        subcommands.add(new PayCommand());
-        subcommands.add(new RemoveCommand());
-        subcommands.add(new ShowCommand());
-        subcommands.add(new StatusCommand());
-        subcommands.add(new TeleportCommand());
+        subcommands.add(new ReloadCommand());
     }
 
     @Override

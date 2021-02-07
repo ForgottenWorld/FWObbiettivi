@@ -1,7 +1,6 @@
 package it.forgottenworld.fwobbiettivi.command.user.treasury;
 
 import it.forgottenworld.fwobbiettivi.command.SubCommand;
-import it.forgottenworld.fwobbiettivi.utility.ChatFormatter;
 import it.forgottenworld.fwobbiettivi.utility.Permissions;
 import it.forgottenworld.fwobbiettivi.utility.cmd.TreasuryCommandDescriptions;
 import it.forgottenworld.fwobbiettivi.utility.cmd.TreasuryCommandNames;
