@@ -5,8 +5,8 @@ import it.forgottenworld.fwobbiettivi.command.SubCommand;
 import it.forgottenworld.fwobbiettivi.gui.GoalsGUI;
 import it.forgottenworld.fwobbiettivi.utility.GUIUtil;
 import it.forgottenworld.fwobbiettivi.utility.Permissions;
-import it.forgottenworld.fwobbiettivi.utility.cmd.GoalCommandDescriptions;
-import it.forgottenworld.fwobbiettivi.utility.cmd.GoalCommandNames;
+import it.forgottenworld.fwobbiettivi.utility.cmd.CommandDescriptions;
+import it.forgottenworld.fwobbiettivi.utility.cmd.CommandNames;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -15,12 +15,12 @@ import java.util.List;
 public class GuiCommand extends SubCommand {
     @Override
     public String getName() {
-        return GoalCommandNames.GUI_CMD;
+        return CommandNames.GUI_CMD;
     }
 
     @Override
     public String getDescription() {
-        return GoalCommandDescriptions.GUI_CMD_DESCRIPTION;
+        return CommandDescriptions.GUI_CMD_DESCRIPTION;
     }
 
     @Override
@@ -47,9 +47,9 @@ public class GuiCommand extends SubCommand {
     public void perform(CommandSender sender, String[] args) {
         Player player = (Player) sender;
 
-        FWObbiettivi.getInstance().map.put(player, new GoalsGUI());
-        FWObbiettivi.getInstance().map.get(player).setPlayer(player);
-        FWObbiettivi.getInstance().map.get(player).openGUI(GUIUtil.GOALS_STEP);
+        FWObbiettivi.getInstance().map.put(player.getUniqueId(), new GoalsGUI());
+        FWObbiettivi.getInstance().map.get(player.getUniqueId()).setPlayer(player);
+        FWObbiettivi.getInstance().map.get(player.getUniqueId()).openGUI(GUIUtil.GOALS_STEP);
     }
 
     @Override

@@ -31,39 +31,6 @@ treasury:
   name: "Tesoreria"
   plot: 1
 
-### Goals
-# Use quantities less than or equal to 64
-# there must be a requiredGoals already present default treasury
-goal:
-  obTest:
-    branch: "test"
-    plot: 3
-    requiredGoals:
-      - Tesoreria
-    requiredZenar: 500.0
-    requiredObject:
-      - DIRT
-      - GRASS_BLOCK
-    requiredQuantity:
-      - 10
-      - 20
-    payment:
-      - COBBLESTONE
-      - WHITE_WOOL
-    paymentQuantity:
-      - 64
-      - 10
-    reward:
-      - GOLD_BLOCK
-    rewardQuantity:
-      - 1
-    rewardZenar: 500.0
-    rewardPermissions:
-      - forgotten.obbiettivi.help
-    rewardMultiplierPlugin: "FWFortress"
-    description:
-      - Obbiettivo di test
-
 ### Bonus maintenance
 # Enter the name of the relative objective as the plot name
 # while as a value, the percentage value of the reduction in maintenance
@@ -91,40 +58,59 @@ languages:
       goals_inventory_title: "Obbiettivi Cittadini"
       goals_new_item_name: "Aggiungi"
       goals_new_item_list:
-        - Crea un nuovo obbiettivo.
+        - Usa questo menu per creare un nuovo
+        - obbiettivo.
       goals_edit_item_name: "Modifica"
       goals_edit_item_list:
-        - a
+        - Usa questo menu per modificare
+        - gli oggetti di un obbiettivo.
       goals_delete_item_name: "Elimina"
       goals_delete_item_list:
-        - a
+        - Usa questo menu per eliminare un
+        - obbiettivo.
       goals_branch_item_name: "Menu Rami"
       goals_branch_item_list:
-        - a
+        - Usa questo menu per visualizzare il
+        - menu gastionale relativo ai rami.
       goals_close_item_name: "Chiudi"
       goals_close_item_list:
         - Chiude questo menu.
       branch_inventory_title: "Rami Obbiettivi"
       branch_new_item_name: "Aggiungi"
       branch_new_item_list:
-        - Crea un nuovo ramo di obbiettivi.
-      branch_edit_item_name: "Modifica"
-      branch_edit_item_list:
-        - a
+        - Usa questo menu per creare un nuovo ramo
+        - di obbiettivi.
       branch_delete_item_name: "Elimina"
       branch_delete_item_list:
-        - a
+        - Usa questo menu per eliminare un
+        - ramo di obbiettivi presente.
       branch_back_item_name: "Torna indietro"
       branch_back_item_list:
         - Va alla pagina precedente.
       branch_list_inventory_title: "Lista Rami"
       branch_list_back_item_name: "Torna indietro"
       branch_list_back_item_list:
-        - a
+        - Va alla pagina precedente.
       goals_list_inventory_title: "Lista Obbiettivi in Ramo"
       goals_list_back_item_name: "Torna indietro"
       goals_list_back_item_list:
         - Va alla pagina precedente.
+      goals_required_obj_item_name: "Oggetti richiesti"
+      goals_required_obj_item_list:
+        - Dentro questo menu ci sono gli oggetti richiesti
+        - per poter attivare l'obbiettivo.
+      goals_payment_obj_item_name: "Pagamento richiesto"
+      goals_payment_obj_item_list:
+        - Dentro questo menu ci sono gli oggetti necessari
+        - per ricevere le ricompense.
+      goals_reward_obj_item_name: "Ricompensa"
+      goals_reward_obj_item_list:
+        - Dentro questo menu ci sono gli oggetti che una
+        - volta eseguito il comando pay vengono rilasciati
+        - agli obbiettivi.
+      goals_info_back_item_name: "Torna indietro"
+      goals_info_back_item_list:
+       - Va alla pagina precedente.
     no_console: "Questo comando puo' essere eseguito solo da un player!"
     no_perm: "Non possiedi i permessi necessari per eseguire questo comando."
     config_reload: "Ricaricato file di configurazione."
@@ -171,6 +157,7 @@ languages:
     not_same_loc: "La CHEST e' tra due plot differenti."
     treasury_unclaim_removed_abort: "Tesoreria non rimossa per unclaim azione negata:"
     treasury_plot_already_set: "In questo chunk e' presente una tesoreria."
+    treasury_removed_abort: "Impossibile rimuovere la tesoreria, esistono ancora degli obbiettivi."
     no_father_goal: "Obbiettivo padre non trovato:"
     no_treasury: "Tesoreria non trovata."
     no_request_object: "Non sono presenti gli oggetti necessari in tesoreria."
@@ -191,6 +178,7 @@ languages:
     branch_removed: "Ramo rimosso con successo:"
     branch_added: "Ramo creato con successo:"
     branch_not_empty: "Questo ramo ha degli obbiettivi."
+    no_town_or_goal_found: "Assicurati di aver inserito la citta' o l'obbiettivo correttamente."
     cmds:
       gui_cmd_description: "Apre la GUI di gestione."
       help_cmd_description: "Mostra questa lista."

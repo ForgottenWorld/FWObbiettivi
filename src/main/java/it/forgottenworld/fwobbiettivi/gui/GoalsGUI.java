@@ -1,5 +1,6 @@
 package it.forgottenworld.fwobbiettivi.gui;
 
+import it.forgottenworld.fwobbiettivi.FWObbiettivi;
 import it.forgottenworld.fwobbiettivi.objects.Branch;
 import it.forgottenworld.fwobbiettivi.objects.managers.Branches;
 import it.forgottenworld.fwobbiettivi.objects.Goal;
@@ -9,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,10 +24,12 @@ public class GoalsGUI {
 
     private Player player;
     private Action action;
-    private List<Integer> steps;
+    private List<BigDecimal> steps;
+
+    public String goalName;
 
     public GoalsGUI(){
-        this.steps = new ArrayList<Integer>();
+        this.steps = new ArrayList<BigDecimal>();
     }
 
     public Player getPlayer() {
@@ -44,11 +48,11 @@ public class GoalsGUI {
         this.action = action;
     }
 
-    public List<Integer> getSteps() {
+    public List<BigDecimal> getSteps() {
         return steps;
     }
 
-    public void setSteps(List<Integer> steps) {
+    public void setSteps(List<BigDecimal> steps) {
         this.steps = steps;
     }
 
@@ -57,13 +61,10 @@ public class GoalsGUI {
      * @param step
      */
     public void openGUI(int step){
-        steps.add(step);
+        steps.add(BigDecimal.valueOf(step));
         switch (step){
             case GUIUtil.GOALS_STEP:
                 openGoalsGUI();
-                break;
-            case GUIUtil.GOALS_NEW_STEP:
-                openBranchListGUI();
                 break;
             case GUIUtil.GOALS_EDIT_STEP:
                 openBranchListGUI();
@@ -71,22 +72,29 @@ public class GoalsGUI {
             case GUIUtil.GOALS_DELETE_STEP:
                 openBranchListGUI();
                 break;
-            case GUIUtil.BRANCH_NEW_STEP:
-                openBranchListGUI();
-                break;
-            case GUIUtil.BRANCH_EDIT_STEP:
-                openBranchListGUI();
+            case GUIUtil.BRANCH_STEP:
+                openBranchGUI();
                 break;
             case GUIUtil.BRANCH_DELETE_STEP:
                 openBranchListGUI();
                 break;
-            case GUIUtil.BRANCH_STEP:
+            case GUIUtil.BRANCH_LIST_STEP:
                 openBranchGUI();
                 break;
-            default:
-
+            case GUIUtil.GOALS_LIST_STEP:
+                openBranchGUI();
                 break;
         }
+    }
+
+    public void openGUI(int step, Branch b){
+        steps.add(BigDecimal.valueOf(step));
+        openGoalsListGUI(b);
+    }
+
+    public void openGUI(int step, Goal g){
+        steps.add(BigDecimal.valueOf(step));
+        openGoalInfoGUI(g);
     }
 
     private void openGoalsGUI() {
@@ -126,12 +134,12 @@ public class GoalsGUI {
         player.openInventory(GUI);
     }
 
-    private void openGoalsListGUI() {
+    private void openGoalsListGUI(Branch branch) {
         Inventory GUI = Bukkit.createInventory(null, GUIUtil.GOALS_LIST_INVENTORY_SIZE, GUIUtil.GOALS_LIST_INVENTORY_TITLE);
 
-        for(int i = 0; i < Goals.getObbiettivi().size(); i++){
+        for(int i = 0; i < Goals.getGoalsFromBranch(branch).size(); i++){
             // Creo item per ogni ramo presente nell'array
-            Goal obbiettivo = Goals.getObbiettivi().get(i);
+            Goal obbiettivo = Goals.getGoalsFromBranch(branch).get(i);
             GUI.setItem(i,
                     GUIUtil.prepareMenuPoint(
                             obbiettivo.getBranch().getIcon().getType(),
@@ -150,6 +158,40 @@ public class GoalsGUI {
         player.openInventory(GUI);
     }
 
+    private void openGoalInfoGUI(Goal g) {
+        Inventory GUI = Bukkit.createInventory(null, GUIUtil.GOAL_INFO_INVENTORY_SIZE, g.getName());
+
+        GUI.setItem(GUIUtil.GOALS_REQUIRED_OBJ_SLOT,
+                GUIUtil.prepareMenuPoint(
+                        GUIUtil.GOALS_REQUIRED_OBJ_ITEM_MATERIAL,
+                        GUIUtil.GOALS_REQUIRED_OBJ_ITEM_NAME,
+                        GUIUtil.GOALS_REQUIRED_OBJ_ITEM_LORE
+                ));
+
+        GUI.setItem(GUIUtil.GOALS_PAYMENT_OBJ_SLOT,
+                GUIUtil.prepareMenuPoint(
+                        GUIUtil.GOALS_PAYMENT_OBJ_ITEM_MATERIAL,
+                        GUIUtil.GOALS_PAYMENT_OBJ_ITEM_NAME,
+                        GUIUtil.GOALS_PAYMENT_OBJ_ITEM_LORE
+                ));
+
+        GUI.setItem(GUIUtil.GOALS_REWARD_OBJ_SLOT,
+                GUIUtil.prepareMenuPoint(
+                        GUIUtil.GOALS_REWARD_OBJ_ITEM_MATERIAL,
+                        GUIUtil.GOALS_REWARD_OBJ_ITEM_NAME,
+                        GUIUtil.GOALS_REWARD_OBJ_ITEM_LORE
+                ));
+
+        GUI.setItem(GUIUtil.GOALS_BACK_ITEM_SLOT,
+                GUIUtil.prepareMenuPoint(
+                        GUIUtil.GOALS_INFO_BACK_ITEM_MATERIAL,
+                        GUIUtil.GOALS_INFO_BACK_ITEM_NAME,
+                        GUIUtil.GOALS_INFO_BACK_ITEM_LORE
+                ));
+
+        player.openInventory(GUI);
+    }
+
     private void openBranchGUI() {
         Inventory GUI = Bukkit.createInventory(null, GUIUtil.BRANCH_INVENTORY_SIZE, GUIUtil.BRANCH_INVENTORY_TITLE);
 
@@ -159,18 +201,14 @@ public class GoalsGUI {
                         GUIUtil.BRANCH_NEW_ITEM_NAME,
                         GUIUtil.BRANCH_NEW_ITEM_LORE
                 ));
-        GUI.setItem(GUIUtil.BRANCH_EDIT_ITEM_SLOT,
-                GUIUtil.prepareMenuPoint(
-                        GUIUtil.BRANCH_EDIT_ITEM_MATERIAL,
-                        GUIUtil.BRANCH_EDIT_ITEM_NAME,
-                        GUIUtil.BRANCH_EDIT_ITEM_LORE
-                ));
+
         GUI.setItem(GUIUtil.BRANCH_DELETE_ITEM_SLOT,
                 GUIUtil.prepareMenuPoint(
                         GUIUtil.BRANCH_DELETE_ITEM_MATERIAL,
                         GUIUtil.BRANCH_DELETE_ITEM_NAME,
                         GUIUtil.BRANCH_DELETE_ITEM_LORE
                 ));
+
         GUI.setItem(GUIUtil.BRANCH_BACK_ITEM_SLOT,
                 GUIUtil.prepareMenuPoint(
                         GUIUtil.BRANCH_BACK_ITEM_MATERIAL,

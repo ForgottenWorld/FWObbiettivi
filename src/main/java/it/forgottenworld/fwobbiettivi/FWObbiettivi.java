@@ -12,10 +12,10 @@ import it.forgottenworld.fwobbiettivi.objects.managers.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.logging.Level;
 
 public final class FWObbiettivi extends JavaPlugin {
@@ -27,7 +27,7 @@ public final class FWObbiettivi extends JavaPlugin {
     private static ConfigManager branches;
     private static ConfigManager goals;
     public GoalsGUI gui = new GoalsGUI();
-    public HashMap<Player, GoalsGUI> map = new HashMap<>();
+    public HashMap<UUID, GoalsGUI> map = new HashMap<>();
 
     public static FWObbiettivi getInstance() {
         return instance;
