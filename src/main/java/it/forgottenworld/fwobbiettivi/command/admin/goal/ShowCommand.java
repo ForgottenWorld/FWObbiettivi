@@ -60,12 +60,8 @@ public class ShowCommand extends SubCommand {
                 sender.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("- " + t.getName()));
             }
             sender.sendMessage(ChatFormatter.chatFooter());
-        } else {
-            sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_GOAL_IN_LIST) + " " + args[1]);
-        }
-
-        // Towns
-        if (TownyUtil.isTown(args[1])){
+        } else if (TownyUtil.isTown(args[1])){
+            // Towns
             // List of Goals
             sender.sendMessage(ChatFormatter.chatHeader());
             for (Goal g : TownGoals.getGoalFromTown(TownyUtil.getTownFromString(args[1]))){
@@ -73,8 +69,9 @@ public class ShowCommand extends SubCommand {
             }
             sender.sendMessage(ChatFormatter.chatFooter());
         } else {
-            sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_FOUND));
+            sender.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_OR_GOAL_FOUND));
         }
+
     }
 
     @Override

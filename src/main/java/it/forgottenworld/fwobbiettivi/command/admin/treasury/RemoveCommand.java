@@ -48,38 +48,26 @@ public class RemoveCommand extends SubCommand {
 
     @Override
     public int getArgsRequired() {
-        return 1;
+        return 2;
     }
 
     @Override
     public void perform(CommandSender sender, String[] args) {
         Player player = (Player) sender;
 
-        // Check if a treasury exist in that town
-        if (args.length == 1){
-            // Check if the treasury exist in this plot
-            if (TownyUtil.isInTown(player.getLocation())) {
-                if (GoalAreaManager.isOnTreasury(player.getLocation().getChunk())) {
-                    Treasury tes = GoalAreaManager.getTreasuryCurrentlyFromChunk(player.getLocation().getChunk());
-                    player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TREASURY_REMOVED) + " " + ChatFormatter.formatWarningMessageNoPrefix(tes.getTown().getName()));
-                    Treasuries.removeTreasury(tes);
-                } else {
-                    // Not in a treasury plot
-                    player.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_GOAL_LOC));
-                }
-            } else {
-                // Not in a town
-                player.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_LOC));
-            }
-        } else {
-            if (TownyUtil.getTownFromString(args[1]) == null || Treasuries.getFromTown(TownyUtil.getTownFromString(args[1])) == null) {
-                player.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_FOUND));
-                return;
-            }
-            Treasury tes = Treasuries.getFromTown(TownyUtil.getTownFromString(args[1]));
-            player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TREASURY_REMOVED) + " " + ChatFormatter.formatWarningMessageNoPrefix(tes.getTown().getName()));
-            Treasuries.removeTreasury(tes);
+        if (TownyUtil.getTownFromString(args[1]) == null || Treasuries.getFromTown(TownyUtil.getTownFromString(args[1])) == null) {
+            player.sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_FOUND));
+            return;
         }
+
+        if (!TownGoals.getGoalFromTown(TownyUtil.getTownFromString(args[1])).isEmpty()) {
+            player.sendMessage(ChatFormatter.formatErrorMessage(Messages.TREASURY_REMOVED_ABORT));
+            return;
+        }
+
+        Treasury tes = Treasuries.getFromTown(TownyUtil.getTownFromString(args[1]));
+        player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.TREASURY_REMOVED) + " " + ChatFormatter.formatWarningMessageNoPrefix(tes.getTown().getName()));
+        Treasuries.removeTreasury(tes);
     }
 
     @Override

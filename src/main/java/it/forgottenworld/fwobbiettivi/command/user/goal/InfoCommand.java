@@ -11,7 +11,6 @@ import it.forgottenworld.fwobbiettivi.utility.cmd.GoalCommandNames;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
@@ -67,11 +66,14 @@ public class InfoCommand extends SubCommand {
             player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("REQUIRED ZENAR: ") + ChatColor.GRAY + goal.getRequiredZenar());
         if (!goal.getRequiredObjects().isEmpty())
             player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("REQUIRED OBJECT: ") + ChatColor.GRAY + ChatFormatter.listFormatter(goal.getRequiredObjects()));
-        player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("PAYMENT: ") + ChatColor.GRAY + ChatFormatter.listFormatter(goal.getPayment()));
+        if (!goal.getRequiredObjects().isEmpty())
+            player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("PAYMENT: ") + ChatColor.GRAY + ChatFormatter.listFormatter(goal.getRequiredObjects()));
         if (goal.getRequiredZenar() > 0)
             player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("REWARD ZENAR: ") + ChatColor.GRAY + goal.getRewardZenar());
         if (!goal.getReward().isEmpty())
             player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("REWARD OBJECT: ") + ChatColor.GRAY + ChatFormatter.listFormatter(goal.getReward()));
+        if (!goal.getRewardMultiplierPlugin().isEmpty())
+            player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("REWARD MULTIPLIER: ") + ChatColor.GRAY + goal.getRewardMultiplierPlugin());
         if (!goal.getRewardPermissions().isEmpty())
             player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("REWARD PERMS: ") + ChatColor.GRAY + ChatFormatter.listFormatter(goal.getRewardPermissions()));
 

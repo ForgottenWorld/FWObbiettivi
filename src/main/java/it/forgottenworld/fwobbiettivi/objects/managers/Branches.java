@@ -65,19 +65,6 @@ public class Branches {
     }
 
     public static void load() {
-//        rami.clear();
-//        Set<String> nameBranch = FWObbiettivi.getInstance().getConfig().getConfigurationSection("branch").getKeys(false);
-//
-//        for (String branch: nameBranch) {
-//
-//            ItemStack icon = new ItemStack(Material.getMaterial(FWObbiettivi.getInstance().getConfig().getString("branch." + branch + ".material")));
-//
-//            ArrayList<String> description = new ArrayList<String>();
-//            description.addAll(FWObbiettivi.getInstance().getConfig().getStringList("branch." + branch + ".description"));
-//
-//            rami.add(new Branch(branch, icon, description));
-//        }
-
         ConfigManager branches = FWObbiettivi.getInstance().getBranches();
         rami.clear();
 

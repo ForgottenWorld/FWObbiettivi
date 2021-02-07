@@ -58,6 +58,7 @@ public class Messages {
     public static final String TREASURY_PLOT_NEEDED = ConfigUtil.getConfigStringLang("treasury_plot_needed");
     public static final String TREASURY_UNCLAIM_REMOVED_ABORT = ConfigUtil.getConfigStringLang("treasury_unclaim_removed");
     public static final String TREASURY_PLOT_ALREADY_SET = ConfigUtil.getConfigStringLang("treasury_plot_already_set");
+    public static final String TREASURY_REMOVED_ABORT = ConfigUtil.getConfigStringLang("treasury_removed_abort");
     public static final String NO_CHEST_FOUND = ConfigUtil.getConfigStringLang("no_chest_found");
     public static final String NO_FATHER_GOAL = ConfigUtil.getConfigStringLang("no_father_goal");
     public static final String NO_TREASURY = ConfigUtil.getConfigStringLang("no_treasury");
@@ -66,6 +67,7 @@ public class Messages {
     public static final String NOT_ENOUGH_MONEY = ConfigUtil.getConfigStringLang("not_enough_money");
     public static final String TOWN_MONEY_WITHDRAWN = ConfigUtil.getConfigStringLang("town_money_withdrawn");
     public static final String TOWN_OBJECTS_WITHDRAWN = ConfigUtil.getConfigStringLang("town_objects_withdrawn");
+    public static final String NO_TOWN_OR_GOAL_FOUND = ConfigUtil.getConfigStringLang("no_town_or_goal_found");
 
     /**
      * PROMPT

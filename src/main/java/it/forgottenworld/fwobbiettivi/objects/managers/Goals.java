@@ -110,29 +110,30 @@ public class Goals {
     }
 
     public static void load() {
+        ConfigManager goals = FWObbiettivi.getInstance().getGoals();
         obbiettivi.clear();
-        ConfigurationSection sec = FWObbiettivi.getInstance().getConfig().getConfigurationSection("goal");
 
-        if (sec != null) {
-            for (String goal : sec.getKeys(false)) {
+        if (goals.getFile().getConfigurationSection("goals") != null) {
+            for (String goal : goals.getFile().getConfigurationSection("goals").getKeys(false)) {
+                String path = "goals." + goal;
                 // Required Goals
                 ArrayList<String> requiredGoal = new ArrayList<String>();
-                requiredGoal.addAll(FWObbiettivi.getInstance().getConfig().getStringList("goal." + goal + ".requiredGoals"));
+                requiredGoal.addAll(goals.getFile().getStringList(path + ".requiredGoals"));
 
                 // Required Zenar
                 double requiredZenar = 0.0;
-                if (FWObbiettivi.getInstance().getConfig().getConfigurationSection("goal." + goal).getKeys(false).contains("requiredZenar"))
-                    requiredZenar = FWObbiettivi.getInstance().getConfig().getDouble("goal." + goal + ".requiredZenar");
+                if (goals.getFile().getConfigurationSection(path).getKeys(false).contains("requiredZenar"))
+                    requiredZenar = goals.getFile().getDouble(path + ".requiredZenar");
 
                 // Required Objects
                 ArrayList<String> requiredObjectsMaterial = new ArrayList<String>();
                 ArrayList<Integer> requiredObjectsQuantity = new ArrayList<Integer>();
                 ArrayList<ItemStack> requiredObjects = new ArrayList<ItemStack>();
 
-                if (FWObbiettivi.getInstance().getConfig().getConfigurationSection("goal." + goal).getKeys(false).contains("requiredObject") &&
-                        FWObbiettivi.getInstance().getConfig().getConfigurationSection("goal." + goal).getKeys(false).contains("requiredQuantity")) {
-                    requiredObjectsMaterial.addAll(FWObbiettivi.getInstance().getConfig().getStringList("goal." + goal + ".requiredObject"));
-                    requiredObjectsQuantity.addAll(FWObbiettivi.getInstance().getConfig().getIntegerList("goal." + goal + ".requiredQuantity"));
+                if (goals.getFile().getConfigurationSection(path).getKeys(false).contains("requiredObject") &&
+                        goals.getFile().getConfigurationSection(path).getKeys(false).contains("requiredQuantity")) {
+                    requiredObjectsMaterial.addAll(goals.getFile().getStringList(path + ".requiredObject"));
+                    requiredObjectsQuantity.addAll(goals.getFile().getIntegerList(path + ".requiredQuantity"));
                     for (int i = 0; i < requiredObjectsMaterial.size(); i++) {
                         requiredObjects.add(new ItemStack(Material.getMaterial(requiredObjectsMaterial.get(i)),
                                 requiredObjectsQuantity.get(i)));
@@ -143,26 +144,26 @@ public class Goals {
                 Branch ramo = null;
                 for (Iterator<Branch> it = Branches.getRami().iterator(); it.hasNext(); ) {
                     Branch branch = it.next();
-                    if (branch.getName().equals(FWObbiettivi.getInstance().getConfig().getString("goal." + goal + ".branch"))) {
+                    if (branch.getName().equals(goals.getFile().getString(path + ".branch"))) {
                         // Adding Goal to that Town
                         ramo = branch;
                     } else {
-                        FWObbiettivi.info(ChatFormatter.formatErrorMessage(Messages.NO_GOAL_IN_LIST) + ChatFormatter.formatWarningMessage(FWObbiettivi.getInstance().getConfig().getString("goal." + goal + ".branch")));
+                        FWObbiettivi.info(ChatFormatter.formatErrorMessage(Messages.NO_GOAL_IN_LIST) + ChatFormatter.formatWarningMessage(goals.getFile().getString("goal." + goal + ".branch")));
                     }
                 }
 
                 // Number of Plot
-                int numPlot = FWObbiettivi.getInstance().getConfig().getInt("goal." + goal + ".plot");
+                int numPlot = goals.getFile().getInt(path + ".plot");
 
                 // Payment materials
                 ArrayList<String> paymentsMaterial = new ArrayList<String>();
                 ArrayList<Integer> paymentsQuantity = new ArrayList<Integer>();
                 ArrayList<ItemStack> payment = new ArrayList<ItemStack>();
 
-                if (FWObbiettivi.getInstance().getConfig().getConfigurationSection("goal." + goal).getKeys(false).contains("payment") &&
-                        FWObbiettivi.getInstance().getConfig().getConfigurationSection("goal." + goal).getKeys(false).contains("paymentQuantity")){
-                    paymentsMaterial.addAll(FWObbiettivi.getInstance().getConfig().getStringList("goal." + goal + ".payment"));
-                    paymentsQuantity.addAll(FWObbiettivi.getInstance().getConfig().getIntegerList("goal." + goal + ".paymentQuantity"));
+                if (goals.getFile().getConfigurationSection(path).getKeys(false).contains("payment") &&
+                        goals.getFile().getConfigurationSection(path).getKeys(false).contains("paymentQuantity")){
+                    paymentsMaterial.addAll(goals.getFile().getStringList(path + ".payment"));
+                    paymentsQuantity.addAll(goals.getFile().getIntegerList(path + ".paymentQuantity"));
                     for (int i = 0; i < paymentsMaterial.size(); i++) {
                         payment.add(new ItemStack(Material.getMaterial(paymentsMaterial.get(i)),
                                 paymentsQuantity.get(i)));
@@ -174,10 +175,10 @@ public class Goals {
                 ArrayList<Integer> rewardsQuantity = new ArrayList<Integer>();
                 ArrayList<ItemStack> reward = new ArrayList<ItemStack>();
 
-                if (FWObbiettivi.getInstance().getConfig().getConfigurationSection("goal." + goal).getKeys(false).contains("reward") &&
-                        FWObbiettivi.getInstance().getConfig().getConfigurationSection("goal." + goal).getKeys(false).contains("rewardQuantity")){
-                    rewardsMaterial.addAll(FWObbiettivi.getInstance().getConfig().getStringList("goal." + goal + ".reward"));
-                    rewardsQuantity.addAll(FWObbiettivi.getInstance().getConfig().getIntegerList("goal." + goal + ".rewardQuantity"));
+                if (goals.getFile().getConfigurationSection(path).getKeys(false).contains("reward") &&
+                        goals.getFile().getConfigurationSection(path).getKeys(false).contains("rewardQuantity")){
+                    rewardsMaterial.addAll(goals.getFile().getStringList(path + ".reward"));
+                    rewardsQuantity.addAll(goals.getFile().getIntegerList(path + ".rewardQuantity"));
 
                     for (int i = 0; i < rewardsMaterial.size(); i++) {
                         reward.add(new ItemStack(Material.getMaterial(rewardsMaterial.get(i)),
@@ -187,22 +188,22 @@ public class Goals {
 
                 // Reward Zenar
                 double rewardZenar = 0.0;
-                if (FWObbiettivi.getInstance().getConfig().getConfigurationSection("goal." + goal).getKeys(false).contains("rewardZenar"))
-                    rewardZenar = FWObbiettivi.getInstance().getConfig().getDouble("goal." + goal + ".rewardZenar");
+                if (goals.getFile().getConfigurationSection(path).getKeys(false).contains("rewardZenar"))
+                    rewardZenar = goals.getFile().getDouble(path + ".rewardZenar");
 
                 // Reward Permissions
                 ArrayList<String> rewardPermissions = new ArrayList<String>();
-                if (FWObbiettivi.getInstance().getConfig().getConfigurationSection("goal." + goal).getKeys(false).contains("rewardPermissions"))
-                    rewardPermissions.addAll(FWObbiettivi.getInstance().getConfig().getStringList("goal." + goal + ".rewardPermissions"));
+                if (goals.getFile().getConfigurationSection(path).getKeys(false).contains("rewardPermissions"))
+                    rewardPermissions.addAll(goals.getFile().getStringList(path + ".rewardPermissions"));
 
                 // Reward Multiplier Plugin Name
                 String rewardMultiplierPlugin = "";
-                if (FWObbiettivi.getInstance().getConfig().getConfigurationSection("goal." + goal).getKeys(false).contains("rewardMultiplierPlugin"))
-                    rewardMultiplierPlugin = FWObbiettivi.getInstance().getConfig().getString("goal." + goal + ".rewardMultiplierPlugin");
+                if (goals.getFile().getConfigurationSection(path).getKeys(false).contains("rewardMultiplierPlugin"))
+                    rewardMultiplierPlugin = goals.getFile().getString(path + ".rewardMultiplierPlugin");
 
                 // Description
                 ArrayList<String> description = new ArrayList<String>();
-                description.addAll(FWObbiettivi.getInstance().getConfig().getStringList("goal." + goal + ".description"));
+                description.addAll(goals.getFile().getStringList(path + ".description"));
 
                 obbiettivi.add(new Goal(goal, ramo, numPlot, requiredGoal, requiredZenar, requiredObjects, payment, reward, rewardZenar, rewardPermissions, rewardMultiplierPlugin, description));
             }
