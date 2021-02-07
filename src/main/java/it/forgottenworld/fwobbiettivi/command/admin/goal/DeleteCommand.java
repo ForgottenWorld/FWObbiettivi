@@ -48,7 +48,6 @@ public class DeleteCommand extends SubCommand {
 
     @Override
     public void perform(CommandSender sender, String[] args) {
-        // TODO Delete a Goal
         Player player = (Player) sender;
         Goal goal = Goals.getGoalFromString(args[1]);
 
@@ -59,14 +58,12 @@ public class DeleteCommand extends SubCommand {
 
         // Check if exist town with this goal
         if (!TownGoals.getTownFromGoal(goal).isEmpty()) {
-            // TODO
             player.sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_IN_USE));
             return;
         }
 
         // Delete Goal
         Goals.removeGoal(goal);
-        // TODO
         player.sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_DELETED) + " " + ChatFormatter.formatWarningMessageNoPrefix(args[1]));
     }
 
