@@ -65,7 +65,7 @@ public class ShowCommand extends SubCommand {
             // List of Goals
             sender.sendMessage(ChatFormatter.chatHeader());
             for (Goal g : TownGoals.getGoalFromTown(TownyUtil.getTownFromString(args[1]))){
-                sender.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("- " + g.getName()));
+                sender.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("- " + g.getName()) + " - " + (TownGoals.getTownGoalFromGoalAndTown(g, TownyUtil.getTownFromString(args[1])).isActive() ? ChatFormatter.formatSuccessMessageNoPrefix("ENABLED"):ChatFormatter.formatErrorMessageNoPrefix("DISABLED")));
             }
             sender.sendMessage(ChatFormatter.chatFooter());
         } else {
