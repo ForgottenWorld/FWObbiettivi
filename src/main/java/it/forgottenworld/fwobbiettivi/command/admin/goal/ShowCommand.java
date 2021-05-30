@@ -52,18 +52,21 @@ public class ShowCommand extends SubCommand {
     @Override
     public void perform(CommandSender sender, String[] args) {
         // TODO Pagination
-        // Goals
+
         if (Goals.isGoal(args[1])){
+            // Goals
             // List of Towns
             sender.sendMessage(ChatFormatter.chatHeader());
+            sender.sendMessage(ChatFormatter.formatSuccessMessageNoPrefix(Messages.TOWNS_WITH_GOAL) + " " + ChatFormatter.formatWarningMessageNoPrefix(args[1]));
             for (Town t : TownGoals.getTownFromGoal(Goals.getGoalFromString(args[1]))){
-                sender.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("- " + t.getName()));
+                sender.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("- " + t.getName()) + " - " + (TownGoals.getTownGoalFromGoalAndTown(Goals.getGoalFromString(args[1]), t).isActive() ? ChatFormatter.formatSuccessMessageNoPrefix("ENABLED"):ChatFormatter.formatErrorMessageNoPrefix("DISABLED")));
             }
             sender.sendMessage(ChatFormatter.chatFooter());
         } else if (TownyUtil.isTown(args[1])){
             // Towns
             // List of Goals
             sender.sendMessage(ChatFormatter.chatHeader());
+            sender.sendMessage(ChatFormatter.formatSuccessMessageNoPrefix(Messages.GOALS_IN_TOWN) + " " + ChatFormatter.formatWarningMessageNoPrefix(args[1]));
             for (Goal g : TownGoals.getGoalFromTown(TownyUtil.getTownFromString(args[1]))){
                 sender.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("- " + g.getName()) + " - " + (TownGoals.getTownGoalFromGoalAndTown(g, TownyUtil.getTownFromString(args[1])).isActive() ? ChatFormatter.formatSuccessMessageNoPrefix("ENABLED"):ChatFormatter.formatErrorMessageNoPrefix("DISABLED")));
             }

@@ -47,6 +47,8 @@ public class Messages {
     public static final String GOAL_NOT_EXIST = ConfigUtil.getConfigStringLang("goal_not_exist");
     public static final String GOAL_IN_USE = ConfigUtil.getConfigStringLang("goal_in_use");
     public static final String GOAL_DELETED = ConfigUtil.getConfigStringLang("goal_deleted");
+    public static final String TOWNS_WITH_GOAL = ConfigUtil.getConfigStringLang("towns_with_goal");
+    public static final String GOALS_IN_TOWN = ConfigUtil.getConfigStringLang("goals_in_town");
 
     public static final String BRANCH_ALREADY_EXIST = ConfigUtil.getConfigStringLang("branch_already_exist");
     public static final String BRANCH_NOT_EXIST = ConfigUtil.getConfigStringLang("branch_not_exist");

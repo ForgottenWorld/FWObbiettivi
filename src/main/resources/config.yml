@@ -182,6 +182,8 @@ languages:
     goal_not_exist: "Non esiste un obbiettivo con questo nome."
     goal_in_use: "L'obbiettivo è utilizzato in qualche citta'."
     goal_deleted: "Obbiettivo eliminato:"
+    towns_with_goal: "Citta' che hanno l'obbiettivo:"
+    goals_in_town: "Obbiettivi preenti nella citta':"
     cmds:
       gui_cmd_description: "Apre la GUI di gestione."
       help_cmd_description: "Mostra questa lista."
