@@ -17,13 +17,15 @@ public class GUIUtil {
 
     public static final int BRANCH_STEP = 4; // Branch Menu
 
-    public static final int BRANCH_EDIT_STEP = 5;
-    public static final int BRANCH_DELETE_STEP = 6;
+    public static final int BRANCH_DELETE_STEP = 5;
 
-    public static final int BRANCH_LIST_STEP = 7;
-    public static final int GOALS_LIST_STEP = 8;
+    public static final int BRANCH_LIST_STEP = 6;
+    public static final int GOALS_LIST_STEP = 7;
 
-    public static final int GOAL_INFO_STEP = 9;
+    public static final int GOAL_INFO_STEP = 8;
+    public static final int GOAL_INFO_REQ_STEP = 9;
+    public static final int GOAL_INFO_PAY_STEP = 10;
+    public static final int GOAL_INFO_REW_STEP = 11;
 
     // Menu Obbiettivi Cittadini
     public static String GOALS_INVENTORY_TITLE = ConfigUtil.getConfigStringLang("gui.goals_inventory_title");
@@ -133,5 +135,9 @@ public class GUIUtil {
 
         return menuPoint;
     }
+
+    public static final String GOALS_INFO_REQ_INVENTORY_TITLE = ConfigUtil.getConfigStringLang("gui.goals_info_req_inventory_title");
+    public static final String GOALS_INFO_PAY_INVENTORY_TITLE = ConfigUtil.getConfigStringLang("gui.goals_info_pay_inventory_title");
+    public static final String GOALS_INFO_REW_INVENTORY_TITLE = ConfigUtil.getConfigStringLang("gui.goals_info_rew_inventory_title");
 
 }

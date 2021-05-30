@@ -74,8 +74,8 @@ public class AddCommand extends SubCommand {
         }
 
         // Check if chest is already a goal
-        if (!GoalAreaManager.getListTownGoalFromChunk(b.getChunk()).isEmpty() &&
-                !GoalAreaManager.getListTownGoalFromChunk(b.getChunk()).stream().filter(c -> c.getLocation().equals(b.getLocation())).collect(Collectors.toList()).isEmpty()){
+        if (!GoalAreaManager.getListTownGoalFromChunk(b.getChunk().getChunkKey()).isEmpty() &&
+                !GoalAreaManager.getListTownGoalFromChunk(b.getChunk().getChunkKey()).stream().filter(c -> c.getLocation().equals(b.getLocation())).collect(Collectors.toList()).isEmpty()){
             player.sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_ALREADY_PRESENT_HERE));
             return;
         }
@@ -101,8 +101,8 @@ public class AddCommand extends SubCommand {
             return;
         }
 
-        if (GoalAreaManager.getChunks().get(player.getLocation().getChunk()) != null) {
-            if (GoalAreaManager.getListTownGoalFromChunk(player.getLocation().getChunk()).size() + (GoalAreaManager.getTreasuryCurrentlyFromChunk(player.getLocation().getChunk()) == null ? 0 : 1) >= ConfigUtil.MAX_GOAL_IN_CHUNK) {
+        if (GoalAreaManager.getChunks().get(player.getLocation().getChunk().getChunkKey()) != null) {
+            if (GoalAreaManager.getListTownGoalFromChunk(player.getLocation().getChunk().getChunkKey()).size() + (GoalAreaManager.getTreasuryCurrentlyFromChunk(player.getLocation().getChunk().getChunkKey()) == null ? 0 : 1) >= ConfigUtil.MAX_GOAL_IN_CHUNK) {
                 player.sendMessage(ChatFormatter.formatErrorMessage(Messages.MAX_GOAL_IN_CHUNK));
                 return;
             }
@@ -116,7 +116,7 @@ public class AddCommand extends SubCommand {
 
         // Check if a Treasury is already present in Town
         if (!ConfigUtil.MULTI_GOAL) {
-            if (GoalAreaManager.isOnTreasury(player.getLocation().getChunk())) {
+            if (GoalAreaManager.isOnTreasury(player.getLocation().getChunk().getChunkKey())) {
                 player.sendMessage(ChatFormatter.formatErrorMessage(Messages.TREASURY_ALREADY_PRESENT));
                 return;
             }
@@ -177,7 +177,7 @@ public class AddCommand extends SubCommand {
 
         TownGoals.addTownGoal(tg);
         // Adding chunk to the chunk control system
-        GoalAreaManager.addChunk(loc.getChunk(), tg);
+        GoalAreaManager.addChunk(loc.getChunk().getChunkKey(), tg);
 
         if (tg.getGoal().getNumPlot() > 1)
             GoalAreaManager.getInstance().putGoalAreaCreation(player.getUniqueId(), tg);
@@ -228,7 +228,7 @@ public class AddCommand extends SubCommand {
 
     @Override
     public List<String> getSubcommandArguments(Player player, String[] args) {
-        ArrayList<String> result = new ArrayList<String>();
+        ArrayList<String> result = new ArrayList<>();
 
         if (args.length == 2) {
             for (Goal goal : Goals.getObbiettivi()) {

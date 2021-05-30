@@ -11,7 +11,8 @@ import it.forgottenworld.fwobbiettivi.objects.TownGoal;
 import it.forgottenworld.fwobbiettivi.utility.FWLocation;
 import it.forgottenworld.fwobbiettivi.utility.Messages;
 import it.forgottenworld.fwobbiettivi.utility.TownyUtil;
-import org.bukkit.Chunk;
+import it.forgottenworld.fwobbiettivi.utility.Util;
+import javafx.util.Pair;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -57,15 +58,16 @@ public class TownGoals {
      * @param tg
      */
     public static void removeTownGoal(TownGoal tg){
-        List<Chunk> chunks = GoalAreaManager.getChunksFromTownGoal(tg);
+        List<Long> chunks = GoalAreaManager.getChunksFromTownGoal(tg);
         if (chunks.isEmpty()) {
             FWObbiettivi.info(Messages.CHUNK_NOT_FOUND);
             return;
         }
 
-        for (Chunk c : chunks){
+        for (Long c : chunks){
+            Pair<Integer, Integer> chunkCoords = Util.getPairFromKey(c);
             // Rename
-            TownyUtil.renamePlot(new Location(tg.getLocation().getWorld(), (c.getX() * 16), 64, (c.getZ() * 16)), tg.getGoal().getName(), true);
+            TownyUtil.renamePlot(new Location(tg.getLocation().getWorld(), (chunkCoords.getKey() * 16), 64, (chunkCoords.getValue() * 16)), tg.getGoal().getName(), true);
             // Remove chunk
             GoalAreaManager.removeChunk(c, tg);
         }

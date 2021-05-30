@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
@@ -46,6 +47,8 @@ public class GUIGoalsListener implements Listener {
             } else if (Goals.getObbiettivi().stream().anyMatch(p -> p.getName().equals(title))) {
                 handleGoalInfoSelectionGUI((Player) event.getWhoClicked(), event.getCurrentItem(), title);
                 event.setCancelled(true);
+            } else if (title.equals(GUIUtil.GOALS_INFO_REQ_INVENTORY_TITLE) || title.equals(GUIUtil.GOALS_INFO_PAY_INVENTORY_TITLE) || title.equals(GUIUtil.GOALS_INFO_REW_INVENTORY_TITLE)){
+                handleGoalInfoSubSelectionGUI((Player) event.getWhoClicked(), event.getCurrentItem(), title, event.getClickedInventory().getStorageContents());
             }
         }
     }
@@ -178,25 +181,56 @@ public class GUIGoalsListener implements Listener {
 
         switch (item.getType()){
             case COMPASS:
-
+                FWObbiettivi.getInstance().map.get(whoClicked).openGUI(GUIUtil.GOAL_INFO_REQ_STEP, Goals.getGoalFromString(name));
                 player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, 10, 1);
                 break;
             case CHEST:
-
+                FWObbiettivi.getInstance().map.get(whoClicked).openGUI(GUIUtil.GOAL_INFO_PAY_STEP, Goals.getGoalFromString(name));
                 player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, 10, 1);
                 break;
             case GOLD_BLOCK:
-
+                FWObbiettivi.getInstance().map.get(whoClicked).openGUI(GUIUtil.GOAL_INFO_REW_STEP, Goals.getGoalFromString(name));
                 player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, 10, 1);
                 break;
             case BARRIER:
                 // Torna indietro
                 // Torno alla GUI precedente (Lista Obbiettivi in Ramo)
-                FWObbiettivi.getInstance().map.get(whoClicked).getSteps().remove(FWObbiettivi.getInstance().map.get(whoClicked).getSteps().size() - 1);
-                FWObbiettivi.getInstance().map.get(whoClicked).getSteps().remove(FWObbiettivi.getInstance().map.get(whoClicked).getSteps().size() - 1);
+                FWObbiettivi.getInstance().map.get(whoClicked).getSteps().remove(FWObbiettivi.getInstance().map.get(whoClicked).getSteps().size() - 2);
                 FWObbiettivi.getInstance().map.get(whoClicked).openGUI(GUIUtil.GOALS_LIST_STEP, Goals.getGoalFromString(name).getBranch());
                 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_FRAME_REMOVE_ITEM, 10, 1);
                 break;
+        }
+    }
+
+    // Goal Info Submenu
+    private void handleGoalInfoSubSelectionGUI(Player player, ItemStack item, String name, ItemStack[] inventoryIS) {
+        UUID whoClicked = player.getUniqueId();
+        FWObbiettivi.getInstance().map.get(whoClicked).setPlayer(player);
+        int step = FWObbiettivi.getInstance().map.get(whoClicked).getSteps().get(FWObbiettivi.getInstance().map.get(whoClicked).getSteps().size()).intValue();
+
+        if (item.getType().equals(Material.BARRIER)) {
+            // Save all
+        }
+
+        switch (step) {
+            case GUIUtil.GOAL_INFO_REQ_STEP:
+
+                break;
+            case GUIUtil.GOAL_INFO_PAY_STEP:
+
+                break;
+            case GUIUtil.GOAL_INFO_REW_STEP:
+
+                break;
+        }
+    }
+
+    @EventHandler
+    public void onPlayerCloseGUIObbiettiviEvent(InventoryCloseEvent event){
+        String title = event.getView().getTitle();
+
+        if (Goals.getObbiettivi().stream().anyMatch(p -> p.getName().equals(title))) {
+            //handleGoalInfoSubSelectionGUI((Player) event.getPlayer(), event.getCurrentItem(), title);
         }
     }
 }

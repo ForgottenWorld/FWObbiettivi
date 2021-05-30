@@ -52,17 +52,17 @@ public class GoalAreaCreationListener implements Listener {
         }
 
         if (!ConfigUtil.MULTI_GOAL) {
-            if (GoalAreaManager.getChunks().containsKey(e.getClickedBlock().getChunk()) && GoalAreaManager.getChunks().get(e.getClickedBlock().getChunk()).size() == 1) {
-                e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_PLOT_ALREADY_SET) + " " + ChatFormatter.formatWarningMessageNoPrefix(GoalAreaManager.getListTownGoalFromChunk(e.getClickedBlock().getLocation().getChunk()).get(0).getGoal().getName()));
+            if (GoalAreaManager.getChunks().containsKey(e.getClickedBlock().getChunk().getChunkKey()) && GoalAreaManager.getChunks().get(e.getClickedBlock().getChunk().getChunkKey()).size() == 1) {
+                e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_PLOT_ALREADY_SET) + " " + ChatFormatter.formatWarningMessageNoPrefix(GoalAreaManager.getListTownGoalFromChunk(e.getClickedBlock().getLocation().getChunk().getChunkKey()).get(0).getGoal().getName()));
                 return;
             }
 
-            if (GoalAreaManager.getChunksTes().containsKey(e.getClickedBlock().getChunk())) {
+            if (GoalAreaManager.getChunksTes().containsKey(e.getClickedBlock().getChunk().getChunkKey())) {
                 e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.TREASURY_PLOT_ALREADY_SET));
                 return;
             }
         } else {
-            List<TownGoal> townGoals = GoalAreaManager.getListTownGoalFromChunk(e.getClickedBlock().getLocation().getChunk());
+            List<TownGoal> townGoals = GoalAreaManager.getListTownGoalFromChunk(e.getClickedBlock().getLocation().getChunk().getChunkKey());
             if (townGoals.isEmpty()) {
                 e.getPlayer().sendMessage(ChatFormatter.formatSuccessMessage(Messages.NO_GOAL_LOC));
             } else {
@@ -82,12 +82,12 @@ public class GoalAreaCreationListener implements Listener {
         for (Pair<Integer, Integer> chunk : chunksList){
             Location loc = new Location(Bukkit.getServer().getWorld(ConfigUtil.getWorldName()), chunk.getKey() * 16, 64, chunk.getValue() * 16);
             TownGoal tg = GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId());
-            if (!GoalAreaManager.getChunksFromTownGoal(tg).contains(loc.getChunk())){
+            if (!GoalAreaManager.getChunksFromTownGoal(tg).contains(loc.getChunk().getChunkKey())){
                 int maxPlot = tg.getGoal().getNumPlot();
                 long chunkCount = GoalAreaManager.getChunksFromTownGoal(tg).size();
 
-                if (GoalAreaManager.getChunks().get(e.getClickedBlock().getLocation().getChunk()) != null) {
-                    if (GoalAreaManager.getListTownGoalFromChunk(e.getClickedBlock().getLocation().getChunk()).size() + (GoalAreaManager.getTreasuryCurrentlyFromChunk(e.getClickedBlock().getLocation().getChunk()) == null ? 0 : 1) >= ConfigUtil.MAX_GOAL_IN_CHUNK) {
+                if (GoalAreaManager.getChunks().get(e.getClickedBlock().getLocation().getChunk().getChunkKey()) != null) {
+                    if (GoalAreaManager.getListTownGoalFromChunk(e.getClickedBlock().getLocation().getChunk().getChunkKey()).size() + (GoalAreaManager.getTreasuryCurrentlyFromChunk(e.getClickedBlock().getLocation().getChunk().getChunkKey()) == null ? 0 : 1) >= ConfigUtil.MAX_GOAL_IN_CHUNK) {
                         e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.MAX_GOAL_IN_CHUNK));
                         return;
                     }
@@ -102,7 +102,7 @@ public class GoalAreaCreationListener implements Listener {
                     }
 
                     TownyUtil.renamePlot(e.getClickedBlock().getLocation(), tg.getGoal().getName(), false);
-                    GoalAreaManager.addChunk(e.getPlayer().getLocation().getChunk(), tg);
+                    GoalAreaManager.addChunk(e.getPlayer().getLocation().getChunk().getChunkKey(), tg);
 
                     e.getPlayer().sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_PLOT_NEEDED) + " " + ChatFormatter.formatWarningMessageNoPrefix((chunkCount + 1) + "/" + maxPlot));
 

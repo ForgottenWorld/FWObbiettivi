@@ -4,10 +4,8 @@ import com.palmergames.bukkit.towny.object.Town;
 import it.forgottenworld.fwobbiettivi.FWObbiettivi;
 import it.forgottenworld.fwobbiettivi.config.ConfigManager;
 import it.forgottenworld.fwobbiettivi.objects.Treasury;
-import it.forgottenworld.fwobbiettivi.utility.ConfigUtil;
-import it.forgottenworld.fwobbiettivi.utility.FWLocation;
-import it.forgottenworld.fwobbiettivi.utility.Messages;
-import it.forgottenworld.fwobbiettivi.utility.TownyUtil;
+import it.forgottenworld.fwobbiettivi.utility.*;
+import javafx.util.Pair;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -55,15 +53,16 @@ public class Treasuries {
      * @param tes
      */
     public static void removeTreasury(Treasury tes) {
-        List<Chunk> chunks = GoalAreaManager.getChunksFromTownTes(tes);
+        List<Long> chunks = GoalAreaManager.getChunksFromTownTes(tes);
         if (chunks.isEmpty()) {
             FWObbiettivi.info(Messages.CHUNK_NOT_FOUND);
             return;
         }
 
-        for (Chunk c : chunks){
+        for (Long c : chunks){
+            Pair<Integer, Integer> chunkCoords = Util.getPairFromKey(c);
             // Rename
-            TownyUtil.renamePlot(new Location(tes.getLocationChestRight().getWorld(), (c.getX() * 16), 64, (c.getZ() * 16)), tes.getName(), true);
+            TownyUtil.renamePlot(new Location(tes.getLocationChestRight().getWorld(), (chunkCoords.getKey() * 16), 64, (chunkCoords.getValue() * 16)), tes.getName(), true);
             // Remove chunk
             GoalAreaManager.removeChunkTes(c, tes);
         }

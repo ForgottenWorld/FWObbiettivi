@@ -9,6 +9,7 @@ import it.forgottenworld.fwobbiettivi.utility.GUIUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -94,7 +95,20 @@ public class GoalsGUI {
 
     public void openGUI(int step, Goal g){
         steps.add(BigDecimal.valueOf(step));
-        openGoalInfoGUI(g);
+        switch (step) {
+            case GUIUtil.GOAL_INFO_STEP:
+                openGoalInfoGUI(g);
+                break;
+            case GUIUtil.GOAL_INFO_REQ_STEP:
+                openGeneratedRequiredGUI(g);
+                break;
+            case GUIUtil.GOAL_INFO_PAY_STEP:
+                openGeneratedPaymentGUI(g);
+                break;
+            case GUIUtil.GOAL_INFO_REW_STEP:
+                openGeneratedRewardGUI(g);
+                break;
+        }
     }
 
     private void openGoalsGUI() {
@@ -238,6 +252,69 @@ public class GoalsGUI {
                         GUIUtil.BRANCH_LIST_BACK_ITEM_MATERIAL,
                         GUIUtil.BRANCH_LIST_BACK_ITEM_NAME,
                         GUIUtil.BRANCH_LIST_BACK_ITEM_LORE
+                ));
+
+        player.openInventory(GUI);
+    }
+
+    private void openGeneratedRequiredGUI(Goal goal) {
+        Inventory GUI = Bukkit.createInventory(null, GUIUtil.GOAL_INFO_INVENTORY_SIZE, goal.getName());
+        int position = 0;
+
+        if (!goal.getRequiredObjects().isEmpty()) {
+            for (ItemStack is : goal.getRequiredObjects()) {
+                GUI.setItem(position, is);
+                position++;
+            }
+        }
+
+        GUI.setItem(GUIUtil.GOALS_BACK_ITEM_SLOT,
+                GUIUtil.prepareMenuPoint(
+                        GUIUtil.GOALS_INFO_BACK_ITEM_MATERIAL,
+                        GUIUtil.GOALS_INFO_BACK_ITEM_NAME,
+                        GUIUtil.GOALS_INFO_BACK_ITEM_LORE
+                ));
+
+        player.openInventory(GUI);
+    }
+
+    private void openGeneratedPaymentGUI(Goal goal) {
+        Inventory GUI = Bukkit.createInventory(null, GUIUtil.GOAL_INFO_INVENTORY_SIZE, goal.getName());
+        int position = 0;
+
+        if (!goal.getPayment().isEmpty()) {
+            for (ItemStack is : goal.getPayment()) {
+                GUI.setItem(position, is);
+                position++;
+            }
+        }
+
+        GUI.setItem(GUIUtil.GOALS_BACK_ITEM_SLOT,
+                GUIUtil.prepareMenuPoint(
+                        GUIUtil.GOALS_INFO_BACK_ITEM_MATERIAL,
+                        GUIUtil.GOALS_INFO_BACK_ITEM_NAME,
+                        GUIUtil.GOALS_INFO_BACK_ITEM_LORE
+                ));
+
+        player.openInventory(GUI);
+    }
+
+    private void openGeneratedRewardGUI(Goal goal) {
+        Inventory GUI = Bukkit.createInventory(null, GUIUtil.GOAL_INFO_INVENTORY_SIZE, goal.getName());
+        int position = 0;
+
+        if (!goal.getReward().isEmpty()) {
+            for (ItemStack is : goal.getReward()) {
+                GUI.setItem(position, is);
+                position++;
+            }
+        }
+
+        GUI.setItem(GUIUtil.GOALS_BACK_ITEM_SLOT,
+                GUIUtil.prepareMenuPoint(
+                        GUIUtil.GOALS_INFO_BACK_ITEM_MATERIAL,
+                        GUIUtil.GOALS_INFO_BACK_ITEM_NAME,
+                        GUIUtil.GOALS_INFO_BACK_ITEM_LORE
                 ));
 
         player.openInventory(GUI);

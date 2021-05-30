@@ -56,7 +56,7 @@ public class StatusCommand extends SubCommand {
 
         sender.sendMessage(ChatFormatter.chatHeader());
         // Check if a goal exist in that town
-        for (TownGoal tg : GoalAreaManager.getListTownGoalFromChunk(player.getLocation().getChunk())){
+        for (TownGoal tg : GoalAreaManager.getListTownGoalFromChunk(player.getLocation().getChunk().getChunkKey())){
             if (tg.isActive()) {
                 player.sendMessage(ChatFormatter.formatWarningMessageNoPrefix("- " + tg.getGoal().getName()) + " - " + ChatFormatter.formatSuccessMessageNoPrefix("ENABLED"));
             } else {

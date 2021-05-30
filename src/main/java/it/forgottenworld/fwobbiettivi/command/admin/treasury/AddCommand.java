@@ -98,7 +98,7 @@ public class AddCommand extends SubCommand {
             Treasury tes = new Treasury(ConfigUtil.getTreasuryName(), townTes, right.getLocation(), left.getLocation(), ConfigUtil.getTreasuryNumPlot());
             Treasuries.addTreasury(tes);
             // Adding chunk to the chunk control system
-            GoalAreaManager.addChunkTes(right.getLocation().getChunk(), tes);
+            GoalAreaManager.addChunkTes(right.getLocation().getChunk().getChunkKey(), tes);
             GoalAreaManager.getInstance().putTesAreaCreation(player.getUniqueId(), tes);
 
             // Rename plot to Treasury name

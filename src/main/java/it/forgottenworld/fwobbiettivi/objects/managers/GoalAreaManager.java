@@ -5,6 +5,7 @@ import it.forgottenworld.fwobbiettivi.config.ConfigManager;
 import it.forgottenworld.fwobbiettivi.objects.*;
 import it.forgottenworld.fwobbiettivi.utility.ConfigUtil;
 import it.forgottenworld.fwobbiettivi.utility.TownyUtil;
+import it.forgottenworld.fwobbiettivi.utility.Util;
 import javafx.util.Pair;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -17,8 +18,8 @@ public class GoalAreaManager {
 
     private HashMap<UUID, TownGoal> playerGoalAreaCreation;
     private HashMap<UUID, Treasury> playerTesAreaCreation;
-    static HashMap<Chunk, List<TownGoal>> chunks = new HashMap<>();
-    static HashMap<Chunk, Treasury> chunksTes = new HashMap<>();
+    static HashMap<Long, List<TownGoal>> chunks = new HashMap<>();
+    static HashMap<Long, Treasury> chunksTes = new HashMap<>();
 
     private GoalAreaManager() {
         this.playerGoalAreaCreation = new HashMap<>();
@@ -64,7 +65,7 @@ public class GoalAreaManager {
         return playerTesAreaCreation;
     }
 
-    public static void addChunk(Chunk chunk, TownGoal townGoal){
+    public static void addChunk(Long chunk, TownGoal townGoal){
         if (getChunks().get(chunk) == null) {
             chunks.put(chunk, new ArrayList<>());
         }
@@ -73,7 +74,7 @@ public class GoalAreaManager {
         save();
     }
 
-    public static void addChunkTes(Chunk chunk, Treasury tes){
+    public static void addChunkTes(Long chunk, Treasury tes){
         if (!containsChunkTes(chunk, tes)) {
             chunksTes.put(chunk, tes);
         }
@@ -81,8 +82,8 @@ public class GoalAreaManager {
         save();
     }
 
-    public static void removeChunk(Chunk chunk, TownGoal townGoal) {
-        for (Map.Entry<Chunk, List<TownGoal>> c : getChunks().entrySet()){
+    public static void removeChunk(Long chunk, TownGoal townGoal) {
+        for (Map.Entry<Long, List<TownGoal>> c : getChunks().entrySet()){
             if (c.getKey().equals(chunk) && c.getValue().contains(townGoal)){
                 chunks.get(c.getKey()).remove(townGoal);
             }
@@ -91,8 +92,8 @@ public class GoalAreaManager {
         save();
     }
 
-    public static void removeChunkTes(Chunk chunk, Treasury tes) {
-        for (Map.Entry<Chunk, Treasury> c : getChunksTes().entrySet()){
+    public static void removeChunkTes(Long chunk, Treasury tes) {
+        for (Map.Entry<Long, Treasury> c : getChunksTes().entrySet()){
             if (c.getKey().equals(chunk) && c.getValue().equals(tes)) {
                 chunksTes.remove(chunk);
             }
@@ -101,33 +102,33 @@ public class GoalAreaManager {
         save();
     }
 
-    public static boolean containsChunk(Chunk chunk, TownGoal townGoal){
-        for (Map.Entry<Chunk, List<TownGoal>> c : getChunks().entrySet()) {
+    public static boolean containsChunk(Long chunk, TownGoal townGoal){
+        for (Map.Entry<Long, List<TownGoal>> c : getChunks().entrySet()) {
             if (c.getKey().equals(chunk) && c.getValue().contains(townGoal))
                 return true;
         }
         return false;
     }
 
-    public static boolean containsChunkTes(Chunk chunk, Treasury tes){
-        for (Map.Entry<Chunk, Treasury> c : getChunksTes().entrySet()) {
+    public static boolean containsChunkTes(Long chunk, Treasury tes){
+        for (Map.Entry<Long, Treasury> c : getChunksTes().entrySet()) {
             if (c.getKey().equals(chunk) && c.getValue().equals(tes))
                 return true;
         }
         return false;
     }
 
-    public static HashMap<Chunk, List<TownGoal>> getChunks(){
+    public static HashMap<Long, List<TownGoal>> getChunks(){
         return chunks;
     }
 
-    public static HashMap<Chunk, Treasury> getChunksTes(){
+    public static HashMap<Long, Treasury> getChunksTes(){
         return chunksTes;
     }
 
-    public static List<Chunk> getChunksFromTownGoal(TownGoal tg){
-        List<Chunk> app = new ArrayList<>();
-        for (Map.Entry<Chunk, List<TownGoal>> entry : getChunks().entrySet()) {
+    public static List<Long> getChunksFromTownGoal(TownGoal tg){
+        List<Long> app = new ArrayList<>();
+        for (Map.Entry<Long, List<TownGoal>> entry : getChunks().entrySet()) {
             if (entry.getValue().contains(tg)) {
                 app.add(entry.getKey());
             }
@@ -135,9 +136,9 @@ public class GoalAreaManager {
         return app;
     }
 
-    public static List<Chunk> getChunksFromTownTes(Treasury tes){
-        List<Chunk> app = new ArrayList<>();
-        for (Map.Entry<Chunk, Treasury> entry : getChunksTes().entrySet()) {
+    public static List<Long> getChunksFromTownTes(Treasury tes){
+        List<Long> app = new ArrayList<>();
+        for (Map.Entry<Long, Treasury> entry : getChunksTes().entrySet()) {
             if (tes.equals(entry.getValue())) {
                 app.add(entry.getKey());
             }
@@ -145,19 +146,19 @@ public class GoalAreaManager {
         return app;
     }
 
-    public static List<TownGoal> getListTownGoalFromChunk(Chunk chunk){
+    public static List<TownGoal> getListTownGoalFromChunk(Long chunk){
         return getChunks().get(chunk) == null ? new ArrayList<>() : getChunks().get(chunk);
     }
 
-    public static Treasury getTreasuryCurrentlyFromChunk(Chunk chunk){
+    public static Treasury getTreasuryCurrentlyFromChunk(Long chunk){
         return getChunksTes().get(chunk);
     }
 
-    public static boolean isOnTownGoal(Chunk chunk){
+    public static boolean isOnTownGoal(Long chunk){
         return getChunks().containsKey(chunk);
     }
 
-    public static boolean isOnTreasury(Chunk chunk){
+    public static boolean isOnTreasury(Long chunk){
         return getChunksTes().containsKey(chunk);
     }
 
@@ -178,7 +179,7 @@ public class GoalAreaManager {
     private static void saveGoal(){
         ConfigManager database = FWObbiettivi.getInstance().getDatabase();
 
-        for(Map.Entry<Chunk, List<TownGoal>> c: getChunks().entrySet()) {
+        for(Map.Entry<Long, List<TownGoal>> c: getChunks().entrySet()) {
             for (TownGoal tg : c.getValue()) {
                 String path = "chunks." + tg.getTown().getName() + "." + tg.getGoal().getName();
                 List<String> coord = new ArrayList<>();
@@ -188,8 +189,8 @@ public class GoalAreaManager {
                     coord.addAll(app);
                 }
 
-                if (!coord.contains(c.getKey().getX() + ";" + c.getKey().getZ()))
-                    coord.add(c.getKey().getX() + ";" + c.getKey().getZ());
+                if (!coord.contains(c.getKey()))
+                    coord.add(c.getKey() + "");
 
                 database.getFile().set(path, coord);
             }
@@ -200,7 +201,7 @@ public class GoalAreaManager {
     private static void saveTes(){
         ConfigManager database = FWObbiettivi.getInstance().getDatabase();
 
-        for(Map.Entry<Chunk, Treasury> c: getChunksTes().entrySet()) {
+        for(Map.Entry<Long, Treasury> c: getChunksTes().entrySet()) {
             Treasury tes = c.getValue();
             String path = "chunks." + tes.getTown().getName() + "." + tes.getName();
             List<String> coord = new ArrayList<>();
@@ -210,8 +211,8 @@ public class GoalAreaManager {
                 coord.addAll(app);
             }
 
-            if (!coord.contains(c.getKey().getX() + ";" + c.getKey().getZ()))
-                coord.add(c.getKey().getX() + ";" + c.getKey().getZ());
+            if (!coord.contains(c.getKey()))
+                coord.add(c.getKey() + "");
 
             database.getFile().set(path, coord);
         }
@@ -232,24 +233,24 @@ public class GoalAreaManager {
 
                     for (String s : app) {
                         String[] valueCoord = s.split("\\;");
-                        coord.add(new Pair<>(Integer.parseInt(valueCoord[0]), Integer.parseInt(valueCoord[1])));
+                        coord.add(Util.getPairFromKey(Long.parseLong(valueCoord[0])));
                     }
 
                     if (goal.equals(ConfigUtil.getTreasuryName())) {
                         // Treasury
                         for (Pair<Integer, Integer> c : coord) {
                             Location loc = new Location(Bukkit.getServer().getWorld(ConfigUtil.getWorldName()), c.getKey() * 16, 64, c.getValue() * 16);
-                            chunksTes.put(loc.getChunk(), Treasuries.getFromTown(TownyUtil.getTownFromString(town)));
+                            chunksTes.put(loc.getChunk().getChunkKey(), Treasuries.getFromTown(TownyUtil.getTownFromString(town)));
                         }
                     } else {
                         // TownGoal
                         for (Pair<Integer, Integer> c : coord) {
                             Location loc = new Location(Bukkit.getServer().getWorld(ConfigUtil.getWorldName()), c.getKey() * 16, 64, c.getValue() * 16);
                             TownGoal tg = TownGoals.getTownGoalFromGoalAndTown(Goals.getGoalFromString(goal), TownyUtil.getTownFromString(town));
-                            if (chunks.get(loc.getChunk()) == null) {
-                                chunks.put(loc.getChunk(), new ArrayList<>());
+                            if (chunks.get(loc.getChunk().getChunkKey()) == null) {
+                                chunks.put(loc.getChunk().getChunkKey(), new ArrayList<>());
                             }
-                            chunks.get(loc.getChunk()).add(tg);
+                            chunks.get(loc.getChunk().getChunkKey()).add(tg);
                         }
                     }
                 }

@@ -78,9 +78,9 @@ public class RemoveCommand extends SubCommand {
             }
             // Check if the Goal exist in this plot
             if (TownyUtil.isInTown(player.getLocation())) {
-                if (GoalAreaManager.isOnTownGoal(player.getLocation().getChunk()) &&
-                        GoalAreaManager.getListTownGoalFromChunk(player.getLocation().getChunk()).contains(TownGoals.getTownGoalFromGoalAndTown(Goals.getGoalFromString(args[1]), TownyUtil.getTownFromLocation(player.getLocation())))) {
-                    List<TownGoal> townGoals = GoalAreaManager.getListTownGoalFromChunk(player.getLocation().getChunk());
+                if (GoalAreaManager.isOnTownGoal(player.getLocation().getChunk().getChunkKey()) &&
+                        GoalAreaManager.getListTownGoalFromChunk(player.getLocation().getChunk().getChunkKey()).contains(TownGoals.getTownGoalFromGoalAndTown(Goals.getGoalFromString(args[1]), TownyUtil.getTownFromLocation(player.getLocation())))) {
+                    List<TownGoal> townGoals = GoalAreaManager.getListTownGoalFromChunk(player.getLocation().getChunk().getChunkKey());
                     TownGoal tgRemove = null;
                     for (TownGoal tg:townGoals) {
                         if (tg.getGoal().getName().equals(args[1])) {
@@ -147,7 +147,7 @@ public class RemoveCommand extends SubCommand {
 
     @Override
     public List<String> getSubcommandArguments(Player player, String[] args) {
-        ArrayList<String> result = new ArrayList<String>();
+        ArrayList<String> result = new ArrayList<>();
 
         if (args.length == 2) {
             for (Goal goal : Goals.getObbiettivi()) {
