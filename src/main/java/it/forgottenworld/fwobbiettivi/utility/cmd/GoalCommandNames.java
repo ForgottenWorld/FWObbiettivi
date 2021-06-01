@@ -4,6 +4,7 @@ public class GoalCommandNames {
 
     public static final String ADD_CMD = "add";
     public static final String CREATE_CMD = "create";
+    public static final String CHUNK_CMD = "chunk";
     public static final String DELETE_CMD = "delete";
     public static final String DISABLE_CMD = "disable";
     public static final String ENABLE_CMD = "enable";

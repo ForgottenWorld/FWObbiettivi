@@ -73,6 +73,7 @@ public class Messages {
     public static final String TOWN_MONEY_WITHDRAWN = ConfigUtil.getConfigStringLang("town_money_withdrawn");
     public static final String TOWN_OBJECTS_WITHDRAWN = ConfigUtil.getConfigStringLang("town_objects_withdrawn");
     public static final String NO_TOWN_OR_GOAL_FOUND = ConfigUtil.getConfigStringLang("no_town_or_goal_found");
+    public static final String NO_ZERO_ALLOW = ConfigUtil.getConfigStringLang("no_zero_allow");
 
     /**
      * PROMPT

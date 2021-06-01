@@ -21,6 +21,7 @@ public class GoalsCommandExecutor implements TabExecutor {
     public GoalsCommandExecutor(){
         subcommands.add(new AddCommand());
         subcommands.add(new CreateCommand());
+        subcommands.add(new ChunkCommand());
         subcommands.add(new DeleteCommand());
         subcommands.add(new DisableCommand());
         subcommands.add(new EnableCommand());

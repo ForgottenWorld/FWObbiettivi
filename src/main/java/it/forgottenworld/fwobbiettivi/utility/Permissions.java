@@ -6,6 +6,7 @@ public class Permissions {
 
     public static final String PERM_ADD = "forgotten.obbiettivi.add";
     public static final String PERM_CREATE = "forgotten.obbiettivi.create";
+    public static final String PERM_CHUNK = "forgotten.obbiettivi.chunk";
     public static final String PERM_DELETE = "forgotten.obbiettivi.delete";
     public static final String PERM_DISABLE = "forgotten.obbiettivi.disable";
     public static final String PERM_ENABLE = "forgotten.obbiettivi.enable";

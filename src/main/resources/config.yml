@@ -179,6 +179,7 @@ languages:
     branch_added: "Ramo creato con successo:"
     branch_not_empty: "Questo ramo ha degli obbiettivi."
     no_town_or_goal_found: "Assicurati di aver inserito la citta' o l'obbiettivo correttamente."
+    no_zero_allow: "Inserisci un numero diverso da 0."
     goal_not_exist: "Non esiste un obbiettivo con questo nome."
     goal_in_use: "L'obbiettivo è utilizzato in qualche citta'."
     goal_deleted: "Obbiettivo eliminato:"
@@ -195,6 +196,7 @@ languages:
       goal:
         add_cmd_description: "Aggiunge un obbiettivo a una Town."
         create_cmd_description: "Crea un nuovo obbiettivo."
+        chunk_cmd_description: "???."
         delete_cmd_description: "Elimina un obbiettivo."
         disable_cmd_description: "Disattiva un obbiettivo."
         edit_cmd_description: "Modifica un obbiettivo."

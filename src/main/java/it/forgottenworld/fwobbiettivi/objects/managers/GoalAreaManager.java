@@ -17,12 +17,18 @@ public class GoalAreaManager {
     private static GoalAreaManager goalAreaManager;
 
     private HashMap<UUID, TownGoal> playerGoalAreaCreation;
+    private HashMap<UUID, TownGoal> playerGoalAreaEdit;
+    private HashMap<UUID, Integer> playerGoalAreaPlot;
+
     private HashMap<UUID, Treasury> playerTesAreaCreation;
+
     static HashMap<Long, List<TownGoal>> chunks = new HashMap<>();
     static HashMap<Long, Treasury> chunksTes = new HashMap<>();
 
     private GoalAreaManager() {
         this.playerGoalAreaCreation = new HashMap<>();
+        this.playerGoalAreaEdit = new HashMap<>();
+        this.playerGoalAreaPlot = new HashMap<>();
         this.playerTesAreaCreation = new HashMap<>();
     }
 
@@ -37,12 +43,21 @@ public class GoalAreaManager {
         return this.playerGoalAreaCreation.containsKey(player.getUniqueId());
     }
 
+    public boolean isPlayerInEditMode(Player player) {
+        return this.playerGoalAreaEdit.containsKey(player.getUniqueId());
+    }
+
     public boolean isPlayerInCreationModeTes(Player player) {
         return this.playerTesAreaCreation.containsKey(player.getUniqueId());
     }
 
     public void putGoalAreaCreation(UUID uuid, TownGoal townGoals){
         this.playerGoalAreaCreation.put(uuid, townGoals);
+    }
+
+    public void putGoalAreaEdit(UUID uuid, TownGoal townGoals, int plot){
+        this.playerGoalAreaEdit.put(uuid, townGoals);
+        this.playerGoalAreaPlot.put(uuid, plot);
     }
 
     public void putTesAreaCreation(UUID uuid, Treasury treasury){
@@ -59,6 +74,14 @@ public class GoalAreaManager {
 
     public HashMap<UUID, TownGoal> getPlayerGoalAreaCreation() {
         return playerGoalAreaCreation;
+    }
+
+    public HashMap<UUID, TownGoal> getPlayerGoalAreaEdit() {
+        return playerGoalAreaEdit;
+    }
+
+    public HashMap<UUID, Integer> getPlayerGoalAreaPlot() {
+        return playerGoalAreaPlot;
     }
 
     public HashMap<UUID, Treasury> getPlayerTesAreaCreation() {

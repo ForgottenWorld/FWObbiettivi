@@ -7,7 +7,7 @@ import it.forgottenworld.fwobbiettivi.command.TreasuryCommandExecutor;
 import it.forgottenworld.fwobbiettivi.config.ConfigManager;
 import it.forgottenworld.fwobbiettivi.gui.GoalsGUI;
 import it.forgottenworld.fwobbiettivi.listeners.*;
-import it.forgottenworld.fwobbiettivi.listeners.GoalAreaCreationListener;
+import it.forgottenworld.fwobbiettivi.listeners.GoalAreaListener;
 import it.forgottenworld.fwobbiettivi.objects.managers.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -68,7 +68,7 @@ public final class FWObbiettivi extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new GUIGoalsListener(), this);
         this.getServer().getPluginManager().registerEvents(new GoalsChestListener(), this);
         this.getServer().getPluginManager().registerEvents(new GoalsChunkListener(), this);
-        this.getServer().getPluginManager().registerEvents(new GoalAreaCreationListener(), this);
+        this.getServer().getPluginManager().registerEvents(new GoalAreaListener(), this);
         this.getServer().getPluginManager().registerEvents(new MantenimentoBonusListener(), this);
     }
 

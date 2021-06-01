@@ -28,12 +28,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class GoalAreaCreationListener implements Listener {
+public class GoalAreaListener implements Listener {
 
     static HashMap<UUID, Integer> numClick = new HashMap<>();
 
     @EventHandler
-    public void onRightClickSelection(PlayerInteractEvent e) {
+    public void onRightClickSelectionCreate(PlayerInteractEvent e) {
         if (!e.getAction().equals(Action.RIGHT_CLICK_BLOCK))
             return;
 
@@ -66,9 +66,17 @@ public class GoalAreaCreationListener implements Listener {
             if (townGoals.isEmpty()) {
                 e.getPlayer().sendMessage(ChatFormatter.formatSuccessMessage(Messages.NO_GOAL_LOC));
             } else {
+                boolean present = false;
                 e.getPlayer().sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOALS_PRESENT));
                 for (TownGoal tg:townGoals){
+                    if (tg.getGoal().getName().equals(GoalAreaManager.getInstance().getPlayerGoalAreaCreation().get(e.getPlayer().getUniqueId()).getGoal().getName())) {
+                        present = true;
+                    }
                     e.getPlayer().sendMessage(ChatFormatter.formatWarningMessageNoPrefix("- " + tg.getGoal().getName()));
+                }
+                if (present) {
+                    e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_ALREADY_PRESENT_HERE));
+                    return;
                 }
             }
         }
@@ -156,7 +164,7 @@ public class GoalAreaCreationListener implements Listener {
     }
 
     @EventHandler
-    public void onDisconnect(PlayerQuitEvent e){
+    public void onDisconnectCreate(PlayerQuitEvent e){
         Player player = e.getPlayer();
         if (!GoalAreaManager.getInstance().isPlayerInCreationMode(player))
             return;
@@ -168,6 +176,100 @@ public class GoalAreaCreationListener implements Listener {
         FWObbiettivi.info(Messages.ABORT_ADD_GOAL);
 
         GoalAreaManager.getInstance().getPlayerGoalAreaCreation().remove(e.getPlayer().getUniqueId());
+    }
+
+    @EventHandler
+    public void onRightClickSelectionAdd(PlayerInteractEvent e){
+        if (!e.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+            return;
+
+        if (e.getItem() != null)
+            return;
+
+        Player player = e.getPlayer();
+        if (!GoalAreaManager.getInstance().isPlayerInEditMode(player))
+            return;
+
+        if ((numClick.get(e.getPlayer().getUniqueId()) == null) || (numClick.get(e.getPlayer().getUniqueId()) % 2 == 0)) {
+            numClick.put(e.getPlayer().getUniqueId(), 1);
+        } else {
+            numClick.remove(e.getPlayer().getUniqueId());
+            return;
+        }
+
+        if (GoalAreaManager.getInstance().getPlayerGoalAreaPlot().get(player.getUniqueId()) >= 1){
+            // add
+            List<TownGoal> townGoals = GoalAreaManager.getListTownGoalFromChunk(e.getClickedBlock().getLocation().getChunk().getChunkKey());
+            if (townGoals.isEmpty()) {
+                e.getPlayer().sendMessage(ChatFormatter.formatSuccessMessage(Messages.NO_GOAL_LOC));
+            } else {
+                boolean present = false;
+                e.getPlayer().sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOALS_PRESENT));
+                for (TownGoal tg:townGoals){
+                    if (tg.getGoal().getName().equals(GoalAreaManager.getInstance().getPlayerGoalAreaEdit().get(e.getPlayer().getUniqueId()).getGoal().getName())) {
+                        present = true;
+                    }
+                    e.getPlayer().sendMessage(ChatFormatter.formatWarningMessageNoPrefix("- " + tg.getGoal().getName()));
+                }
+                if (present) {
+                    e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_ALREADY_PRESENT_HERE));
+                    return;
+                }
+            }
+
+            List<Pair<Integer, Integer>> chunksList = new ArrayList<>();
+            chunksList.add(new Pair<>(e.getClickedBlock().getChunk().getX() + 1, e.getClickedBlock().getChunk().getZ()));
+            chunksList.add(new Pair<>(e.getClickedBlock().getChunk().getX() - 1, e.getClickedBlock().getChunk().getZ()));
+            chunksList.add(new Pair<>(e.getClickedBlock().getChunk().getX(), e.getClickedBlock().getChunk().getZ() + 1));
+            chunksList.add(new Pair<>(e.getClickedBlock().getChunk().getX(), e.getClickedBlock().getChunk().getZ() - 1));
+
+            for (Pair<Integer, Integer> chunk : chunksList) {
+                Location loc = new Location(Bukkit.getServer().getWorld(ConfigUtil.getWorldName()), chunk.getKey() * 16, 64, chunk.getValue() * 16);
+                TownGoal tg = GoalAreaManager.getInstance().getPlayerGoalAreaEdit().get(e.getPlayer().getUniqueId());
+                if (GoalAreaManager.getChunksFromTownGoal(tg).contains(loc.getChunk().getChunkKey())) {
+                    int maxPlot = tg.getGoal().getNumPlot() + GoalAreaManager.getInstance().getPlayerGoalAreaPlot().get(player.getUniqueId());
+                    long chunkCount = GoalAreaManager.getChunksFromTownGoal(tg).size();
+
+                    if (GoalAreaManager.getChunks().get(e.getClickedBlock().getLocation().getChunk().getChunkKey()) != null) {
+                        if (GoalAreaManager.getListTownGoalFromChunk(e.getClickedBlock().getLocation().getChunk().getChunkKey()).size() + (GoalAreaManager.getTreasuryCurrentlyFromChunk(e.getClickedBlock().getLocation().getChunk().getChunkKey()) == null ? 0 : 1) >= ConfigUtil.MAX_GOAL_IN_CHUNK) {
+                            e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.MAX_GOAL_IN_CHUNK));
+                            return;
+                        }
+                    }
+
+                    if (chunkCount < maxPlot) {
+
+                        if (!TownyUtil.isInTown(e.getClickedBlock().getLocation())) {
+                            // Not in a town
+                            e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.NO_TOWN_LOC));
+                            return;
+                        }
+
+                        TownyUtil.renamePlot(e.getClickedBlock().getLocation(), tg.getGoal().getName(), false);
+                        GoalAreaManager.addChunk(e.getPlayer().getLocation().getChunk().getChunkKey(), tg);
+
+                        e.getPlayer().sendMessage(ChatFormatter.formatSuccessMessage(Messages.GOAL_PLOT_NEEDED) + " " + ChatFormatter.formatWarningMessageNoPrefix((chunkCount + 1) + "/" + maxPlot));
+
+                        if (e.getPlayer().getTargetBlockExact(5) == null)
+                            chunkCount--;
+                        else
+                            e.getPlayer().getTargetBlockExact(5).getWorld().playSound(e.getPlayer().getTargetBlockExact(5).getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
+
+                        GoalAreaManager.spawnEffectAtBlock(e.getPlayer().getTargetBlockExact(5).getLocation());
+
+                        if ((chunkCount + 1) == maxPlot) {
+                            GoalAreaManager.getInstance().getPlayerGoalAreaEdit().remove(e.getPlayer().getUniqueId());
+                            GoalAreaManager.getInstance().getPlayerGoalAreaPlot().remove(e.getPlayer().getUniqueId());
+                        }
+                    }
+                    return;
+                }
+            }
+
+            e.getPlayer().sendMessage(ChatFormatter.formatErrorMessage(Messages.GOAL_PLOT_NOT_NEAR));
+        } else {
+            // remove
+        }
     }
 
 }

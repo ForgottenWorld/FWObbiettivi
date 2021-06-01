@@ -6,6 +6,7 @@ public class GoalCommandDescriptions {
 
     public static final String ADD_CMD_DESCRIPTION = ConfigUtil.getConfigStringLang("cmds.goal.add_cmd_description");
     public static final String CREATE_CMD_DESCRIPTION = ConfigUtil.getConfigStringLang("cmds.goal.create_cmd_description");
+    public static final String CHUNK_CMD_DESCRIPTION = ConfigUtil.getConfigStringLang("cmds.goal.chunk_cmd_description");
     public static final String DELETE_CMD_DESCRIPTION = ConfigUtil.getConfigStringLang("cmds.goal.delete_cmd_description");
     public static final String DISABLE_CMD_DESCRIPTION = ConfigUtil.getConfigStringLang("cmds.goal.disable_cmd_description");
     public static final String ENABLE_CMD_DESCRIPTION = ConfigUtil.getConfigStringLang("cmds.goal.enable_cmd_description");
